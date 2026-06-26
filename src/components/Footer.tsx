@@ -1,12 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { SITE } from "@/lib/site";
-
-const quickLinks = [
-  { label: "Our Villas", href: "/villas" },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
-  { label: "Terms & Conditions", href: "/contact" },
-];
+import { useLanguage } from "@/context/LanguageContext";
 
 const socialLinks = [
   {
@@ -62,6 +58,15 @@ const socialLinks = [
 ];
 
 export default function Footer() {
+  const { t } = useLanguage();
+
+  const quickLinks = [
+    { label: t.navOurVillas, href: "/villas", key: "villas" },
+    { label: t.navAboutUs, href: "/about", key: "about" },
+    { label: t.navContactUs, href: "/contact", key: "contact" },
+    { label: "Terms & Conditions", href: "/contact", key: "terms" },
+  ];
+
   return (
     <footer className="bg-[var(--dark)] text-white">
       <div className="container-site py-16 md:py-20">
@@ -101,11 +106,11 @@ export default function Footer() {
                 textTransform: "uppercase",
               }}
             >
-              Quick Links
+              {t.footerQuickLinksTitle}
             </p>
             <ul className="space-y-2">
               {quickLinks.map((link) => (
-                <li key={link.label}>
+                <li key={link.key}>
                   <Link
                     href={link.href}
                     className="text-white/60 transition-colors hover:text-[var(--sand)]"
@@ -133,7 +138,7 @@ export default function Footer() {
                 textTransform: "uppercase",
               }}
             >
-              Contact
+              {t.footerContactTitle}
             </p>
             <address
               className="space-y-2 not-italic text-white/60"

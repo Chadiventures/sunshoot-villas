@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Footer from "@/components/Footer";
+import { useLanguage } from "@/context/LanguageContext";
 import { VILLAS } from "@/lib/villas";
 
 const WHATSAPP = "6281239701978";
@@ -112,6 +113,7 @@ const inputClass =
   "w-full rounded-sm border border-[var(--text)]/15 bg-white px-4 py-3 text-[var(--text)] outline-none transition-colors focus:border-[var(--sand)]";
 
 export default function BookPage() {
+  const { t } = useLanguage();
   const [fields, setFields] = useState<BookingFields>(initialFields);
   const [errors, setErrors] = useState<Partial<Record<keyof BookingFields, boolean>>>({});
   const [submitted, setSubmitted] = useState(false);
@@ -180,7 +182,7 @@ export default function BookPage() {
               fontWeight: 300,
             }}
           >
-            Book Your Stay
+            {t.bookPageTitle}
           </h1>
           <p
             className="mx-auto max-w-xl text-white/70"
@@ -191,8 +193,7 @@ export default function BookPage() {
               lineHeight: 1.7,
             }}
           >
-            Complete the form below and we&apos;ll confirm availability and
-            pricing via WhatsApp within 24 hours.
+            {t.bookPageSubtitle}
           </p>
         </div>
       </section>

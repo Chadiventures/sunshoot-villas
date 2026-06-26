@@ -1,9 +1,14 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useLanguage } from "@/context/LanguageContext";
 import { VILLAS } from "@/lib/villas";
 import { VILLA_IMAGES } from "@/lib/media";
 
 export default function VillaCards({ showHeader = true }: { showHeader?: boolean }) {
+  const { t } = useLanguage();
+
   return (
     <section className="bg-[var(--bg)] py-20 md:py-28">
       <div className="container-site">
@@ -77,12 +82,20 @@ export default function VillaCards({ showHeader = true }: { showHeader?: boolean
                     ? `${villa.description.slice(0, 140)}…`
                     : villa.description}
                 </p>
-                <Link
-                  href={`/villas/${villa.slug}`}
-                  className="btn-outline-dark btn-hover !px-6 !py-2.5 !text-[10px]"
-                >
-                  View Villa
-                </Link>
+                <div className="flex flex-wrap gap-3">
+                  <Link
+                    href={`/villas/${villa.slug}`}
+                    className="btn-outline-dark btn-hover !px-6 !py-2.5 !text-[10px]"
+                  >
+                    {t.villaCardViewVilla}
+                  </Link>
+                  <Link
+                    href="/book"
+                    className="btn-primary btn-hover !px-6 !py-2.5 !text-[10px]"
+                  >
+                    {t.villaCardBookNow}
+                  </Link>
+                </div>
               </div>
             </article>
           ))}

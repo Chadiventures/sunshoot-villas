@@ -1,14 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
 const STORAGE_KEY = "villa-promo-dismissed";
 export const BANNER_HEIGHT = 44;
 
-const MARQUEE_TEXT =
-  "Limited availability for July 2026 - Enquire now to secure your villa!   |   4 private pool villas in the heart of Seminyak   |   Free airport pickup included   |   Personal service from host Warren   |   ";
-
 export default function VillaTopBanner() {
+  const { t } = useLanguage();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -28,6 +27,8 @@ export default function VillaTopBanner() {
   };
 
   if (!visible) return null;
+
+  const marqueeText = t.bannerText;
 
   return (
     <div
@@ -52,7 +53,7 @@ export default function VillaTopBanner() {
               letterSpacing: "0.02em",
             }}
           >
-            {MARQUEE_TEXT}
+            {marqueeText}
           </span>
           <span
             className="shrink-0 whitespace-nowrap px-6"
@@ -63,10 +64,10 @@ export default function VillaTopBanner() {
               letterSpacing: "0.02em",
             }}
           >
-            {MARQUEE_TEXT}
+            {marqueeText}
           </span>
         </div>
-        <p className="sr-only">{MARQUEE_TEXT}</p>
+        <p className="sr-only">{marqueeText}</p>
       </div>
 
       <button

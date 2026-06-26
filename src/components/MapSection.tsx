@@ -1,13 +1,18 @@
+"use client";
+
 import { MAPS_EMBED } from "@/lib/media";
 import { SITE } from "@/lib/site";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function MapSection() {
+  const { t } = useLanguage();
+
   return (
     <section className="bg-[var(--bg)] py-20 md:py-28">
       <div className="container-site">
         <div className="mb-10 text-center">
           <p className="section-eyebrow mb-3">Location</p>
-          <h2 className="section-heading">Find Us</h2>
+          <h2 className="section-heading">{t.findUsTitle}</h2>
           <p
             className="mx-auto mt-4 max-w-xl text-[var(--text-muted)]"
             style={{

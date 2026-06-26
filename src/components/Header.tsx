@@ -3,11 +3,19 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import LanguageSelector from "@/components/LanguageSelector";
+import { useLanguage } from "@/context/LanguageContext";
 
 const STORAGE_KEY = "villa-promo-dismissed";
 
+function getReviewsHref(pathname: string): string {
+  const isVillaDetail = /^\/villas\/[^/]+$/.test(pathname);
+  return isVillaDetail ? "#reviews" : "/villas/mawar#reviews";
+}
+
 export default function Header() {
   const pathname = usePathname();
+  const { t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [bannerActive, setBannerActive] = useState(false);
@@ -51,9 +59,10 @@ export default function Header() {
     bannerActive && isVillaDetail ? "var(--villa-banner-h, 44px)" : "0px";
 
   const navLinks = [
-    { label: "Our Villas", href: "/villas" },
-    { label: "About Us", href: "/about" },
-    { label: "Contact Us", href: "/contact" },
+    { label: t.navOurVillas, href: "/villas", key: "villas" },
+    { label: t.navReviews, href: getReviewsHref(pathname), key: "reviews" },
+    { label: t.navAboutUs, href: "/about", key: "about" },
+    { label: t.navContactUs, href: "/contact", key: "contact" },
   ];
 
   return (
@@ -75,19 +84,22 @@ export default function Header() {
           <nav className="hidden items-center gap-6 lg:gap-8 md:flex">
             {navLinks.map((link) => (
               <Link
-                key={link.label}
+                key={link.key}
                 href={link.href}
                 className="text-[11px] font-medium tracking-[0.15em] text-white/85 uppercase transition-all duration-300 ease-in-out hover:scale-105 hover:text-[var(--sand)]"
               >
                 {link.label}
               </Link>
             ))}
+            <LanguageSelector />
             <Link href="/book" className="btn-primary btn-hover !py-2.5 !text-[10px]">
-              Book Now
+              {t.navBookNow}
             </Link>
           </nav>
 
-          <button
+          <div className="flex items-center gap-2 md:hidden">
+            <LanguageSelector compact />
+            <button
             type="button"
             className="btn-hover flex h-10 w-10 items-center justify-center text-white md:hidden"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
@@ -104,6 +116,7 @@ export default function Header() {
               </svg>
             )}
           </button>
+          </div>
         </div>
       </header>
 
@@ -118,7 +131,7 @@ export default function Header() {
           <nav className="flex flex-col px-6">
             {navLinks.map((link) => (
               <Link
-                key={link.label}
+                key={link.key}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
                 className="border-b border-white/10 py-5 font-[family-name:var(--font-cormorant)] text-2xl font-light text-white transition-colors hover:text-[var(--sand)]"
@@ -131,7 +144,7 @@ export default function Header() {
               onClick={() => setMobileOpen(false)}
               className="btn-primary btn-hover mt-8 w-full text-center"
             >
-              Book Now
+              {t.navBookNow}
             </Link>
           </nav>
         </div>

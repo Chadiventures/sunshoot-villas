@@ -1,6 +1,7 @@
 "use client";
 
 import ScrollReveal from "@/components/ScrollReveal";
+import { useLanguage } from "@/context/LanguageContext";
 
 const DESTINATIONS = [
   { name: "Canggu", time: "20 min" },
@@ -32,6 +33,8 @@ function PinIcon() {
 }
 
 export default function WhySeminyak() {
+  const { t } = useLanguage();
+
   return (
     <section className="bg-[var(--bg)] py-14 md:py-20">
       <div className="container-site">
@@ -44,7 +47,7 @@ export default function WhySeminyak() {
               fontWeight: 300,
             }}
           >
-            Why Seminyak?
+            {t.seminyakTitle}
           </h2>
           <p
             className="text-[var(--text-muted)]"
@@ -54,7 +57,7 @@ export default function WhySeminyak() {
               fontWeight: 300,
             }}
           >
-            Perfectly positioned in the heart of Bali
+            {t.seminyakSubtitle}
           </p>
         </ScrollReveal>
 

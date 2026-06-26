@@ -1,6 +1,7 @@
 "use client";
 
 import ScrollReveal from "@/components/ScrollReveal";
+import { useLanguage } from "@/context/LanguageContext";
 
 type VillaWhatsAppCtaProps = {
   villaName: string;
@@ -23,6 +24,7 @@ function WhatsAppLogo() {
 }
 
 export default function VillaWhatsAppCta({ villaName }: VillaWhatsAppCtaProps) {
+  const { t } = useLanguage();
   const message = `Hi! I am interested in ${villaName}. Could you please send me more information about availability and pricing?`;
 
   const handleClick = () => {
@@ -74,7 +76,7 @@ export default function VillaWhatsAppCta({ villaName }: VillaWhatsAppCtaProps) {
               textTransform: "uppercase",
             }}
           >
-            Send Inquiry on WhatsApp
+            {t.whatsAppButton}
           </button>
         </ScrollReveal>
       </div>

@@ -1,3 +1,7 @@
+"use client";
+
+import { useLanguage } from "@/context/LanguageContext";
+
 const features = [
   {
     title: "Prime Seminyak Location",
@@ -48,11 +52,13 @@ const features = [
 ];
 
 export default function WhyChooseUs() {
+  const { t } = useLanguage();
+
   return (
     <section className="bg-[var(--dark)] py-20 md:py-28">
       <div className="container-site">
         <div className="mb-14 text-center">
-          <p className="section-eyebrow mb-3">Why Choose Us</p>
+          <p className="section-eyebrow mb-3">{t.whyChooseUsTitle}</p>
           <h2
             className="text-white"
             style={{

@@ -9,8 +9,8 @@ import VillaWhatsAppCta from "@/components/villas/VillaWhatsAppCta";
 import VillaTopBanner from "@/components/villas/VillaTopBanner";
 import VillaKeyInfo from "@/components/villas/VillaKeyInfo";
 import VillaReviewsCarousel from "@/components/villas/VillaReviewsCarousel";
+import { useLanguage } from "@/context/LanguageContext";
 import type { VillaFacilities } from "@/lib/villas";
-import { getVillaLongDescription } from "@/lib/villa-descriptions";
 
 type VillaPageContentProps = {
   slug: string;
@@ -27,7 +27,8 @@ export default function VillaPageContent({
   heroImage,
   galleryImages,
 }: VillaPageContentProps) {
-  const description = getVillaLongDescription(slug);
+  const { getVillaDescription } = useLanguage();
+  const description = getVillaDescription(slug);
 
   return (
     <>

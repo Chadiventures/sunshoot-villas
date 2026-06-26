@@ -1,8 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import { HERO_VIDEO } from "@/lib/media";
 import { SITE } from "@/lib/site";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Hero() {
+  const { t } = useLanguage();
+
   return (
     <section className="relative flex min-h-screen items-center justify-center overflow-hidden">
       <video
@@ -35,7 +40,7 @@ export default function Hero() {
             letterSpacing: "0.02em",
           }}
         >
-          Sun Shoot Villas Seminyak
+          {t.heroHeadline}
         </h1>
 
         <p
@@ -47,21 +52,16 @@ export default function Hero() {
             lineHeight: 1.7,
           }}
         >
-          Your private sanctuary in the heart of Bali
+          {t.heroSubheadline}
         </p>
 
         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Link href="/villas" className="btn-primary min-w-[200px]">
-            View Our Villas
+            {t.navOurVillas}
           </Link>
-          <a
-            href={`https://wa.me/${SITE.whatsapp}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-outline min-w-[200px]"
-          >
-            Enquire Now
-          </a>
+          <Link href="/book" className="btn-outline min-w-[200px]">
+            {t.navBookNow}
+          </Link>
         </div>
       </div>
     </section>

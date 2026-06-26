@@ -266,3 +266,19 @@ body {
     animation: none;
   }
 }
+
+/* Language selector dropdown */
+.lang-dropdown {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+.lang-dropdown-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}

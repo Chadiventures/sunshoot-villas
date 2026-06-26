@@ -81,7 +81,7 @@ export default function About() {
               lineHeight: 1.8,
             }}
           >
-            Sun Shoot Villas Seminyak sits on Jl. Bidadari II E — a quiet lane
+            Sun Shoot Villas Seminyak sits on Jl. Bidadari II E - a quiet lane
             in one of Seminyak&apos;s most sought-after neighbourhoods. Four
             private pool villas, each with its own character, sharing the warmth
             of genuine Balinese hospitality.
@@ -97,7 +97,7 @@ export default function About() {
             }}
           >
             This is not a corporate hotel experience. It is a personal retreat
-            where you arrive as a guest and leave feeling like family — with
+            where you arrive as a guest and leave feeling like family - with
             open-plan living, tropical gardens, and your own private pool.
           </p>
 

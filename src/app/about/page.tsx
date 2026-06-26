@@ -8,7 +8,7 @@ import { SITE } from "@/lib/site";
 export const metadata: Metadata = {
   title: `About Us | ${SITE.name}`,
   description:
-    "Learn about Sun Shoot Villas Seminyak — private pool villas with personal Balinese hospitality in the Bidadari area.",
+    "Learn about Sun Shoot Villas Seminyak - private pool villas with personal Balinese hospitality in the Bidadari area.",
 };
 
 export default function AboutPage() {
@@ -16,7 +16,7 @@ export default function AboutPage() {
     <>
       <PageHero
         title="About Sun Shoot Villas"
-        subtitle="Luxury without the corporate feel — four private pool villas in the heart of Seminyak."
+        subtitle="Luxury without the corporate feel - four private pool villas in the heart of Seminyak."
         breadcrumb={[
           { label: "Home", href: "/" },
           { label: "About Us" },
@@ -39,7 +39,7 @@ export default function AboutPage() {
             >
               {SITE.name} is a collection of four private pool villas on{" "}
               {SITE.address}. Each villa offers two bedrooms, open-plan living
-              and dining, and your own private pool — designed for couples,
+              and dining, and your own private pool - designed for couples,
               families, and groups who want space, privacy, and authentic
               Balinese warmth.
             </p>
@@ -53,7 +53,7 @@ export default function AboutPage() {
               }}
             >
               Villa Mawar, Jepun, Anggrek and Sandat each have their own
-              character — from garden villas to modern ensuites — but all share
+              character - from garden villas to modern ensuites - but all share
               the same commitment to personal, attentive hospitality. Sunshoot
               Food &amp; Drinks can deliver directly to your villa, and the
               famous Bidadari area puts restaurants, supermarkets and salons

@@ -13,7 +13,7 @@ const features = [
   {
     title: "Private Pool",
     description:
-      "Every villa comes with its own private pool — your personal oasis steps from your living room.",
+      "Every villa comes with its own private pool - your personal oasis steps from your living room.",
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M2 12c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2 2 2 4 2" />
@@ -24,7 +24,7 @@ const features = [
   {
     title: "Personal Service",
     description:
-      "Luxury without the corporate hotel feel — genuine Balinese warmth and attentive hospitality.",
+      "Luxury without the corporate hotel feel - genuine Balinese warmth and attentive hospitality.",
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />

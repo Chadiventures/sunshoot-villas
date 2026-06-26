@@ -72,7 +72,7 @@ export default function Location() {
               lineHeight: 1.8,
             }}
           >
-            Step inside your villa and the world fades away — tropical gardens,
+            Step inside your villa and the world fades away - tropical gardens,
             a private pool, and the gentle rhythm of Balinese life.
           </p>
 

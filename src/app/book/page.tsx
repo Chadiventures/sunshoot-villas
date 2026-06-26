@@ -45,7 +45,7 @@ function buildWhatsAppMessage(fields: BookingFields, nights: number | null): str
     VILLAS.find((v) => v.slug === fields.villa)?.name ?? fields.villa;
 
   const lines = [
-    "*Booking Request — Sun Shoot Villas Seminyak*",
+    "*Booking Request - Sun Shoot Villas Seminyak*",
     "",
     `*Villa:* ${villaName}`,
     `*Arrival:* ${fields.arrivalDate}`,
@@ -288,7 +288,7 @@ export default function BookPage() {
                       />
                       {fieldError("departureDate") && (
                         <p className="mt-1 text-xs text-red-500">
-                          Required — must be after arrival
+                          Required - must be after arrival
                         </p>
                       )}
                     </div>
@@ -429,7 +429,7 @@ export default function BookPage() {
               </div>
             </div>
 
-            {/* Summary box — right on desktop, below form on mobile */}
+            {/* Summary box - right on desktop, below form on mobile */}
             <div className="order-2 lg:col-span-1">
               <div className="sticky top-24 rounded-sm border border-[var(--sand)]/30 bg-[var(--dark)] p-6 md:p-8">
                 <h3
@@ -465,7 +465,7 @@ export default function BookPage() {
                         fontWeight: 400,
                       }}
                     >
-                      {selectedVillaName ?? "—"}
+                      {selectedVillaName ?? "-"}
                     </dd>
                   </div>
 
@@ -554,7 +554,7 @@ export default function BookPage() {
                         fontWeight: 300,
                       }}
                     >
-                      {nights !== null ? nights : "—"}
+                      {nights !== null ? nights : "-"}
                     </dd>
                   </div>
 

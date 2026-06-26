@@ -35,7 +35,7 @@ const features: Feature[] = [
   {
     title: "Private Pool",
     description:
-      "Your own pool surrounded by tropical gardens — perfect for morning dips and sunset swims.",
+      "Your own pool surrounded by tropical gardens - perfect for morning dips and sunset swims.",
     icon: (
       <svg {...iconProps}>
         <path d="M4 12h16" />
@@ -93,7 +93,7 @@ const features: Feature[] = [
   },
   {
     title: "Personal Hospitality",
-    description: "Genuine Balinese warmth — luxury without the corporate feel.",
+    description: "Genuine Balinese warmth - luxury without the corporate feel.",
     icon: (
       <svg {...iconProps}>
         <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />

@@ -12,7 +12,7 @@ export default function Logo({ variant = "light", className = "" }: LogoProps) {
     <Link
       href="/"
       className={`block ${className}`}
-      aria-label="Sun Shoot Villas Seminyak — Home"
+      aria-label="Sun Shoot Villas Seminyak - Home"
     >
       <span
         className={`block leading-tight ${color}`}

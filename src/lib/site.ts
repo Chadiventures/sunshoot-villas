@@ -18,5 +18,5 @@ export const GLOBAL_POLICIES = {
   payment:
     "50% deposit on booking, 50% balance due 2 days before arrival. Full payment required for bookings made less than 3 days before arrival.",
   smoking: "Not permitted in bedrooms, only in open areas",
-  cancellation: "Cancellation policy to be confirmed — please contact us for details.",
+  cancellation: "Cancellation policy to be confirmed - please contact us for details.",
 } as const;

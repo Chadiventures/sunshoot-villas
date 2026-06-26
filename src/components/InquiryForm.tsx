@@ -35,7 +35,7 @@ function buildWhatsAppMessage(form: FormFields): string {
     VILLAS.find((v) => v.slug === form.villa)?.name ?? form.villa;
 
   const lines = [
-    `*Enquiry — ${SITE.shortName}*`,
+    `*Enquiry - ${SITE.shortName}*`,
     "",
     `*Name:* ${form.name}`,
     `*Email:* ${form.email}`,

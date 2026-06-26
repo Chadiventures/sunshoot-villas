@@ -13,7 +13,7 @@ const iconProps = {
   height: 44,
   viewBox: "0 0 24 24",
   fill: "none",
-  stroke: "#67bc6a",
+  stroke: "var(--brand-green)",
   strokeWidth: 1.2,
   strokeLinecap: "round" as const,
   strokeLinejoin: "round" as const,
@@ -21,9 +21,9 @@ const iconProps = {
 
 const features: Feature[] = [
   {
-    title: "Three Master Bedrooms",
+    title: "Two Bedrooms",
     description:
-      "Spacious ensuite rooms with premium linens and tropical views.",
+      "Comfortable ensuite rooms with air conditioning and tropical views.",
     icon: (
       <svg {...iconProps}>
         <path d="M3 10h18v8H3z" />
@@ -33,9 +33,9 @@ const features: Feature[] = [
     ),
   },
   {
-    title: "Semi-Outdoor Bathrooms",
+    title: "Private Pool",
     description:
-      "Open-air bathing experiences surrounded by lush greenery.",
+      "Your own pool surrounded by tropical gardens — perfect for morning dips and sunset swims.",
     icon: (
       <svg {...iconProps}>
         <path d="M4 12h16" />
@@ -46,8 +46,8 @@ const features: Feature[] = [
     ),
   },
   {
-    title: "Large Living and Dining",
-    description: "Open-plan spaces perfect for gathering and entertaining.",
+    title: "Open-Plan Living",
+    description: "Spacious living and dining areas flowing into the garden.",
     icon: (
       <svg {...iconProps}>
         <rect x="3" y="8" width="18" height="10" rx="1" />
@@ -57,8 +57,8 @@ const features: Feature[] = [
     ),
   },
   {
-    title: "8x3 Metre Private Pool",
-    description: "Your own sparkling pool for morning laps and sunset dips.",
+    title: "Fully Equipped Kitchen",
+    description: "Cook at home or order from Sunshoot Food & Drinks.",
     icon: (
       <svg {...iconProps}>
         <path d="M2 12c2-2 4-2 6 0s4 2 6 0 4-2 6 0" />
@@ -68,9 +68,9 @@ const features: Feature[] = [
     ),
   },
   {
-    title: "Fully Equipped Kitchen",
+    title: "Fast WiFi",
     description:
-      "Modern appliances and cookware for effortless self-catering.",
+      "Stay connected with reliable WiFi throughout the villa.",
     icon: (
       <svg {...iconProps}>
         <rect x="4" y="4" width="16" height="16" rx="1" />
@@ -80,9 +80,9 @@ const features: Feature[] = [
     ),
   },
   {
-    title: "Free WiFi Throughout",
+    title: "Bidadari Location",
     description:
-      "High-speed connectivity across every corner of your villa.",
+      "Walking distance to restaurants, supermarkets and Seminyak Beach.",
     icon: (
       <svg {...iconProps}>
         <path d="M5 12.55a11 11 0 0114.08 0" />
@@ -92,8 +92,8 @@ const features: Feature[] = [
     ),
   },
   {
-    title: "Attentive Staff",
-    description: "Dedicated team ready to assist with every request.",
+    title: "Personal Hospitality",
+    description: "Genuine Balinese warmth — luxury without the corporate feel.",
     icon: (
       <svg {...iconProps}>
         <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
@@ -102,9 +102,9 @@ const features: Feature[] = [
     ),
   },
   {
-    title: "Sun Deck and Gazebo",
+    title: "Tropical Gardens",
     description:
-      "Shaded lounging areas for reading, yoga, or afternoon naps.",
+      "Lush greenery surrounding your private pool and open-air living.",
     icon: (
       <svg {...iconProps}>
         <circle cx="12" cy="5" r="3" />
@@ -179,7 +179,7 @@ function FeatureRow({
       style={{
         width: "1px",
         height: "60px",
-        backgroundColor: "#67bc6a",
+        backgroundColor: "var(--brand-green)",
         opacity: 0.35,
       }}
     />
@@ -270,7 +270,7 @@ export default function Features() {
       <div className="mx-auto max-w-4xl px-6 lg:px-10">
         <div className="mb-12 text-center">
           <p
-            className="mb-3 text-[#67bc6a]"
+            className="mb-3 text-[var(--brand-green)]"
             style={{
               fontFamily: "var(--font-inter)",
               fontSize: "11px",

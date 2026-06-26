@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Inter } from "next/font/google";
 import TopBanner from "@/components/TopBanner";
 import Header from "@/components/Header";
 import ChatBot from "@/components/ChatBot";
+import { SITE } from "@/lib/site";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -19,9 +20,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Sahana Villas | Luxury Villas in Seminyak, Bali",
+  title: `${SITE.name} | Private Pool Villas in Seminyak, Bali`,
   description:
-    "3-bedroom luxury villas with private pool in the heart of Seminyak, Bali. Your private oasis awaits.",
+    "Four private pool villas in the heart of Seminyak, Bali. Balinese luxury with a personal touch on Jl. Bidadari II E.",
 };
 
 export default function RootLayout({

@@ -103,7 +103,7 @@ export default function Testimonials() {
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="mb-10 text-center md:mb-16">
           <p
-            className="mb-3 text-[#67bc6a]"
+            className="mb-3 text-[var(--brand-green)]"
             style={{
               fontFamily: "var(--font-inter)",
               fontSize: "11px",
@@ -155,7 +155,7 @@ export default function Testimonials() {
               >
                 <div className="card-alive relative border border-[rgba(0,0,0,0.08)] bg-white p-8 lg:p-12">
                   <div
-                    className="mb-6 text-[#67bc6a]"
+                    className="mb-6 text-[var(--brand-green)]"
                     aria-label="5 stars"
                     style={{ fontSize: isActive ? "18px" : "14px" }}
                   >
@@ -220,7 +220,7 @@ export default function Testimonials() {
               style={{
                 width: activeIndex === index ? "24px" : "8px",
                 backgroundColor:
-                  activeIndex === index ? "#67bc6a" : "rgba(26, 26, 26, 0.25)",
+                  activeIndex === index ? "var(--brand-green)" : "rgba(26, 26, 26, 0.25)",
               }}
             />
           ))}
@@ -231,7 +231,7 @@ export default function Testimonials() {
             href="https://www.tripadvisor.com/VacationRentalReview-g469404-d2551837"
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center gap-2 text-[#67bc6a] transition-colors duration-300 hover:text-[#5aaa5d]"
+            className="group inline-flex items-center gap-2 text-[var(--brand-green)] transition-colors duration-300 hover:text-[var(--brand-green-hover)]"
             style={{
               fontFamily: "var(--font-inter)",
               fontSize: "13px",

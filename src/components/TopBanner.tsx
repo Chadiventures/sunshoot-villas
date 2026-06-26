@@ -1,6 +1,7 @@
 import Link from "next/link";
 
-const bannerOffer = "SMART SAVER · BOOK DIRECT AND SAVE 15% · LIMITED AVAILABILITY";
+const bannerOffer =
+  "BOOK DIRECT · PRIVATE POOL VILLAS IN SEMINYAK · PERSONAL BALINESE HOSPITALITY";
 
 const textStyle = {
   fontFamily: "var(--font-inter)",
@@ -31,7 +32,7 @@ function BannerSegment({ hidden }: { hidden?: boolean }) {
 export default function TopBanner() {
   return (
     <div
-      className="top-banner overflow-hidden bg-[#67bc6a] transition-colors duration-300 hover:bg-[#5aaa5d]"
+      className="top-banner overflow-hidden bg-[var(--brand-green)] transition-colors duration-300 hover:bg-[var(--brand-green-hover)]"
       style={{
         position: "relative",
         height: "32px",
@@ -41,14 +42,14 @@ export default function TopBanner() {
       }}
     >
       <Link
-        href="/promos"
+        href="/contact"
         style={{
           display: "block",
           width: "100%",
           height: "100%",
           textDecoration: "none",
         }}
-        aria-label="View current promotions"
+        aria-label="Contact Sun Shoot Villas"
       >
         <div className="top-banner-track flex h-full items-center">
           <BannerSegment />

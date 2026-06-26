@@ -1,16 +1,19 @@
 @import "tailwindcss";
 
 :root {
-  --cream: #f7f3ee;
-  --beige: #c1bab2;
-  --beige-light: #f5f2ef;
-  --brand-green: #67bc6a;
-  --brand-green-hover: #5aaa5d;
-  --terracotta: #b07b72;
-  --sage: #8fa99a;
+  --cream: #faf8f5;
+  --beige: #e8dfd4;
+  --beige-light: #f0ebe3;
+  --sand: #d4c4b0;
+  --brand-green: #2d5a3d;
+  --brand-green-hover: #234a32;
+  --brand-green-light: #4a7a5a;
+  --terracotta: #c4a882;
+  --sage: #5a8a6a;
   --text: #1a1a1a;
   --muted: #6b6b6b;
-  --footer-bg: #1a1a1a;
+  --footer-bg: #1f2e24;
+  --dark-green: #1f2e24;
 }
 
 @theme inline {
@@ -84,10 +87,10 @@ body {
 @keyframes chat-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(103, 188, 106, 0.4);
+    box-shadow: 0 0 0 0 rgba(45, 90, 61, 0.4);
   }
   50% {
-    box-shadow: 0 0 0 12px rgba(103, 188, 106, 0);
+    box-shadow: 0 0 0 12px rgba(45, 90, 61, 0);
   }
 }
 
@@ -121,27 +124,14 @@ body {
   }
 }
 
-.footer-tripadvisor img {
-  opacity: 0.5;
-  filter: brightness(0) invert(1);
-  transition: opacity 0.2s, filter 0.2s;
-}
-
-.footer-tripadvisor:hover img {
-  opacity: 1;
-  filter: brightness(0) saturate(100%) invert(68%) sepia(30%) saturate(600%)
-    hue-rotate(85deg);
-}
-
 .footer-contact-link {
   transition: color 0.2s;
 }
 
 .footer-contact-link:hover {
-  color: #67bc6a;
+  color: var(--brand-green-light);
 }
 
-/* Global image depth effects */
 img {
   transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
@@ -156,18 +146,16 @@ img {
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.22), 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
-/* Button depth */
 .btn-alive {
-  box-shadow: 0 4px 16px rgba(103, 188, 106, 0.35);
+  box-shadow: 0 4px 16px rgba(45, 90, 61, 0.35);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .btn-alive:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(103, 188, 106, 0.5);
+  box-shadow: 0 8px 28px rgba(45, 90, 61, 0.5);
 }
 
-/* Card depth */
 .card-alive {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -184,10 +172,9 @@ img {
 }
 
 .feature-row-hover:hover {
-  border-left: 3px solid #67bc6a;
+  border-left: 3px solid var(--brand-green);
 }
 
-a[href="/book"],
 button[type="submit"] {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -211,8 +198,8 @@ button[type="submit"] {
 }
 
 .key-info-row:hover {
-  border-left-color: #67bc6a;
-  background-color: rgba(103, 188, 106, 0.08);
+  border-left-color: var(--brand-green);
+  background-color: rgba(45, 90, 61, 0.08);
 }
 
 .key-info-tabs-scroll {

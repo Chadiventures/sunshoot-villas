@@ -3,13 +3,14 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import ContactSection from "@/components/contact/ContactSection";
 import Footer from "@/components/Footer";
+import { SITE } from "@/lib/site";
 
 const ContactHeroVideo = dynamic(
   () => import("@/components/contact/ContactHeroVideo"),
   {
     loading: () => (
       <div
-        className="absolute inset-0 h-full w-full bg-[#c1bab2]"
+        className="absolute inset-0 h-full w-full bg-[var(--beige)]"
         aria-hidden="true"
       />
     ),
@@ -17,9 +18,9 @@ const ContactHeroVideo = dynamic(
 );
 
 export const metadata: Metadata = {
-  title: "Contact | Sahana Villas",
+  title: `Contact | ${SITE.name}`,
   description:
-    "Get in touch with Sahana Villas in Seminyak, Bali. Call, email, or send a booking enquiry and our team will respond within 24 hours.",
+    "Get in touch with Sun Shoot Villas Seminyak. Call, email, or send a booking enquiry via WhatsApp.",
 };
 
 export default function ContactPage() {
@@ -37,12 +38,12 @@ export default function ContactPage() {
 
         <div
           className="absolute inset-0"
-          style={{ backgroundColor: "rgba(28, 46, 32, 0.70)" }}
+          style={{ backgroundColor: "rgba(31, 46, 36, 0.70)" }}
         />
 
         <div className="relative z-10">
           <p
-            className="mb-3 text-[#67bc6a]"
+            className="mb-3 text-[var(--brand-green-light)]"
             style={{
               fontFamily: "var(--font-inter)",
               fontSize: "11px",
@@ -64,7 +65,7 @@ export default function ContactPage() {
               lineHeight: 1.15,
             }}
           >
-            Contact Sahana Villas
+            Contact Us
           </h1>
 
           <nav
@@ -76,7 +77,7 @@ export default function ContactPage() {
               color: "rgba(255,255,255,0.6)",
             }}
           >
-            <Link href="/" className="transition-colors hover:text-[#67bc6a]">
+            <Link href="/" className="transition-colors hover:text-[var(--brand-green-light)]">
               Home
             </Link>
             <span className="mx-2">/</span>

@@ -2,23 +2,23 @@ import Image from "next/image";
 
 const collageImages = [
   {
-    src: "/about-us-section-1.png",
-    alt: "Sahana Villas living space",
+    src: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=600&q=80",
+    alt: "Sun Shoot Villas living space",
     marginTop: 0,
   },
   {
-    src: "/about-us-section-2.png",
-    alt: "Sahana Villas pool area",
+    src: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600&q=80",
+    alt: "Sun Shoot Villas pool area",
     marginTop: 48,
   },
   {
-    src: "/about-us-section-3.png",
-    alt: "Sahana Villas bedroom",
+    src: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=600&q=80",
+    alt: "Sun Shoot Villas bedroom",
     marginTop: -24,
   },
   {
-    src: "/about-us-section.png",
-    alt: "Sahana Villas tropical garden",
+    src: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80",
+    alt: "Sun Shoot Villas tropical garden",
     marginTop: 24,
   },
 ];

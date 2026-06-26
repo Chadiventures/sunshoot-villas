@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { SITE } from "@/lib/site";
 
 function getWeatherEmoji(code: number): string {
   if (code === 0) return "☀️";
@@ -83,7 +85,7 @@ export default function Hero() {
         playsInline
         preload="metadata"
         className="absolute inset-0 h-full w-full object-cover"
-        style={{ willChange: "transform" }}
+        poster="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=1920&q=80"
       >
         <source src="/hero.mp4" type="video/mp4" />
       </video>
@@ -98,7 +100,7 @@ export default function Hero() {
 
       <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
         <p
-          className="mb-4 text-[#67bc6a]"
+          className="mb-4 text-[var(--brand-green-light)]"
           style={{
             fontFamily: "var(--font-inter)",
             fontSize: "11px",
@@ -119,7 +121,8 @@ export default function Hero() {
             lineHeight: 1.15,
           }}
         >
-          Your Private Oasis <em>Awaits</em>
+          {SITE.tagline.split(" ").slice(0, 3).join(" ")}{" "}
+          <em>{SITE.tagline.split(" ").slice(3).join(" ")}</em>
         </h1>
 
         <p
@@ -131,14 +134,13 @@ export default function Hero() {
             letterSpacing: "0.02em",
           }}
         >
-          3-Bedroom Luxury Villas with Private Pool
+          Four private pool villas in the Bidadari area of Seminyak
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4">
-          <a
-            id="book"
-            href="#book"
-            className="btn-alive inline-block min-h-[44px] border border-[#67bc6a] bg-[#67bc6a] px-10 py-3.5 text-white transition-all duration-300 hover:bg-[#5aaa5d]"
+          <Link
+            href="/contact"
+            className="btn-alive inline-block min-h-[44px] border border-[var(--brand-green)] bg-[var(--brand-green)] px-10 py-3.5 text-white transition-all duration-300 hover:bg-[var(--brand-green-hover)]"
             style={{
               fontFamily: "var(--font-inter)",
               fontSize: "11px",
@@ -147,30 +149,21 @@ export default function Hero() {
               textTransform: "uppercase",
             }}
           >
-            Check Availability
-          </a>
-          <a
-            href="https://maps.app.goo.gl/YVMeVAbNe2cC8hh38"
-            target="_blank"
-            rel="noopener noreferrer"
+            Enquire Now
+          </Link>
+          <Link
+            href="/villas"
+            className="inline-block min-h-[44px] border border-white/60 px-10 py-3.5 text-white transition-all duration-300 hover:border-white"
             style={{
-              display: "inline-block",
               fontFamily: "var(--font-inter)",
               fontSize: "11px",
               fontWeight: 500,
               letterSpacing: "0.18em",
               textTransform: "uppercase",
-              color: "white",
-              background: "transparent",
-              border: "1px solid rgba(255,255,255,0.6)",
-              padding: "14px 40px",
-              borderRadius: "2px",
-              textDecoration: "none",
-              transition: "border-color 0.2s, color 0.2s",
             }}
           >
-            Virtual Tour
-          </a>
+            View Villas
+          </Link>
         </div>
       </div>
 
@@ -208,13 +201,6 @@ export default function Hero() {
             {getWeatherEmoji(weather.weatherCode)} {weather.temperature}°C
           </p>
         )}
-      </div>
-
-      <div className="absolute bottom-10 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 md:flex">
-        <div
-          className="scroll-indicator-line h-10 w-px bg-white/50"
-          style={{ transformOrigin: "top" }}
-        />
       </div>
     </section>
   );

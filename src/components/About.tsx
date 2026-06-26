@@ -47,7 +47,7 @@ export default function About() {
 
         <div ref={textRef} style={slideStyle(false)}>
           <p
-            className="mb-4 text-[#67bc6a]"
+            className="mb-4 text-[var(--brand-green)]"
             style={{
               fontFamily: "var(--font-inter)",
               fontSize: "11px",
@@ -56,7 +56,7 @@ export default function About() {
               textTransform: "uppercase",
             }}
           >
-            The Sahana Story
+            Our Story
           </p>
 
           <h2
@@ -68,8 +68,8 @@ export default function About() {
               lineHeight: 1.25,
             }}
           >
-            Where Bali&apos;s Heart{" "}
-            <em className="text-[#67bc6a]">Meets</em> Modern Luxury
+            Balinese Minimalism,{" "}
+            <em className="text-[var(--brand-green)]">Personal</em> Luxury
           </h2>
 
           <p
@@ -81,11 +81,10 @@ export default function About() {
               lineHeight: 1.8,
             }}
           >
-            Nestled on Oberoi Street in the heart of Seminyak, Sahana Villas
-            offers an intimate escape where tropical serenity meets refined
-            contemporary design. Each villa is a private sanctuary with its own
-            pool, open-air living spaces, and the gentle rhythm of Balinese
-            hospitality.
+            Sun Shoot Villas Seminyak sits on Jl. Bidadari II E — a quiet lane
+            in one of Seminyak&apos;s most sought-after neighbourhoods. Four
+            private pool villas, each with its own character, sharing the warmth
+            of genuine Balinese hospitality.
           </p>
 
           <p
@@ -97,14 +96,14 @@ export default function About() {
               lineHeight: 1.8,
             }}
           >
-            Whether you arrive as a family, a couple, or a group of friends,
-            Sahana welcomes you with spacious bedrooms, attentive staff, and
-            everything you need to feel at home in paradise.
+            This is not a corporate hotel experience. It is a personal retreat
+            where you arrive as a guest and leave feeling like family — with
+            open-plan living, tropical gardens, and your own private pool.
           </p>
 
           <a
             href="/about"
-            className="btn-alive group inline-flex items-center gap-2 border-b border-[#1A1A1A] pb-1 text-[#1A1A1A] transition-colors duration-300 hover:border-[#67bc6a] hover:text-[#67bc6a]"
+            className="btn-alive group inline-flex items-center gap-2 border-b border-[#1A1A1A] pb-1 text-[#1A1A1A] transition-colors duration-300 hover:border-[var(--brand-green)] hover:text-[var(--brand-green)]"
             style={{
               fontFamily: "var(--font-inter)",
               fontSize: "13px",

@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 const WHATSAPP_URL = "https://wa.me/6281239701978";
 
 function WhatsAppIcon({
@@ -24,35 +26,70 @@ function WhatsAppIcon({
 }
 
 export default function FloatingWhatsAppButton() {
+  const [labelBounce, setLabelBounce] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLabelBounce(true), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="fixed right-6 bottom-6 z-40">
-      <div className="group relative">
-        <span
-          className="pointer-events-none absolute right-0 bottom-full mb-3 hidden rounded-sm bg-[var(--dark)] px-3 py-2 text-white opacity-0 shadow-lg transition-opacity duration-300 ease-in-out group-hover:opacity-100 md:block"
-          style={{
-            fontFamily: "var(--font-inter)",
-            fontSize: "0.75rem",
-            fontWeight: 400,
-            whiteSpace: "nowrap",
-          }}
-          role="tooltip"
-        >
-          Chat with us on WhatsApp
-        </span>
+    <>
+      <style>{`
+        @keyframes wa-chat-label-bounce {
+          0%, 100% { transform: translateY(0); }
+          25% { transform: translateY(-8px); }
+          45% { transform: translateY(0); }
+          65% { transform: translateY(-4px); }
+          80% { transform: translateY(0); }
+        }
+        .wa-chat-label-bounce {
+          animation: wa-chat-label-bounce 0.7s ease-in-out;
+        }
+      `}</style>
 
-        <span className="wa-fab-pulse" aria-hidden="true" />
+      <div className="fixed right-6 bottom-6 z-40">
+        <div className="flex items-center gap-2.5">
+          <span
+            className={`whitespace-nowrap rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-[#1A2E1A] shadow-md md:px-3.5 md:py-2 md:text-[13px] ${labelBounce ? "wa-chat-label-bounce" : ""}`}
+            style={{
+              fontFamily: "var(--font-inter)",
+              lineHeight: 1.2,
+            }}
+            aria-hidden="true"
+          >
+            Chat with us!
+          </span>
 
-        <a
-          href={WHATSAPP_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Chat with us on WhatsApp"
-          className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] shadow-lg transition-transform duration-300 ease-in-out hover:scale-110 md:h-14 md:w-14"
-        >
-          <WhatsAppIcon size={22} className="md:hidden" />
-          <WhatsAppIcon size={26} className="hidden md:block" />
-        </a>
+          <div className="group relative">
+            <span
+              className="pointer-events-none absolute right-0 bottom-full mb-3 hidden rounded-sm bg-[var(--dark)] px-3 py-2 text-white opacity-0 shadow-lg transition-opacity duration-300 ease-in-out group-hover:opacity-100 md:block"
+              style={{
+                fontFamily: "var(--font-inter)",
+                fontSize: "0.75rem",
+                fontWeight: 400,
+                whiteSpace: "nowrap",
+              }}
+              role="tooltip"
+            >
+              Chat with us on WhatsApp
+            </span>
+
+            <span className="wa-fab-pulse" aria-hidden="true" />
+
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Chat with us on WhatsApp"
+              className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] shadow-lg transition-transform duration-300 ease-in-out hover:scale-110 md:h-14 md:w-14"
+            >
+              <WhatsAppIcon size={22} className="md:hidden" />
+              <WhatsAppIcon size={26} className="hidden md:block" />
+            </a>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

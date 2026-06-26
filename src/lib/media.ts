@@ -10,3 +10,14 @@ export const VILLA_IMAGES: Record<string, string> = {
 
 export const MAPS_EMBED =
   "https://maps.google.com/maps?q=Jl.+Bidadari+II+E,+Seminyak,+Kuta,+Bali,+Indonesia&z=15&output=embed";
+
+const GALLERY_EXTRAS = [
+  "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
+  "https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg",
+  "https://images.pexels.com/photos/32870/pexels-photo.jpg",
+  "https://images.pexels.com/photos/1134176/pexels-photo-1134176.jpeg",
+];
+
+export function getVillaGalleryImages(heroImage: string): string[] {
+  return [heroImage, ...GALLERY_EXTRAS];
+}

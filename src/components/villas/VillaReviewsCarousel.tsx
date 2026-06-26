@@ -86,6 +86,41 @@ function ReviewCard({ review }: { review: VillaReview }) {
   );
 }
 
+function CarouselArrow({
+  direction,
+  onClick,
+  className = "",
+}: {
+  direction: "left" | "right";
+  onClick: () => void;
+  className?: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={direction === "left" ? "Previous reviews" : "Next reviews"}
+      className={`btn-hover flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-[#C9A96E] bg-white transition-all duration-300 ease-in-out hover:bg-[#C9A96E]/10 ${className}`}
+    >
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#C9A96E"
+        strokeWidth="2"
+        aria-hidden="true"
+      >
+        {direction === "left" ? (
+          <path d="M15 18l-6-6 6-6" />
+        ) : (
+          <path d="M9 18l6-6-6-6" />
+        )}
+      </svg>
+    </button>
+  );
+}
+
 export default function VillaReviewsCarousel({ slug }: VillaReviewsCarouselProps) {
   const reviews = useMemo(
     () => (slug ? getVillaReviews(slug) : DEFAULT_REVIEWS),
@@ -168,16 +203,11 @@ export default function VillaReviewsCarousel({ slug }: VillaReviewsCarouselProps
         </ScrollReveal>
 
         <div className="relative">
-          <button
-            type="button"
+          <CarouselArrow
+            direction="left"
             onClick={() => scroll("left")}
-            aria-label="Previous reviews"
-            className="btn-hover absolute top-1/2 left-0 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--sand)] bg-white text-[var(--dark)] shadow-md transition-all duration-300 ease-in-out hover:bg-[var(--bg)] md:flex"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-          </button>
+            className="absolute top-1/2 left-0 z-10 hidden -translate-y-1/2 md:flex"
+          />
 
           <div
             className="overflow-hidden px-0 md:px-12"
@@ -197,19 +227,19 @@ export default function VillaReviewsCarousel({ slug }: VillaReviewsCarouselProps
             </div>
           </div>
 
-          <button
-            type="button"
+          <CarouselArrow
+            direction="right"
             onClick={() => scroll("right")}
-            aria-label="Next reviews"
-            className="btn-hover absolute top-1/2 right-0 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--sand)] bg-white text-[var(--dark)] shadow-md transition-all duration-300 ease-in-out hover:bg-[var(--bg)] md:flex"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <path d="M9 18l6-6-6-6" />
-            </svg>
-          </button>
+            className="absolute top-1/2 right-0 z-10 hidden -translate-y-1/2 md:flex"
+          />
         </div>
 
-        <p className="mt-4 text-center text-[0.6875rem] text-[var(--text-muted)] md:hidden">
+        <div className="mt-4 flex items-center justify-center gap-4 md:hidden">
+          <CarouselArrow direction="left" onClick={() => scroll("left")} />
+          <CarouselArrow direction="right" onClick={() => scroll("right")} />
+        </div>
+
+        <p className="mt-3 text-center text-[0.6875rem] text-[var(--text-muted)] md:hidden">
           Swipe to read more reviews
         </p>
 

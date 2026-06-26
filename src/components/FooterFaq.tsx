@@ -45,12 +45,6 @@ const FAQ_ITEMS = [
     answer: "Unfortunately we do not allow pets at our villas.",
   },
   {
-    id: "parties",
-    question: "Can I host a party or event at the villa?",
-    answer:
-      "Parties and events are not permitted. Quiet hours are between 00:00 and 07:00.",
-  },
-  {
     id: "cleaning",
     question: "Is daily cleaning included?",
     answer:

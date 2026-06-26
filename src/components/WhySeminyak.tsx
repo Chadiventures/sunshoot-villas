@@ -109,7 +109,7 @@ export default function WhySeminyak() {
             </p>
           </ScrollReveal>
 
-          <div>
+          <div className="hidden md:block">
             <div className="grid grid-cols-2 gap-3 sm:gap-4">
               {DESTINATIONS.map((dest, index) => (
                 <ScrollReveal key={dest.name} delay={100 + index * 60}>

@@ -8,6 +8,44 @@ type LanguageSelectorProps = {
   compact?: boolean;
 };
 
+function FlagIcon({ code }: { code: Language }) {
+  if (code === "en") {
+    return (
+      <img
+        src="https://flagcdn.com/w20/gb.png"
+        width="20"
+        height="14"
+        alt="English"
+        style={{ borderRadius: "2px" }}
+      />
+    );
+  }
+  return (
+    <img
+      src="https://flagcdn.com/w20/id.png"
+      width="20"
+      height="14"
+      alt="Bahasa Indonesia"
+      style={{ borderRadius: "2px" }}
+    />
+  );
+}
+
+function LanguageOptionLabel({
+  code,
+  displayLabel,
+}: {
+  code: Language;
+  displayLabel: string;
+}) {
+  return (
+    <span className="inline-flex items-center gap-2">
+      <FlagIcon code={code} />
+      {displayLabel}
+    </span>
+  );
+}
+
 export default function LanguageSelector({ compact = false }: LanguageSelectorProps) {
   const { language, setLanguage } = useLanguage();
   const [open, setOpen] = useState(false);
@@ -60,9 +98,15 @@ export default function LanguageSelector({ compact = false }: LanguageSelectorPr
           letterSpacing: "0.05em",
         }}
       >
-        <span aria-hidden="true">{current.flag}</span>
-        {!compact && (
-          <span className="hidden md:inline">{current.displayLabel}</span>
+        {compact ? (
+          <FlagIcon code={current.code} />
+        ) : (
+          <span className="hidden md:inline">
+            <LanguageOptionLabel
+              code={current.code}
+              displayLabel={current.displayLabel}
+            />
+          </span>
         )}
         <svg
           width="10"
@@ -102,8 +146,10 @@ export default function LanguageSelector({ compact = false }: LanguageSelectorPr
               fontWeight: language === lang.code ? 500 : 400,
             }}
           >
-            <span aria-hidden="true">{lang.flag}</span>
-            <span>{lang.displayLabel}</span>
+            <LanguageOptionLabel
+              code={lang.code}
+              displayLabel={lang.displayLabel}
+            />
           </button>
         ))}
       </div>

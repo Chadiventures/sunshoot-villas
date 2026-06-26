@@ -96,7 +96,7 @@ export const translations: Record<Language, Translations> = {
       anggrek:
         "Villa Anggrek menawarkan nilai luar biasa tanpa mengorbankan kenyamanan atau gaya. Sempurna untuk pasangan dan keluarga dengan anak kecil. WiFi serat optik 20Mbps tersedia untuk tamu yang bekerja jarak jauh.",
       sandat:
-        "Terletak di area Bidadari Seminyak yang terkenal, Villa Sandat adalah retret yang luas dan indah dengan semua yang Anda butuhkan untuk liburan Bali yang sempurna. Sunshoot Food and Drinks mengantarkan langsung ke pintu vila Anda.",
+        "Terletak di area Bidadari Seminyak yang terkenal, Villa Sandat adalah retret yang luas dan indah dengan semua yang Anda butuhkan untuk liburan Bali yang sempurna. Sunshooter Bar mengantarkan langsung ke pintu vila Anda.",
     },
   },
 };

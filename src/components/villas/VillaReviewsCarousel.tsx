@@ -1,49 +1,17 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
+import {
+  DEFAULT_REVIEWS,
+  getVillaReviews,
+  type ReviewPlatform,
+  type VillaReview,
+} from "@/lib/villa-reviews";
 
-type Platform = "Google" | "TripAdvisor" | "Facebook";
-
-type Review = {
-  text: string;
-  name: string;
-  country: string;
-  platform: Platform;
+type VillaReviewsCarouselProps = {
+  slug?: string;
 };
-
-const REVIEWS: Review[] = [
-  {
-    text: "Warren and Liniah are amazing hosts who go above and beyond to make your stay enjoyable. We loved Villa Jepun and its beautiful pool. They are well connected and can recommend the best tours and activities.",
-    name: "Sarah M",
-    country: "Australia",
-    platform: "Google",
-  },
-  {
-    text: "Each time I come to Bali I stay at Sunshoot Villas. Me and all my friends were satisfied 1000%. The host Warren was great, staff and neighbourhood were excellent.",
-    name: "Jean-Pierre L",
-    country: "France",
-    platform: "TripAdvisor",
-  },
-  {
-    text: "Everything was excellent. Warren goes over and above to accommodate our needs. Staff are friendly and do a wonderful job. It was quiet, clean and had everything we needed.",
-    name: "David K",
-    country: "United Kingdom",
-    platform: "Google",
-  },
-  {
-    text: "Had an exceptional stay. The villa is beautiful with a gorgeous private pool. Warren and the team are incredible hosts. Highly recommend to anyone visiting Bali.",
-    name: "Emma T",
-    country: "New Zealand",
-    platform: "Facebook",
-  },
-  {
-    text: "Best value villa in Seminyak by far. Spotlessly clean, great location, and Warren was always available if we needed anything. Will definitely be back!",
-    name: "Michael R",
-    country: "United States",
-    platform: "TripAdvisor",
-  },
-];
 
 function Stars() {
   return (
@@ -57,8 +25,8 @@ function Stars() {
   );
 }
 
-function PlatformBadge({ platform }: { platform: Platform }) {
-  const colors: Record<Platform, string> = {
+function PlatformBadge({ platform }: { platform: ReviewPlatform }) {
+  const colors: Record<ReviewPlatform, string> = {
     Google: "bg-[#4285F4]/10 text-[#4285F4]",
     TripAdvisor: "bg-[#34A853]/10 text-[#1A2E1A]",
     Facebook: "bg-[#1877F2]/10 text-[#1877F2]",
@@ -74,7 +42,7 @@ function PlatformBadge({ platform }: { platform: Platform }) {
   );
 }
 
-function ReviewCard({ review }: { review: Review }) {
+function ReviewCard({ review }: { review: VillaReview }) {
   return (
     <article className="card-lift flex h-full w-[85vw] max-w-[340px] shrink-0 flex-col rounded-sm border border-[var(--text)]/10 bg-white p-5 shadow-sm sm:w-[320px] md:w-[360px]">
       <Stars />
@@ -118,18 +86,23 @@ function ReviewCard({ review }: { review: Review }) {
   );
 }
 
-export default function VillaReviewsCarousel() {
+export default function VillaReviewsCarousel({ slug }: VillaReviewsCarouselProps) {
+  const reviews = useMemo(
+    () => (slug ? getVillaReviews(slug) : DEFAULT_REVIEWS),
+    [slug],
+  );
+
   const trackRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
   const positionRef = useRef(0);
   const touchStartX = useRef<number | null>(null);
   const animRef = useRef<number | undefined>(undefined);
 
-  const doubled = [...REVIEWS, ...REVIEWS];
+  const doubled = useMemo(() => [...reviews, ...reviews], [reviews]);
   const CARD_WIDTH = 340;
   const GAP = 16;
   const STEP = CARD_WIDTH + GAP;
-  const TOTAL = STEP * REVIEWS.length;
+  const TOTAL = STEP * reviews.length;
 
   useEffect(() => {
     const track = trackRef.current;

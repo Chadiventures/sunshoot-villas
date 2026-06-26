@@ -140,7 +140,7 @@ export default function VillaPageContent({
       </section>
 
       {/* Reviews */}
-      <VillaReviewsCarousel />
+      <VillaReviewsCarousel slug={slug} />
 
       {/* Facilities */}
       <VillaPageFacilities facilities={facilities} />

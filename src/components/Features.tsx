@@ -58,7 +58,7 @@ const features: Feature[] = [
   },
   {
     title: "Fully Equipped Kitchen",
-    description: "Cook at home or order from Sunshoot Food & Drinks.",
+    description: "Cook at home or order from Sunshooter Bar.",
     icon: (
       <svg {...iconProps}>
         <path d="M2 12c2-2 4-2 6 0s4 2 6 0 4-2 6 0" />

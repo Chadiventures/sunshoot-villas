@@ -414,19 +414,6 @@ export default function BookPage() {
                     Send Booking Request
                   </div>
                 </div>
-
-                <p
-                  className="mt-6 text-center text-[var(--text-muted)]"
-                  style={{
-                    fontFamily: "var(--font-inter)",
-                    fontSize: "0.8125rem",
-                    fontWeight: 300,
-                    lineHeight: 1.6,
-                  }}
-                >
-                  50% deposit required to secure booking. Balance due 2 days
-                  before arrival.
-                </p>
               </div>
             </div>
 

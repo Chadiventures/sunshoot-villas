@@ -140,7 +140,7 @@ export const VILLAS: Villa[] = [
     bedrooms: "2 bedrooms + guest toilet",
     highlights: ["Private pool", "Fully equipped kitchen", "Bidadari area"],
     description:
-      "Located in the famous Bidadari area of Seminyak. Walking distance to restaurants, supermarkets and salons. Sunshoot Food & Drinks delivers directly to your villa.",
+      "Located in the famous Bidadari area of Seminyak. Walking distance to restaurants, supermarkets and salons. Sunshooter Bar delivers directly to your villa.",
     facilities: {
       pool: true,
       kitchen: true,

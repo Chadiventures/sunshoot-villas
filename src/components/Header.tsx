@@ -8,11 +8,6 @@ import { useLanguage } from "@/context/LanguageContext";
 
 const STORAGE_KEY = "villa-promo-dismissed";
 
-function getReviewsHref(pathname: string): string {
-  const isVillaDetail = /^\/villas\/[^/]+$/.test(pathname);
-  return isVillaDetail ? "#reviews" : "/villas/mawar#reviews";
-}
-
 export default function Header() {
   const pathname = usePathname();
   const { t } = useLanguage();
@@ -60,7 +55,6 @@ export default function Header() {
 
   const navLinks = [
     { label: t.navOurVillas, href: "/villas", key: "villas" },
-    { label: t.navReviews, href: getReviewsHref(pathname), key: "reviews" },
     { label: t.navAboutUs, href: "/about", key: "about" },
     { label: t.navContactUs, href: "/contact", key: "contact" },
   ];

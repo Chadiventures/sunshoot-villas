@@ -1,0 +1,233 @@
+@import "tailwindcss";
+
+:root {
+  --cream: #f7f3ee;
+  --beige: #c1bab2;
+  --beige-light: #f5f2ef;
+  --brand-green: #67bc6a;
+  --brand-green-hover: #5aaa5d;
+  --terracotta: #b07b72;
+  --sage: #8fa99a;
+  --text: #1a1a1a;
+  --muted: #6b6b6b;
+  --footer-bg: #1a1a1a;
+}
+
+@theme inline {
+  --color-cream: var(--cream);
+  --color-beige: var(--beige);
+  --color-beige-light: var(--beige-light);
+  --color-brand-green: var(--brand-green);
+  --color-terracotta: var(--terracotta);
+  --color-sage: var(--sage);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-footer-bg: var(--footer-bg);
+  --font-heading: var(--font-cormorant);
+  --font-body: var(--font-inter);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--cream);
+  color: var(--text);
+  font-family: var(--font-inter), sans-serif;
+  overflow-x: hidden;
+}
+
+.carousel-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.carousel-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-viewport:hover .carousel-track {
+  animation-play-state: paused;
+}
+
+.carousel-track {
+  width: max-content;
+  animation: carousel-marquee 30s linear infinite;
+}
+
+@keyframes carousel-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-pulse {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(8px);
+    opacity: 1;
+  }
+}
+
+.scroll-indicator-line {
+  animation: scroll-pulse 2s ease-in-out infinite;
+}
+
+@keyframes chat-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(103, 188, 106, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(103, 188, 106, 0);
+  }
+}
+
+.chat-pulse {
+  animation: chat-pulse 2.5s ease-in-out infinite;
+}
+
+.top-banner-content {
+  padding-right: 10rem;
+  white-space: nowrap;
+}
+
+.top-banner-separator {
+  margin-left: 5rem;
+  margin-right: 5rem;
+  font-size: 8px;
+  letter-spacing: 0;
+}
+
+.top-banner-track {
+  width: max-content;
+  animation: top-banner-marquee 28s linear infinite;
+}
+
+@keyframes top-banner-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.footer-tripadvisor img {
+  opacity: 0.5;
+  filter: brightness(0) invert(1);
+  transition: opacity 0.2s, filter 0.2s;
+}
+
+.footer-tripadvisor:hover img {
+  opacity: 1;
+  filter: brightness(0) saturate(100%) invert(68%) sepia(30%) saturate(600%)
+    hue-rotate(85deg);
+}
+
+.footer-contact-link {
+  transition: color 0.2s;
+}
+
+.footer-contact-link:hover {
+  color: #67bc6a;
+}
+
+/* Global image depth effects */
+img {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.img-alive {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.img-alive:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.22), 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Button depth */
+.btn-alive {
+  box-shadow: 0 4px 16px rgba(103, 188, 106, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-alive:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(103, 188, 106, 0.5);
+}
+
+/* Card depth */
+.card-alive {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-alive:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
+}
+
+.feature-row-hover {
+  border-left: 3px solid transparent;
+  transition: border-left 0.3s ease;
+}
+
+.feature-row-hover:hover {
+  border-left: 3px solid #67bc6a;
+}
+
+a[href="/book"],
+button[type="submit"] {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+@keyframes key-info-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.key-info-content {
+  animation: key-info-fade-in 0.25s ease-out;
+}
+
+.key-info-row {
+  border-left: 3px solid transparent;
+  transition: background-color 0.2s ease, border-left-color 0.2s ease;
+}
+
+.key-info-row:hover {
+  border-left-color: #67bc6a;
+  background-color: rgba(103, 188, 106, 0.08);
+}
+
+.key-info-tabs-scroll {
+  overflow-x: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  justify-content: flex-start;
+}
+
+@media (min-width: 768px) {
+  .key-info-tabs-scroll {
+    justify-content: center;
+  }
+}
+
+.key-info-tabs-scroll::-webkit-scrollbar {
+  display: none;
+}

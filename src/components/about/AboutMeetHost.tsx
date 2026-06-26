@@ -44,13 +44,17 @@ export default function AboutMeetHost() {
                   lineHeight: 1.85,
                 }}
               >
-                Warren has been welcoming guests to Seminyak for years, building
-                a reputation for warmth, reliability, and going above and beyond.
-                Whether it is arranging airport pickup, recommending the best
-                local warungs, or simply making sure everything is perfect before
-                you arrive, Warren and his team are always just a WhatsApp
-                message away. Our guests do not just leave with great memories,
-                many come back year after year.
+                Warren is originally from Perth, Australia and has been living
+                in Bali for over 9 years. Together with his wife Lianah, he
+                manages the Sunshoot Villas complex with a small dedicated team.
+                Warren speaks English and some Indonesian, Lianah speaks both
+                Indonesian and English fluently, and the team can assist in other
+                languages using online translation. Warren and Lianah are
+                passionate about giving every guest personal attention and
+                making sure your Bali holiday is everything you hoped for. They
+                are always contactable via WhatsApp, even outside of regular
+                hours, so you never have to worry if something comes up during
+                your stay.
               </p>
             </div>
           </ScrollReveal>

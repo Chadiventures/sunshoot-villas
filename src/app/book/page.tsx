@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Footer from "@/components/Footer";
 import { useLanguage } from "@/context/LanguageContext";
+import { GLOBAL_POLICIES } from "@/lib/site";
 import { VILLAS } from "@/lib/villas";
 
 const WHATSAPP = "6281239701978";
@@ -586,8 +587,38 @@ export default function BookPage() {
                     color: "rgba(255,255,255,0.65)",
                   }}
                 >
-                  Our team will confirm availability and pricing via WhatsApp
-                  within 24 hours.
+                  <p className="mb-3">
+                    Check-in: {GLOBAL_POLICIES.checkIn}. Check-out: By{" "}
+                    {GLOBAL_POLICIES.checkOut}.
+                  </p>
+                  <p>
+                    Our team will confirm availability and pricing via WhatsApp
+                    within 24 hours.
+                  </p>
+                </div>
+
+                <div
+                  className="mt-6 border-t border-white/10 pt-6"
+                  style={{
+                    fontFamily: "var(--font-inter)",
+                    fontSize: "0.8125rem",
+                    fontWeight: 300,
+                    lineHeight: 1.7,
+                    color: "rgba(255,255,255,0.65)",
+                  }}
+                >
+                  <p
+                    className="mb-2 text-white/50"
+                    style={{
+                      fontSize: "0.6875rem",
+                      fontWeight: 500,
+                      letterSpacing: "0.12em",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Payment Methods
+                  </p>
+                  <p>We accept Visa, Mastercard and Cash.</p>
                 </div>
               </div>
             </div>

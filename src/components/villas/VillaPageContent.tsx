@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import VillaPageGallery from "@/components/villas/VillaPageGallery";
 import VillaPageFacilities from "@/components/villas/VillaPageFacilities";
+import VillaHouseRules from "@/components/villas/VillaHouseRules";
 import VillaWhatsAppCta from "@/components/villas/VillaWhatsAppCta";
 import VillaTopBanner from "@/components/villas/VillaTopBanner";
 import VillaKeyInfo from "@/components/villas/VillaKeyInfo";
@@ -15,6 +16,7 @@ import type { VillaFacilities } from "@/lib/villas";
 type VillaPageContentProps = {
   slug: string;
   villaName: string;
+  villaDescription: string;
   facilities: VillaFacilities;
   heroImage: string;
   galleryImages: string[];
@@ -23,12 +25,14 @@ type VillaPageContentProps = {
 export default function VillaPageContent({
   slug,
   villaName,
+  villaDescription,
   facilities,
   heroImage,
   galleryImages,
 }: VillaPageContentProps) {
-  const { getVillaDescription } = useLanguage();
-  const description = getVillaDescription(slug);
+  const { language, getVillaDescription } = useLanguage();
+  const description =
+    language === "id" ? getVillaDescription(slug) : villaDescription;
 
   return (
     <>
@@ -112,7 +116,7 @@ export default function VillaPageContent({
             </ScrollReveal>
 
             <ScrollReveal direction="right" delay={100} className="lg:w-1/2">
-              <VillaKeyInfo />
+              <VillaKeyInfo slug={slug} />
             </ScrollReveal>
           </div>
         </div>
@@ -144,6 +148,9 @@ export default function VillaPageContent({
 
       {/* Facilities */}
       <VillaPageFacilities facilities={facilities} />
+
+      {/* House Rules */}
+      <VillaHouseRules />
 
       {/* WhatsApp CTA */}
       <VillaWhatsAppCta villaName={villaName} />

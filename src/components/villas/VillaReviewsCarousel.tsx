@@ -212,6 +212,33 @@ export default function VillaReviewsCarousel({ slug }: VillaReviewsCarouselProps
         <p className="mt-4 text-center text-[0.6875rem] text-[var(--text-muted)] md:hidden">
           Swipe to read more reviews
         </p>
+
+        <div className="mt-8 flex justify-center px-2 md:mt-10">
+          <a
+            href="https://www.booking.com/hotel/id/sun-shoot-villas-seminyak.html#tab-reviews"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex min-h-[44px] max-w-full flex-wrap items-center justify-center gap-x-2 gap-y-1 rounded-sm border px-4 py-2.5 text-center transition-all duration-300 ease-in-out hover:bg-[#C9A96E] hover:text-white"
+            style={{
+              borderColor: "#C9A96E",
+              color: "#C9A96E",
+              fontFamily: "var(--font-inter)",
+              fontSize: "0.8125rem",
+              fontWeight: 500,
+            }}
+          >
+            <span>Read all reviews on</span>
+            <span className="inline-flex items-center gap-1.5">
+              <span
+                className="inline-block h-2 w-2 shrink-0 rounded-full bg-[#003580] transition-colors duration-300 ease-in-out group-hover:bg-white"
+                aria-hidden="true"
+              />
+              <span className="font-semibold text-[#003580] transition-colors duration-300 ease-in-out group-hover:text-white">
+                booking.com
+              </span>
+            </span>
+          </a>
+        </div>
       </div>
     </section>
   );

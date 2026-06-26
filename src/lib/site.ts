@@ -13,8 +13,8 @@ export const SITE = {
 } as const;
 
 export const GLOBAL_POLICIES = {
-  checkIn: "After 14:00",
-  checkOut: "12:00",
+  checkIn: "From 14:00",
+  checkOut: "11:00",
   payment:
     "50% deposit on booking, 50% balance due 2 days before arrival. Full payment required for bookings made less than 3 days before arrival.",
   smoking: "Not permitted in bedrooms, only in open areas",

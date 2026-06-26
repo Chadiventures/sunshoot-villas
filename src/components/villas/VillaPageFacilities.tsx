@@ -130,6 +130,65 @@ const FACILITY_ICONS: Record<keyof VillaFacilitiesType, ReactNode> = {
       <path d="M12 8v4M10 10h4" />
     </svg>
   ),
+  mosquitoNet: (
+    <svg {...iconProps} aria-hidden="true">
+      <path d="M12 2v4M6 6l12 12M18 6L6 18" />
+      <circle cx="12" cy="12" r="9" />
+    </svg>
+  ),
+  ironingFacilities: (
+    <svg {...iconProps} aria-hidden="true">
+      <path d="M6 2h12l-2 8H8L6 2zM4 14h16v2H4z" />
+    </svg>
+  ),
+  coffeeMaker: (
+    <svg {...iconProps} aria-hidden="true">
+      <path d="M18 8h1a4 4 0 010 8h-1" />
+      <path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z" />
+    </svg>
+  ),
+  outdoorFurniture: (
+    <svg {...iconProps} aria-hidden="true">
+      <path d="M4 10h16M6 10V6h12v4M8 20v-4M16 20v-4" />
+    </svg>
+  ),
+  childSafetyGates: (
+    <svg {...iconProps} aria-hidden="true">
+      <path d="M4 4v16M20 4v16M4 12h16" />
+    </svg>
+  ),
+  babyCrib: (
+    <svg {...iconProps} aria-hidden="true">
+      <path d="M2 9h20v6H2zM6 9V5h12v4" />
+    </svg>
+  ),
+  hairdryer: (
+    <svg {...iconProps} aria-hidden="true">
+      <path d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2" />
+    </svg>
+  ),
+  bidet: (
+    <svg {...iconProps} aria-hidden="true">
+      <path d="M12 2v6M8 8h8M6 14h12v6H6z" />
+    </svg>
+  ),
+  oven: (
+    <svg {...iconProps} aria-hidden="true">
+      <rect x="4" y="2" width="16" height="20" rx="2" />
+      <path d="M8 6h8M8 14h8" />
+    </svg>
+  ),
+  microwave: (
+    <svg {...iconProps} aria-hidden="true">
+      <rect x="2" y="6" width="20" height="12" rx="2" />
+      <path d="M6 12h4M14 10v4" />
+    </svg>
+  ),
+  toaster: (
+    <svg {...iconProps} aria-hidden="true">
+      <path d="M6 2h12v16H6zM8 18h8v4H8z" />
+    </svg>
+  ),
 };
 
 function StatusIcon({ available }: { available: boolean }) {

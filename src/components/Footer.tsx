@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import FooterFaq from "@/components/FooterFaq";
 import { SITE } from "@/lib/site";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -185,6 +186,8 @@ export default function Footer() {
           </div>
         </div>
       </div>
+
+      <FooterFaq />
 
       <div className="border-t border-white/10">
         <div className="container-site py-6">

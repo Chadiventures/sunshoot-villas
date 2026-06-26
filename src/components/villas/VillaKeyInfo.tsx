@@ -1,18 +1,7 @@
 "use client";
 
 import ScrollReveal from "@/components/ScrollReveal";
-
-const MAPS_URL =
-  "https://maps.google.com/?q=Jl.+Bidadari+II+E,+Seminyak,+Bali,+Indonesia";
-
-const CARDS = [
-  { label: "Location", value: "Jl. Bidadari II E, Seminyak", href: MAPS_URL },
-  { label: "Bedrooms", value: "2" },
-  { label: "Pool", value: "Private" },
-  { label: "Check-in", value: "14:00" },
-  { label: "Check-out", value: "12:00" },
-  { label: "Distance to Beach", value: "15 min by scooter or car" },
-];
+import { getVillaKeyInfoCards } from "@/lib/villas";
 
 function InfoCard({
   label,
@@ -74,18 +63,38 @@ function InfoCard({
   );
 }
 
-export default function VillaKeyInfo() {
+type VillaKeyInfoProps = {
+  slug: string;
+};
+
+export default function VillaKeyInfo({ slug }: VillaKeyInfoProps) {
+  const cards = getVillaKeyInfoCards(slug);
+
   return (
-    <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
-      {CARDS.map((card, i) => (
-        <InfoCard
-          key={card.label}
-          label={card.label}
-          value={card.value}
-          href={card.href}
-          index={i}
-        />
-      ))}
+    <div>
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
+        {cards.map((card, i) => (
+          <InfoCard
+            key={card.label}
+            label={card.label}
+            value={card.value}
+            href={card.href}
+            index={i}
+          />
+        ))}
+      </div>
+      <p
+        className="mt-4 text-center text-[var(--text-muted)] lg:text-left"
+        style={{
+          fontFamily: "var(--font-inter)",
+          fontSize: "0.8125rem",
+          fontWeight: 300,
+          fontStyle: "italic",
+          lineHeight: 1.6,
+        }}
+      >
+        Baby crib and extra bed available on request
+      </p>
     </div>
   );
 }

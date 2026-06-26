@@ -7,12 +7,14 @@ const SEMINYAK_VIDEO =
   "https://videos.pexels.com/video-files/2169880/2169880-hd_1920_1080_30fps.mp4";
 
 const DESTINATIONS = [
-  { name: "Canggu", time: "20 min" },
-  { name: "Berawa", time: "15 min" },
-  { name: "Kuta", time: "15 min" },
-  { name: "Airport", time: "20 min" },
-  { name: "Ubud", time: "1 hour" },
-  { name: "Uluwatu", time: "45 min" },
+  { name: "Seminyak Beach", time: "15 min by taxi" },
+  { name: "Kuta Beach", time: "15 min by taxi" },
+  { name: "Canggu", time: "20 min by taxi" },
+  { name: "Airport", time: "20 min by taxi" },
+  { name: "Eat Street (Jl Kayu Aya)", time: "10 min walk" },
+  { name: "Seminyak Square", time: "10 min walk" },
+  { name: "Potato Head Beach Club", time: "10 min by taxi" },
+  { name: "Mexicola", time: "10 min by taxi" },
 ];
 
 function PinIcon() {
@@ -154,7 +156,7 @@ export default function WhySeminyak() {
                 fontStyle: "italic",
               }}
             >
-              Times approximate by Gojek or Grab
+              Times approximate by Gojek, Grab or scooter
             </p>
           </div>
         </div>

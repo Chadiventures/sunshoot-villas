@@ -39,18 +39,29 @@ function StarIcon({ size = 10 }: { size?: number }) {
 
 function MobileRatingEntry({ item }: { item: RatingItem }) {
   const content = (
-    <div className="flex items-center justify-center gap-1 px-1">
-      <StarIcon size={9} />
+    <div className="flex items-center justify-center gap-0.5 whitespace-nowrap px-0.5">
+      <span
+        className="text-white"
+        style={{
+          fontFamily: "var(--font-inter)",
+          fontSize: "10px",
+          fontWeight: 500,
+          lineHeight: 1.2,
+        }}
+      >
+        {item.platform}
+      </span>
+      <StarIcon size={8} />
       <span
         className="text-[#C9A96E]"
         style={{
           fontFamily: "var(--font-inter)",
-          fontSize: "11px",
+          fontSize: "10px",
           fontWeight: 700,
           lineHeight: 1,
         }}
       >
-        {item.score}/{item.max}
+        {item.score}
       </span>
     </div>
   );

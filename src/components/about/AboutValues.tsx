@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 function ValueIcon({ children }: { children: ReactNode }) {
   return (
     <svg
-      className="h-5 w-5 sm:h-7 sm:w-7"
+      className="h-5 w-5 md:h-7 md:w-7"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -70,40 +70,32 @@ export default function AboutValues() {
           </h2>
         </ScrollReveal>
 
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-8">
+        <div className="grid grid-cols-3 gap-2 md:gap-8">
           {VALUES.map((value, index) => (
             <ScrollReveal key={value.title} direction="pop" delay={index * 100}>
-              <article className="card-lift h-full rounded-sm border border-white/10 bg-white/5 p-3 md:p-8">
-                <div className="mb-3 text-[var(--sand)] md:mb-5">{value.icon}</div>
+              <article className="card-lift h-full rounded-sm border border-white/10 bg-white/5 p-2 md:p-8">
+                <div className="mb-2 text-[var(--sand)] md:mb-5">{value.icon}</div>
                 <h3
-                  className="mb-2 text-white md:mb-3"
+                  className="mb-1.5 text-[11px] text-white md:mb-3 md:text-[1.375rem]"
                   style={{
                     fontFamily: "var(--font-cormorant)",
-                    fontSize: "1rem",
                     fontWeight: 400,
                   }}
                 >
-                  <span className="md:hidden" style={{ fontSize: "1rem" }}>
-                    {value.title}
-                  </span>
-                  <span className="hidden md:inline" style={{ fontSize: "1.375rem" }}>
-                    {value.title}
-                  </span>
+                  {value.title}
                 </h3>
                 <p
-                  className="text-white/75"
+                  className="text-[11px] text-white/75 md:text-[0.9375rem]"
                   style={{
                     fontFamily: "var(--font-inter)",
-                    fontSize: "0.75rem",
                     fontWeight: 300,
                     lineHeight: 1.6,
                   }}
                 >
-                  <span className="md:hidden">{value.description}</span>
-                  <span
-                    className="hidden md:inline"
-                    style={{ fontSize: "0.9375rem", lineHeight: 1.75 }}
-                  >
+                  <span className="md:hidden" style={{ lineHeight: 1.5 }}>
+                    {value.description}
+                  </span>
+                  <span className="hidden md:inline" style={{ lineHeight: 1.75 }}>
                     {value.description}
                   </span>
                 </p>

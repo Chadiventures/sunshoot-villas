@@ -6,7 +6,7 @@ import { useLanguage } from "@/context/LanguageContext";
 const features = [
   {
     title: "Prime Seminyak Location",
-    mobileTitle: "Location",
+    mobileTitle: "Perfect Location",
     description:
       "Walking distance to restaurants, supermarkets, salons and Seminyak Beach in the famous Bidadari area.",
     icon: (
@@ -18,7 +18,7 @@ const features = [
   },
   {
     title: "Private Pool",
-    mobileTitle: "Pool",
+    mobileTitle: "Private Pool",
     description:
       "Every villa comes with its own private pool - your personal oasis steps from your living room.",
     icon: (
@@ -30,7 +30,7 @@ const features = [
   },
   {
     title: "Personal Service",
-    mobileTitle: "Service",
+    mobileTitle: "Outstanding Service",
     description:
       "Luxury without the corporate hotel feel - genuine Balinese warmth and attentive hospitality.",
     icon: (
@@ -42,7 +42,7 @@ const features = [
   },
   {
     title: "Airport Pickup Included",
-    mobileTitle: "Airport",
+    mobileTitle: "Free Airport Transfer",
     description:
       "Start your holiday stress-free with complimentary airport pickup arranged for your arrival.",
     icon: (
@@ -129,17 +129,17 @@ export default function WhyChooseUs() {
                 {feature.icon}
               </div>
               <h3
-                className="mb-0 whitespace-nowrap text-[9px] text-white sm:mb-3 sm:whitespace-normal sm:text-[1.25rem]"
+                className="mb-0 whitespace-nowrap text-[9px] text-white md:mb-3 md:whitespace-normal md:text-[1.25rem]"
                 style={{
                   fontFamily: "var(--font-cormorant)",
                   fontWeight: 400,
                 }}
               >
-                <span className="sm:hidden">{feature.mobileTitle}</span>
-                <span className="hidden sm:inline">{feature.title}</span>
+                <span className="md:hidden">{feature.mobileTitle}</span>
+                <span className="hidden md:inline">{feature.title}</span>
               </h3>
               <p
-                className="hidden text-white/65 sm:block"
+                className="hidden text-white/65 md:block"
                 style={{
                   fontFamily: "var(--font-inter)",
                   fontSize: "0.875rem",

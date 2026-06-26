@@ -191,31 +191,23 @@ const FACILITY_ICONS: Record<keyof VillaFacilitiesType, ReactNode> = {
 function FacilityPill({
   facilityKey,
   label,
-  included,
   index,
 }: {
   facilityKey: keyof VillaFacilitiesType;
   label: string;
-  included: boolean;
   index: number;
 }) {
   return (
     <ScrollReveal direction="pop" delay={index * 45}>
       <span
-        className={`inline-flex items-center gap-2 rounded-full px-3 py-2 ${
-          included
-            ? "border border-[#1A2E1A]/15 bg-[#1A2E1A]/8 text-[#1A2E1A]"
-            : "border border-[var(--text)]/10 bg-[#f0f0f0] text-[var(--text-muted)]"
-        }`}
+        className="inline-flex items-center gap-2 rounded-full border border-[#1A2E1A]/15 bg-[#1A2E1A]/8 px-3 py-2 text-[#1A2E1A]"
         style={{
           fontFamily: "var(--font-inter)",
           fontSize: "0.75rem",
           fontWeight: 400,
         }}
       >
-        <span className={included ? "text-[#2d8a4e]" : "opacity-40"}>
-          {FACILITY_ICONS[facilityKey]}
-        </span>
+        <span className="text-[#2d8a4e]">{FACILITY_ICONS[facilityKey]}</span>
         {label}
       </span>
     </ScrollReveal>
@@ -225,12 +217,9 @@ function FacilityPill({
 export default function VillaPageFacilities({
   facilities,
 }: VillaPageFacilitiesProps) {
-  const entries = (
+  const included = (
     Object.entries(FACILITY_LABELS) as [keyof VillaFacilitiesType, string][]
-  ).filter(([key]) => !HIDDEN_FACILITIES.includes(key));
-
-  const included = entries.filter(([key]) => facilities[key]);
-  const notIncluded = entries.filter(([key]) => !facilities[key]);
+  ).filter(([key]) => !HIDDEN_FACILITIES.includes(key) && facilities[key]);
 
   return (
     <section className="bg-[var(--bg)] py-14 md:py-20">
@@ -248,57 +237,28 @@ export default function VillaPageFacilities({
           </h2>
         </ScrollReveal>
 
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-0">
-          <div className="md:pr-8 md:pb-0 md:border-r md:border-[var(--text)]/10">
-            <h3
-              className="mb-4 text-[var(--dark)]"
-              style={{
-                fontFamily: "var(--font-inter)",
-                fontSize: "0.6875rem",
-                fontWeight: 600,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-              }}
-            >
-              What is included
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {included.map(([key, label], index) => (
-                <FacilityPill
-                  key={key}
-                  facilityKey={key}
-                  label={label}
-                  included
-                  index={index}
-                />
-              ))}
-            </div>
-          </div>
-
-          <div className="md:pl-8">
-            <h3
-              className="mb-4 text-[var(--text-muted)]"
-              style={{
-                fontFamily: "var(--font-inter)",
-                fontSize: "0.6875rem",
-                fontWeight: 600,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-              }}
-            >
-              Not included
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {notIncluded.map(([key, label], index) => (
-                <FacilityPill
-                  key={key}
-                  facilityKey={key}
-                  label={label}
-                  included={false}
-                  index={index + included.length}
-                />
-              ))}
-            </div>
+        <div>
+          <h3
+            className="mb-4 text-[var(--dark)]"
+            style={{
+              fontFamily: "var(--font-inter)",
+              fontSize: "0.6875rem",
+              fontWeight: 600,
+              letterSpacing: "0.15em",
+              textTransform: "uppercase",
+            }}
+          >
+            What is included
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {included.map(([key, label], index) => (
+              <FacilityPill
+                key={key}
+                facilityKey={key}
+                label={label}
+                index={index}
+              />
+            ))}
           </div>
         </div>
       </div>

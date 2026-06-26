@@ -4,11 +4,11 @@ import ScrollReveal from "@/components/ScrollReveal";
 
 export default function AboutOurVillas() {
   return (
-    <section className="bg-white py-16 md:py-24">
+    <section className="bg-white py-12 md:py-16">
       <div className="container-site">
         <ScrollReveal className="mx-auto max-w-[800px] text-center">
           <h2
-            className="mb-8 text-[var(--dark)]"
+            className="mb-6 text-[var(--dark)]"
             style={{
               fontFamily: "var(--font-cormorant)",
               fontSize: "clamp(2rem, 5vw, 2.75rem)",

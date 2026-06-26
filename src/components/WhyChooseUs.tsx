@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 
 const features = [
@@ -51,13 +52,48 @@ const features = [
   },
 ];
 
+const REVEAL_STYLE = {
+  transition: "opacity 600ms ease-out, transform 600ms ease-out",
+} as const;
+
+const CARD_STAGGER_MS = [0, 150, 300, 450];
+
 export default function WhyChooseUs() {
   const { t } = useLanguage();
+  const sectionRef = useRef<HTMLElement>(null);
+  const [headerVisible, setHeaderVisible] = useState(false);
+  const [cardsVisible, setCardsVisible] = useState(false);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setHeaderVisible(true);
+          window.setTimeout(() => setCardsVisible(true), 500);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <section className="bg-[var(--dark)] py-20 md:py-28">
+    <section ref={sectionRef} className="bg-[var(--dark)] py-20 md:py-28">
       <div className="container-site">
-        <div className="mb-14 text-center">
+        <div
+          className="mb-14 text-center"
+          style={{
+            ...REVEAL_STYLE,
+            opacity: headerVisible ? 1 : 0,
+            transform: headerVisible ? "translateY(0)" : "translateY(40px)",
+          }}
+        >
           <p className="section-eyebrow mb-3">{t.whyChooseUsTitle}</p>
           <h2
             className="text-white"
@@ -72,8 +108,19 @@ export default function WhyChooseUs() {
         </div>
 
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          {features.map((feature) => (
-            <div key={feature.title} className="text-center">
+          {features.map((feature, index) => (
+            <div
+              key={feature.title}
+              className="text-center"
+              style={{
+                ...REVEAL_STYLE,
+                opacity: cardsVisible ? 1 : 0,
+                transform: cardsVisible ? "translateY(0)" : "translateY(40px)",
+                transitionDelay: cardsVisible
+                  ? `${CARD_STAGGER_MS[index]}ms`
+                  : "0ms",
+              }}
+            >
               <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full border border-[var(--sand)] text-[var(--sand)]">
                 {feature.icon}
               </div>

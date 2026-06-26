@@ -95,6 +95,20 @@ export default function Footer() {
             >
               Private pool villas in the heart of Seminyak, Bali.
             </p>
+            <div className="mt-6 flex gap-3">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target={social.href === "#" ? undefined : "_blank"}
+                  rel={social.href === "#" ? undefined : "noopener noreferrer"}
+                  aria-label={social.label}
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-white/60 transition-colors hover:border-[var(--sand)] hover:text-[var(--sand)]"
+                >
+                  {social.icon}
+                </a>
+              ))}
+            </div>
           </div>
 
           <div>
@@ -183,21 +197,6 @@ export default function Footer() {
               </p>
               <p>Jl. Bidadari II E, Seminyak</p>
             </address>
-
-            <div className="mt-6 flex gap-3">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  target={social.href === "#" ? undefined : "_blank"}
-                  rel={social.href === "#" ? undefined : "noopener noreferrer"}
-                  aria-label={social.label}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-white/60 transition-colors hover:border-[var(--sand)] hover:text-[var(--sand)]"
-                >
-                  {social.icon}
-                </a>
-              ))}
-            </div>
           </div>
         </div>
 

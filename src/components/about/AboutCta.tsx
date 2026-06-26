@@ -5,7 +5,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 
 export default function AboutCta() {
   return (
-    <section className="py-16 md:py-20" style={{ backgroundColor: "#C9A96E" }}>
+    <section className="py-12 md:py-16" style={{ backgroundColor: "#C9A96E" }}>
       <div className="container-site">
         <ScrollReveal className="text-center">
           <h2

@@ -37,7 +37,7 @@ const VALUES = [
 
 export default function AboutValues() {
   return (
-    <section className="bg-[var(--dark)] py-16 md:py-24">
+    <section className="bg-[var(--dark)] py-12 md:py-16">
       <div className="container-site">
         <ScrollReveal className="mb-12 text-center md:mb-14">
           <h2

@@ -23,7 +23,7 @@ export default function AboutHero() {
         aria-hidden="true"
       />
 
-      <div className="relative z-10 mx-auto max-w-4xl px-6 py-16 text-center md:py-20">
+      <div className="relative z-10 mx-auto max-w-4xl px-6 py-12 text-center md:py-16">
         <h1
           className="mb-5 text-white"
           style={{

@@ -20,12 +20,6 @@ const RATINGS: RatingItem[] = [
   { platform: "Trip.com", score: "8.9", max: "10" },
   { platform: "Traveloka", score: "8.3", max: "10" },
   { platform: "Google", score: "3.7", max: "5" },
-  {
-    platform: "The Bali Guideline",
-    score: "8.7",
-    max: "10",
-    href: "https://thebaliguideline.com/stay/seminyak/sun-shoot-villas-private-pool-villa-anggrek",
-  },
 ];
 
 function StarIcon() {

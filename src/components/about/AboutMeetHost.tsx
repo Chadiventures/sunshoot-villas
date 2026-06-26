@@ -4,7 +4,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 
 export default function AboutMeetHost() {
   return (
-    <section className="bg-[var(--bg)] py-16 md:py-24">
+    <section className="bg-[var(--bg)] py-12 md:py-16">
       <div className="container-site">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-14">
           <ScrollReveal direction="left">

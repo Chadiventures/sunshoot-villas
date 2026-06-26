@@ -7,90 +7,48 @@ const ARTICLE_URL =
 
 export default function AboutFeaturedIn() {
   return (
-    <section className="bg-white py-16 md:py-20">
-      <div className="container-site">
-        <ScrollReveal className="mb-10 text-center md:mb-12">
-          <h2
-            className="mb-3 text-[var(--dark)]"
+    <section className="bg-[#C9A96E] py-4 md:max-h-[80px] md:py-0">
+      <ScrollReveal>
+        <div className="container-site flex flex-col items-center justify-center gap-3 py-3 text-center md:h-20 md:flex-row md:justify-between md:gap-6 md:py-0 md:text-left">
+          <p
+            className="text-[#1A2E1A]"
             style={{
               fontFamily: "var(--font-cormorant)",
-              fontSize: "clamp(2rem, 5vw, 2.75rem)",
-              fontWeight: 300,
+              fontSize: "clamp(1.125rem, 3vw, 1.375rem)",
+              fontWeight: 400,
             }}
           >
-            Featured In
-          </h2>
+            Featured in The Bali Guideline
+          </p>
+
           <p
-            className="mx-auto max-w-xl text-[var(--text-muted)]"
+            className="text-[#1A2E1A]"
             style={{
               fontFamily: "var(--font-inter)",
-              fontSize: "1rem",
-              fontWeight: 300,
-              lineHeight: 1.7,
+              fontSize: "0.9375rem",
+              fontWeight: 700,
             }}
           >
-            Sun Shoot Villas has been recognized by leading travel guides
+            8.7 / 10
           </p>
-        </ScrollReveal>
 
-        <ScrollReveal delay={100}>
-          <article className="card-lift mx-auto max-w-2xl rounded-sm border-2 border-[#C9A96E] bg-[#FAF8F5] p-6 md:p-8">
-            <p
-              className="mb-2 text-[#C9A96E]"
-              style={{
-                fontFamily: "var(--font-inter)",
-                fontSize: "0.6875rem",
-                fontWeight: 600,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-              }}
-            >
-              The Bali Guideline
-            </p>
-            <p
-              className="mb-5 text-[var(--text)]"
-              style={{
-                fontFamily: "var(--font-inter)",
-                fontSize: "0.9375rem",
-                fontWeight: 300,
-                lineHeight: 1.8,
-              }}
-            >
-              Recognized as one of Seminyak&apos;s best private pool villa stays,
-              featured alongside Bali&apos;s top luxury properties.
-            </p>
-            <div className="mb-6 flex items-center gap-2">
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="#C9A96E"
-                aria-hidden="true"
-              >
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-              </svg>
-              <span
-                className="text-[#C9A96E]"
-                style={{
-                  fontFamily: "var(--font-inter)",
-                  fontSize: "1rem",
-                  fontWeight: 500,
-                }}
-              >
-                8.7 / 10
-              </span>
-            </div>
-            <a
-              href={ARTICLE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-outline-dark btn-hover inline-flex !px-6 !py-2.5 !text-[10px]"
-            >
-              Read the Article
-            </a>
-          </article>
-        </ScrollReveal>
-      </div>
+          <a
+            href={ARTICLE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-[40px] items-center justify-center rounded-sm border-2 border-[#1A2E1A] px-5 py-2 text-[#1A2E1A] transition-all duration-300 ease-in-out hover:bg-[#1A2E1A] hover:text-white"
+            style={{
+              fontFamily: "var(--font-inter)",
+              fontSize: "0.625rem",
+              fontWeight: 600,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+            }}
+          >
+            Read Article
+          </a>
+        </div>
+      </ScrollReveal>
     </section>
   );
 }

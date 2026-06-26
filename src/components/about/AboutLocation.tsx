@@ -1,14 +1,33 @@
 "use client";
 
 import ScrollReveal from "@/components/ScrollReveal";
+import { HERO_VIDEO } from "@/lib/media";
 
 export default function AboutLocation() {
   return (
-    <section className="bg-[var(--dark)] py-16 md:py-24">
-      <div className="container-site">
+    <section className="relative overflow-hidden py-12 md:py-16">
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        className="absolute inset-0 h-full w-full object-cover"
+        aria-hidden="true"
+      >
+        <source src={HERO_VIDEO} type="video/mp4" />
+      </video>
+
+      <div
+        className="absolute inset-0"
+        style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
+        aria-hidden="true"
+      />
+
+      <div className="container-site relative z-10">
         <ScrollReveal className="mx-auto max-w-[800px] text-center">
           <h2
-            className="mb-8 text-white"
+            className="mb-6 text-white md:mb-8"
             style={{
               fontFamily: "var(--font-cormorant)",
               fontSize: "clamp(2rem, 5vw, 2.75rem)",
@@ -18,7 +37,7 @@ export default function AboutLocation() {
             Location
           </h2>
           <p
-            className="text-white/80"
+            className="text-white"
             style={{
               fontFamily: "var(--font-inter)",
               fontSize: "1rem",

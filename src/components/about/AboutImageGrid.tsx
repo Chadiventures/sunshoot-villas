@@ -83,9 +83,9 @@ export default function AboutImageGrid() {
   };
 
   return (
-    <section className="bg-white py-16 md:py-24">
+    <section className="bg-white py-12 md:py-16">
       <div className="container-site">
-        <ScrollReveal className="mb-10 text-center md:mb-14">
+        <ScrollReveal className="mb-6 text-center md:mb-8">
           <h2
             className="text-[var(--dark)]"
             style={{

@@ -51,18 +51,18 @@ export default function LanguageSelector({ compact = false }: LanguageSelectorPr
         onClick={() => setOpen((prev) => !prev)}
         aria-expanded={open}
         aria-haspopup="listbox"
-        aria-label={`Language: ${current.name}`}
+        aria-label={`Language: ${current.displayLabel}`}
         className="flex items-center gap-1.5 rounded-sm border border-white/20 px-2 py-1.5 text-white transition-all duration-300 ease-in-out hover:border-[var(--sand)] hover:text-[var(--sand)] md:gap-2 md:px-2.5"
         style={{
           fontFamily: "var(--font-inter)",
-          fontSize: compact ? "0.875rem" : "0.6875rem",
+          fontSize: compact ? "1rem" : "0.6875rem",
           fontWeight: 500,
           letterSpacing: "0.05em",
         }}
       >
         <span aria-hidden="true">{current.flag}</span>
         {!compact && (
-          <span className="hidden md:inline">{current.name}</span>
+          <span className="hidden md:inline">{current.displayLabel}</span>
         )}
         <svg
           width="10"
@@ -72,7 +72,7 @@ export default function LanguageSelector({ compact = false }: LanguageSelectorPr
           stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
-          className={`hidden transition-transform duration-300 ease-in-out md:block ${open ? "rotate-180" : ""}`}
+          className={`hidden shrink-0 transition-transform duration-300 ease-in-out md:block ${open ? "rotate-180" : ""}`}
           aria-hidden="true"
         >
           <path d="M6 9l6 6 6-6" />
@@ -82,7 +82,7 @@ export default function LanguageSelector({ compact = false }: LanguageSelectorPr
       <div
         role="listbox"
         aria-label="Select language"
-        className={`lang-dropdown absolute top-full right-0 z-50 mt-2 min-w-[180px] overflow-hidden rounded-sm border border-[var(--text)]/10 bg-[#FAF8F5] shadow-lg ${open ? "lang-dropdown-open" : ""}`}
+        className={`lang-dropdown absolute top-full right-0 z-50 mt-2 min-w-[200px] overflow-hidden rounded-sm border border-[var(--text)]/10 bg-[#FAF8F5] shadow-lg ${open ? "lang-dropdown-open" : ""}`}
       >
         {LANGUAGES.map((lang) => (
           <button
@@ -103,7 +103,7 @@ export default function LanguageSelector({ compact = false }: LanguageSelectorPr
             }}
           >
             <span aria-hidden="true">{lang.flag}</span>
-            <span>{lang.name}</span>
+            <span>{lang.displayLabel}</span>
           </button>
         ))}
       </div>

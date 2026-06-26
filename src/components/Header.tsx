@@ -91,10 +91,10 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
-            <LanguageSelector />
             <Link href="/book" className="btn-primary btn-hover !py-2.5 !text-[10px]">
               {t.navBookNow}
             </Link>
+            <LanguageSelector />
           </nav>
 
           <div className="flex items-center gap-2 md:hidden">

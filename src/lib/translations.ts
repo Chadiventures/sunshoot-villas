@@ -5,10 +5,10 @@ export const LANGUAGE_STORAGE_KEY = "sunshoot-language";
 export const LANGUAGES: {
   code: Language;
   flag: string;
-  name: string;
+  displayLabel: string;
 }[] = [
-  { code: "en", flag: "\u{1F1EC}\u{1F1E7}", name: "English" },
-  { code: "id", flag: "\u{1F1EE}\u{1F1E9}", name: "Bahasa Indonesia" },
+  { code: "en", flag: "\u{1F1EC}\u{1F1E7}", displayLabel: "GB English" },
+  { code: "id", flag: "\u{1F1EE}\u{1F1E9}", displayLabel: "ID Bahasa Indonesia" },
 ];
 
 export type VillaSlug = "mawar" | "jepun" | "anggrek" | "sandat";

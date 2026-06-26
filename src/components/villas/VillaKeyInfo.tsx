@@ -11,7 +11,7 @@ const CARDS = [
   { label: "Pool", value: "Private" },
   { label: "Check-in", value: "14:00" },
   { label: "Check-out", value: "12:00" },
-  { label: "Distance to Beach", value: "10 min walk" },
+  { label: "Distance to Beach", value: "15 min by scooter or car" },
 ];
 
 function InfoCard({

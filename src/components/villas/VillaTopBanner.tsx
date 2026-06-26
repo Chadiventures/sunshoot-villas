@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 
 const STORAGE_KEY = "villa-promo-dismissed";
 export const BANNER_HEIGHT = 44;
+
+const MARQUEE_TEXT =
+  "Limited availability for July 2026 - Enquire now to secure your villa!   |   4 private pool villas in the heart of Seminyak   |   Free airport pickup included   |   Personal service from host Warren   |   ";
 
 export default function VillaTopBanner() {
   const [visible, setVisible] = useState(false);
@@ -29,38 +31,61 @@ export default function VillaTopBanner() {
 
   return (
     <div
-      className="fixed top-0 right-0 left-0 z-[60] flex items-center justify-center px-10 py-2.5 text-center"
+      className="fixed top-0 right-0 left-0 z-[60] flex items-center"
       style={{
         backgroundColor: "#C9A96E",
         color: "#1A2E1A",
         minHeight: `${BANNER_HEIGHT}px`,
       }}
     >
-      <p
-        className="text-[0.6875rem] leading-snug font-medium sm:text-xs"
-        style={{ fontFamily: "var(--font-inter)", letterSpacing: "0.02em" }}
-      >
-        <span className="sm:hidden">
-          Limited availability July 2026 -{" "}
-          <Link href="/book" className="underline">
-            Enquire now
-          </Link>
-        </span>
-        <span className="hidden sm:inline">
-          Limited availability for July 2026 -{" "}
-          <Link href="/book" className="underline hover:opacity-80">
-            Enquire now to secure your villa!
-          </Link>
-        </span>
-      </p>
+      <div className="villa-banner-marquee flex-1 overflow-hidden pr-12 pl-3">
+        <div
+          className="villa-banner-track flex w-max items-center"
+          aria-hidden="true"
+        >
+          <span
+            className="shrink-0 whitespace-nowrap px-6"
+            style={{
+              fontFamily: "var(--font-inter)",
+              fontSize: "0.75rem",
+              fontWeight: 500,
+              letterSpacing: "0.02em",
+            }}
+          >
+            {MARQUEE_TEXT}
+          </span>
+          <span
+            className="shrink-0 whitespace-nowrap px-6"
+            style={{
+              fontFamily: "var(--font-inter)",
+              fontSize: "0.75rem",
+              fontWeight: 500,
+              letterSpacing: "0.02em",
+            }}
+          >
+            {MARQUEE_TEXT}
+          </span>
+        </div>
+        <p className="sr-only">{MARQUEE_TEXT}</p>
+      </div>
+
       <button
         type="button"
         onClick={dismiss}
         aria-label="Dismiss banner"
-        className="absolute top-1/2 right-3 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full transition-all duration-300 ease-in-out hover:scale-110"
+        className="absolute top-1/2 right-3 z-10 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-[#C9A96E] transition-all duration-300 ease-in-out hover:scale-110"
         style={{ color: "#1A2E1A" }}
       >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          aria-hidden="true"
+        >
           <path d="M18 6L6 18M6 6l12 12" />
         </svg>
       </button>

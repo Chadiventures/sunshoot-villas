@@ -236,3 +236,33 @@ body {
     opacity: 0;
   }
 }
+
+/* Villa top banner marquee */
+.villa-banner-marquee {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 24px,
+    black calc(100% - 48px),
+    transparent
+  );
+}
+
+.villa-banner-track {
+  animation: villaBannerMarquee 45s linear infinite;
+}
+
+@keyframes villaBannerMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .villa-banner-track {
+    animation: none;
+  }
+}

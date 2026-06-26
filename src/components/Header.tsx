@@ -6,11 +6,6 @@ import { usePathname } from "next/navigation";
 
 const STORAGE_KEY = "villa-promo-dismissed";
 
-function getReviewsHref(pathname: string): string {
-  const isVillaDetail = /^\/villas\/[^/]+$/.test(pathname);
-  return isVillaDetail ? "#reviews" : "/villas/mawar#reviews";
-}
-
 export default function Header() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
@@ -54,11 +49,9 @@ export default function Header() {
   const solid = scrolled || !isHome;
   const headerTop =
     bannerActive && isVillaDetail ? "var(--villa-banner-h, 44px)" : "0px";
-  const reviewsHref = getReviewsHref(pathname);
 
   const navLinks = [
     { label: "Our Villas", href: "/villas" },
-    { label: "Reviews", href: reviewsHref },
     { label: "About Us", href: "/about" },
     { label: "Contact Us", href: "/contact" },
   ];

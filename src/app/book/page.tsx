@@ -492,6 +492,33 @@ export default function BookPage() {
                   </div>
                 </div>
               </div>
+
+              <div className="mt-6 text-center">
+                <p
+                  className="mx-auto max-w-lg italic text-[var(--text-muted)]"
+                  style={{
+                    fontFamily: "var(--font-inter)",
+                    fontSize: "0.75rem",
+                    fontWeight: 300,
+                    lineHeight: 1.7,
+                  }}
+                >
+                  Secure payment is handled via our booking system. You will receive
+                  payment instructions by email or WhatsApp after your booking is
+                  confirmed.
+                </p>
+                <p
+                  className="mt-3 text-[var(--text-muted)]"
+                  style={{
+                    fontFamily: "var(--font-inter)",
+                    fontSize: "0.6875rem",
+                    fontWeight: 400,
+                    letterSpacing: "0.04em",
+                  }}
+                >
+                  Visa | Mastercard | Cash
+                </p>
+              </div>
             </div>
 
             {/* Summary box - right on desktop, below form on mobile */}

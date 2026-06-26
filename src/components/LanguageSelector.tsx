@@ -31,17 +31,15 @@ function FlagIcon({ code }: { code: Language }) {
   );
 }
 
-function LanguageOptionLabel({
-  code,
-  displayLabel,
-}: {
-  code: Language;
-  displayLabel: string;
-}) {
+function getLanguageName(code: Language): string {
+  return code === "en" ? "English" : "Bahasa Indonesia";
+}
+
+function LanguageOptionLabel({ code }: { code: Language }) {
   return (
     <span className="inline-flex items-center gap-2">
       <FlagIcon code={code} />
-      {displayLabel}
+      {getLanguageName(code)}
     </span>
   );
 }
@@ -89,7 +87,7 @@ export default function LanguageSelector({ compact = false }: LanguageSelectorPr
         onClick={() => setOpen((prev) => !prev)}
         aria-expanded={open}
         aria-haspopup="listbox"
-        aria-label={`Language: ${current.displayLabel}`}
+        aria-label={`Language: ${getLanguageName(current.code)}`}
         className="flex items-center gap-1.5 rounded-sm border border-white/20 px-2 py-1.5 text-white transition-all duration-300 ease-in-out hover:border-[var(--sand)] hover:text-[var(--sand)] md:gap-2 md:px-2.5"
         style={{
           fontFamily: "var(--font-inter)",
@@ -102,10 +100,7 @@ export default function LanguageSelector({ compact = false }: LanguageSelectorPr
           <FlagIcon code={current.code} />
         ) : (
           <span className="hidden md:inline">
-            <LanguageOptionLabel
-              code={current.code}
-              displayLabel={current.displayLabel}
-            />
+            <LanguageOptionLabel code={current.code} />
           </span>
         )}
         <svg
@@ -146,10 +141,7 @@ export default function LanguageSelector({ compact = false }: LanguageSelectorPr
               fontWeight: language === lang.code ? 500 : 400,
             }}
           >
-            <LanguageOptionLabel
-              code={lang.code}
-              displayLabel={lang.displayLabel}
-            />
+            <LanguageOptionLabel code={lang.code} />
           </button>
         ))}
       </div>

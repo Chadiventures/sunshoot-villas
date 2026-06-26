@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PhoneNumberField, {
   DEFAULT_PHONE_VALUE,
   buildPhoneWhatsAppLines,
@@ -35,6 +35,33 @@ const initialForm: FormFields = {
   children: "0",
   message: "",
 };
+
+function toYmd(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function getTodayYmd(): string {
+  return toYmd(new Date());
+}
+
+function getTomorrowYmd(): string {
+  const date = new Date();
+  date.setDate(date.getDate() + 1);
+  return toYmd(date);
+}
+
+function addDaysToYmd(ymd: string, days: number): string {
+  const date = new Date(`${ymd}T00:00:00`);
+  date.setDate(date.getDate() + days);
+  return toYmd(date);
+}
+
+function getDepartureMinYmd(arrivalDate: string): string {
+  return arrivalDate ? addDaysToYmd(arrivalDate, 1) : getTomorrowYmd();
+}
 
 function buildWhatsAppMessage(form: FormFields): string {
   const villaName =
@@ -117,6 +144,51 @@ export default function InquiryForm({
   };
 
   const fieldError = (key: FieldKey) => Boolean(errors[key]);
+
+  const arrivalMin = getTodayYmd();
+  const departureMin = getDepartureMinYmd(form.arrivalDate);
+
+  useEffect(() => {
+    if (form.arrivalDate && form.arrivalDate < getTodayYmd()) {
+      setForm((prev) => ({ ...prev, arrivalDate: "", departureDate: "" }));
+      return;
+    }
+    if (
+      form.departureDate &&
+      form.departureDate < getDepartureMinYmd(form.arrivalDate)
+    ) {
+      setForm((prev) => ({ ...prev, departureDate: "" }));
+    }
+  }, [form.arrivalDate, form.departureDate]);
+
+  const handleArrivalDateChange = (value: string) => {
+    if (value && value < getTodayYmd()) {
+      setForm((prev) => ({ ...prev, arrivalDate: "", departureDate: "" }));
+    } else {
+      setForm((prev) => ({
+        ...prev,
+        arrivalDate: value,
+        departureDate:
+          prev.departureDate && value && prev.departureDate <= value
+            ? ""
+            : prev.departureDate,
+      }));
+    }
+    setErrors((prev) => ({
+      ...prev,
+      arrivalDate: false,
+      departureDate: false,
+    }));
+  };
+
+  const handleDepartureDateChange = (value: string) => {
+    const min = getDepartureMinYmd(form.arrivalDate);
+    if (value && value < min) {
+      setForm((prev) => ({ ...prev, departureDate: "" }));
+      return;
+    }
+    updateField("departureDate", value);
+  };
 
   const inputClass = (hasError: boolean) =>
     `w-full rounded-sm border bg-white px-4 py-3 text-[var(--text)] outline-none transition-colors placeholder:text-[var(--text-muted)]/50 ${
@@ -244,7 +316,8 @@ export default function InquiryForm({
             id="arrivalDate"
             type="date"
             value={form.arrivalDate}
-            onChange={(e) => updateField("arrivalDate", e.target.value)}
+            min={arrivalMin}
+            onChange={(e) => handleArrivalDateChange(e.target.value)}
             className={`${inputClass(fieldError("arrivalDate"))} [color-scheme:light]`}
             style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
           />
@@ -263,7 +336,8 @@ export default function InquiryForm({
             id="departureDate"
             type="date"
             value={form.departureDate}
-            onChange={(e) => updateField("departureDate", e.target.value)}
+            min={departureMin}
+            onChange={(e) => handleDepartureDateChange(e.target.value)}
             className={`${inputClass(fieldError("departureDate"))} [color-scheme:light]`}
             style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
           />

@@ -1,9 +1,16 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Footer from "@/components/Footer";
-import PageHero from "@/components/PageHero";
+import VideoPageHero from "@/components/VideoPageHero";
 import InquiryForm from "@/components/InquiryForm";
 import MapSection from "@/components/MapSection";
 import { SITE } from "@/lib/site";
+
+const CONTACT_HERO_VIDEO =
+  "https://videos.pexels.com/video-files/3125908/3125908-hd_1920_1080_25fps.mp4";
+
+const CONTACT_IMAGE =
+  "https://cf.bstatic.com/xdata/images/hotel/max1280x900/185354560.jpg?k=6a8de904dbd7d2121d6e233fd5a13746df529ac987d74da48410ae3357898cfa&o=&hp=1";
 
 export const metadata: Metadata = {
   title: `Contact | ${SITE.name}`,
@@ -14,13 +21,10 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
-      <PageHero
+      <VideoPageHero
+        videoSrc={CONTACT_HERO_VIDEO}
         title="Contact Us"
-        subtitle="We'd love to hear from you. Send an enquiry and we'll get back to you promptly."
-        breadcrumb={[
-          { label: "Home", href: "/" },
-          { label: "Contact" },
-        ]}
+        subtitle="We are always just a message away"
       />
 
       <section className="bg-[var(--bg)] py-16 md:py-24">
@@ -92,6 +96,28 @@ export default function ContactPage() {
                     Chat on WhatsApp
                   </a>
                 </div>
+              </div>
+
+              <div className="group mt-6">
+                <div className="relative h-[200px] w-full overflow-hidden rounded-sm md:h-[250px]">
+                  <Image
+                    src={CONTACT_IMAGE}
+                    alt="Sun Shoot Villas Seminyak"
+                    fill
+                    className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                </div>
+                <p
+                  className="mt-2 text-[var(--text-muted)] italic"
+                  style={{
+                    fontFamily: "var(--font-inter)",
+                    fontSize: "0.8125rem",
+                    fontWeight: 300,
+                  }}
+                >
+                  Jl. Bidadari II E, Seminyak, Bali
+                </p>
               </div>
             </div>
 

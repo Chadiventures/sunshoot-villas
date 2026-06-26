@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Footer from "@/components/Footer";
 import PhoneNumberField, {
   DEFAULT_PHONE_VALUE,
@@ -46,6 +46,33 @@ function calcNights(arrival: string, departure: string): number | null {
     (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24),
   );
   return nights > 0 ? nights : null;
+}
+
+function toYmd(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function getTodayYmd(): string {
+  return toYmd(new Date());
+}
+
+function getTomorrowYmd(): string {
+  const date = new Date();
+  date.setDate(date.getDate() + 1);
+  return toYmd(date);
+}
+
+function addDaysToYmd(ymd: string, days: number): string {
+  const date = new Date(`${ymd}T00:00:00`);
+  date.setDate(date.getDate() + days);
+  return toYmd(date);
+}
+
+function getDepartureMinYmd(arrivalDate: string): string {
+  return arrivalDate ? addDaysToYmd(arrivalDate, 1) : getTomorrowYmd();
 }
 
 function buildWhatsAppMessage(fields: BookingFields, nights: number | null): string {
@@ -180,6 +207,52 @@ export default function BookPage() {
 
   const fieldError = (key: keyof BookingFields) => Boolean(errors[key]);
 
+  const arrivalMin = getTodayYmd();
+  const departureMin = getDepartureMinYmd(fields.arrivalDate);
+
+  useEffect(() => {
+    if (fields.arrivalDate && fields.arrivalDate < getTodayYmd()) {
+      setFields((prev) => ({ ...prev, arrivalDate: "", departureDate: "" }));
+      return;
+    }
+    if (
+      fields.departureDate &&
+      fields.departureDate < getDepartureMinYmd(fields.arrivalDate)
+    ) {
+      setFields((prev) => ({ ...prev, departureDate: "" }));
+    }
+  }, [fields.arrivalDate, fields.departureDate]);
+
+  const handleArrivalDateChange = (value: string) => {
+    if (value && value < getTodayYmd()) {
+      setFields((prev) => ({ ...prev, arrivalDate: "", departureDate: "" }));
+    } else {
+      setFields((prev) => ({
+        ...prev,
+        arrivalDate: value,
+        departureDate:
+          prev.departureDate && value && prev.departureDate <= value
+            ? ""
+            : prev.departureDate,
+      }));
+    }
+    setErrors((prev) => ({
+      ...prev,
+      arrivalDate: false,
+      departureDate: false,
+    }));
+    if (submitted) setSubmitted(false);
+  };
+
+  const handleDepartureDateChange = (value: string) => {
+    const min = getDepartureMinYmd(fields.arrivalDate);
+    if (value && value < min) {
+      setFields((prev) => ({ ...prev, departureDate: "" }));
+      return;
+    }
+    update("departureDate", value);
+  };
+
   return (
     <>
       <section className="bg-[var(--dark)] pt-28 pb-14 md:pt-32 md:pb-16">
@@ -278,7 +351,8 @@ export default function BookPage() {
                         id="book-arrival"
                         type="date"
                         value={fields.arrivalDate}
-                        onChange={(e) => update("arrivalDate", e.target.value)}
+                        min={arrivalMin}
+                        onChange={(e) => handleArrivalDateChange(e.target.value)}
                         className={`${inputClass} [color-scheme:light] ${fieldError("arrivalDate") ? "border-red-400" : ""}`}
                         style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
                       />
@@ -294,7 +368,8 @@ export default function BookPage() {
                         id="book-departure"
                         type="date"
                         value={fields.departureDate}
-                        onChange={(e) => update("departureDate", e.target.value)}
+                        min={departureMin}
+                        onChange={(e) => handleDepartureDateChange(e.target.value)}
                         className={`${inputClass} [color-scheme:light] ${fieldError("departureDate") ? "border-red-400" : ""}`}
                         style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
                       />

@@ -189,7 +189,7 @@ export default function FooterFaq() {
   const [openId, setOpenId] = useState<string | null>(null);
 
   return (
-    <section className="border-t border-white/10 bg-[var(--dark)]">
+    <section id="faq" className="border-t border-white/10 bg-[var(--dark)]">
       <div className="container-site py-10 md:py-12">
         <h2
           className="mb-6 text-center text-white md:mb-8"

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -10,8 +11,14 @@ import VillaWhatsAppCta from "@/components/villas/VillaWhatsAppCta";
 import VillaTopBanner from "@/components/villas/VillaTopBanner";
 import VillaKeyInfo from "@/components/villas/VillaKeyInfo";
 import VillaReviewsCarousel from "@/components/villas/VillaReviewsCarousel";
+import VillaHighlightsStrip from "@/components/villas/VillaHighlightsStrip";
+import VillaSectionDivider from "@/components/villas/VillaSectionDivider";
+import VillaImageStrip from "@/components/villas/VillaImageStrip";
 import { useLanguage } from "@/context/LanguageContext";
 import type { VillaFacilities } from "@/lib/villas";
+
+const DISTANCE_NOTE =
+  "Our villas are just a few hundred metres from Sunset Road. Seminyak Square and Eat Street are about a 10 minute walk away, and the beaches at Kuta, Legian and Seminyak are approximately 15 minutes by taxi or scooter.";
 
 type VillaPageContentProps = {
   slug: string;
@@ -34,20 +41,49 @@ export default function VillaPageContent({
   const description =
     language === "id" ? getVillaDescription(slug) : villaDescription;
 
+  const heroRef = useRef<HTMLElement>(null);
+  const parallaxRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const hero = heroRef.current;
+    const image = parallaxRef.current;
+    if (!hero || !image) return;
+
+    const onScroll = () => {
+      const rect = hero.getBoundingClientRect();
+      if (rect.bottom > 0) {
+        const scrollProgress = Math.max(0, -rect.top);
+        image.style.transform = `translate3d(0, ${scrollProgress * 0.35}px, 0) scale(1.08)`;
+      }
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const stripImage =
+    galleryImages[1] ?? galleryImages[0] ?? heroImage;
+
   return (
     <>
       <VillaTopBanner />
 
       {/* Hero */}
-      <section className="relative min-h-[55vh] w-full overflow-hidden sm:min-h-[65vh]">
-        <Image
-          src={heroImage}
-          alt={villaName}
-          fill
-          priority
-          className="object-cover transition-transform duration-300 ease-in-out"
-          sizes="100vw"
-        />
+      <section
+        ref={heroRef}
+        className="relative h-[50vh] w-full overflow-hidden md:h-[60vh]"
+      >
+        <div ref={parallaxRef} className="villa-hero-parallax-image absolute inset-0">
+          <Image
+            src={heroImage}
+            alt={villaName}
+            fill
+            priority
+            className="object-cover object-center"
+            sizes="100vw"
+          />
+        </div>
         <div
           className="absolute inset-0"
           style={{
@@ -85,6 +121,10 @@ export default function VillaPageContent({
         </div>
       </section>
 
+      <VillaHighlightsStrip />
+
+      <VillaSectionDivider />
+
       {/* Intro */}
       <section className="bg-[var(--bg)] py-10 md:py-16">
         <div className="container-site">
@@ -103,7 +143,7 @@ export default function VillaPageContent({
                 Welcome
               </p>
               <p
-                className="text-[var(--text)]"
+                className="mb-5 text-[var(--text)]"
                 style={{
                   fontFamily: "var(--font-inter)",
                   fontSize: "1rem",
@@ -113,6 +153,18 @@ export default function VillaPageContent({
               >
                 {description}
               </p>
+              <p
+                className="text-[var(--text-muted)]"
+                style={{
+                  fontFamily: "var(--font-inter)",
+                  fontSize: "0.875rem",
+                  fontWeight: 300,
+                  lineHeight: 1.75,
+                  fontStyle: "italic",
+                }}
+              >
+                {DISTANCE_NOTE}
+              </p>
             </ScrollReveal>
 
             <ScrollReveal direction="right" delay={100} className="lg:w-1/2">
@@ -121,6 +173,10 @@ export default function VillaPageContent({
           </div>
         </div>
       </section>
+
+      <VillaImageStrip src={stripImage} alt={`${villaName} pool and garden`} />
+
+      <VillaSectionDivider />
 
       {/* Gallery */}
       <section className="bg-white py-10 md:py-16">
@@ -143,11 +199,19 @@ export default function VillaPageContent({
         </div>
       </section>
 
+      <VillaSectionDivider />
+
       {/* Reviews */}
-      <VillaReviewsCarousel slug={slug} />
+      <ScrollReveal>
+        <VillaReviewsCarousel slug={slug} />
+      </ScrollReveal>
+
+      <VillaSectionDivider />
 
       {/* Facilities */}
       <VillaPageFacilities facilities={facilities} />
+
+      <VillaSectionDivider />
 
       {/* House Rules */}
       <VillaHouseRules />

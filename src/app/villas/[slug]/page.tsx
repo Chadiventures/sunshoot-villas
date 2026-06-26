@@ -29,7 +29,7 @@ export default async function VillaDetailPage({ params }: Props) {
   if (!villa) notFound();
 
   const heroImage = VILLA_IMAGES[slug] ?? VILLA_IMAGES.mawar;
-  const galleryImages = getVillaGalleryImages(heroImage);
+  const galleryImages = getVillaGalleryImages(slug);
 
   return (
     <VillaPageContent

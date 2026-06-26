@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
-type Direction = "up" | "left" | "right";
+type Direction = "up" | "left" | "right" | "pop";
 
 type ScrollRevealProps = {
   children: ReactNode;
@@ -45,7 +45,9 @@ export default function ScrollReveal({
       ? "scroll-reveal-left"
       : direction === "right"
         ? "scroll-reveal-right"
-        : "scroll-reveal-up";
+        : direction === "pop"
+          ? "scroll-reveal-pop"
+          : "scroll-reveal-up";
 
   return (
     <Tag

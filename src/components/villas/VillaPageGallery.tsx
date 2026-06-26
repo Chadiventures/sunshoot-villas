@@ -16,7 +16,6 @@ export default function VillaPageGallery({
   const touchStartX = useRef<number | null>(null);
 
   const total = images.length;
-  const thumbnails = images.slice(0, 4);
 
   const goTo = useCallback(
     (index: number) => {
@@ -46,78 +45,82 @@ export default function VillaPageGallery({
 
   return (
     <div className="w-full">
-      <div
-        className="img-zoom-wrap relative aspect-[4/3] w-full overflow-hidden rounded-sm bg-[var(--dark)] sm:aspect-[16/10]"
-        onTouchStart={onTouchStart}
-        onTouchEnd={onTouchEnd}
-      >
-        <Image
-          src={images[activeIndex]}
-          alt={`${villaName} gallery image ${activeIndex + 1}`}
-          fill
-          className="zoom-target object-cover"
-          sizes="(max-width: 768px) 100vw, 72rem"
-          priority={activeIndex === 0}
-        />
-
-        <button
-          type="button"
-          onClick={goPrev}
-          aria-label="Previous image"
-          className="btn-hover absolute top-1/2 left-3 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[var(--dark)] shadow-md transition-all duration-300 ease-in-out hover:bg-white md:flex"
+      <div className="flex flex-col items-center">
+        <div
+          className="relative w-full max-h-[500px] overflow-hidden rounded-sm bg-[var(--dark)] md:w-[65%]"
+          style={{ height: "min(500px, 55vw)" }}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
-        </button>
-        <button
-          type="button"
-          onClick={goNext}
-          aria-label="Next image"
-          className="btn-hover absolute top-1/2 right-3 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[var(--dark)] shadow-md transition-all duration-300 ease-in-out hover:bg-white md:flex"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-            <path d="M9 18l6-6-6-6" />
-          </svg>
-        </button>
+          <Image
+            key={activeIndex}
+            src={images[activeIndex]}
+            alt={`${villaName} gallery image ${activeIndex + 1}`}
+            fill
+            className="gallery-main-zoom object-cover object-center"
+            sizes="(max-width: 768px) 100vw, 65vw"
+            priority={activeIndex === 0}
+          />
 
-        <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5 md:hidden">
-          {images.map((_, i) => (
-            <span
-              key={i}
-              className={`h-1.5 rounded-full transition-all ${
-                i === activeIndex ? "w-5 bg-white" : "w-1.5 bg-white/50"
-              }`}
-              aria-hidden="true"
-            />
-          ))}
+          <button
+            type="button"
+            onClick={goPrev}
+            aria-label="Previous image"
+            className="btn-hover absolute top-1/2 left-3 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[var(--dark)] shadow-md transition-all duration-300 ease-in-out hover:bg-white md:flex"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            onClick={goNext}
+            aria-label="Next image"
+            className="btn-hover absolute top-1/2 right-3 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[var(--dark)] shadow-md transition-all duration-300 ease-in-out hover:bg-white md:flex"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
+
+          <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5 md:hidden">
+            {images.map((_, i) => (
+              <span
+                key={i}
+                className={`h-1.5 rounded-full transition-all ${
+                  i === activeIndex ? "w-5 bg-white" : "w-1.5 bg-white/50"
+                }`}
+                aria-hidden="true"
+              />
+            ))}
+          </div>
         </div>
+
+        <p className="mt-2 text-center text-[0.6875rem] text-[var(--text-muted)] md:hidden">
+          Swipe left or right to browse photos
+        </p>
       </div>
 
-      <p className="mt-2 text-center text-[0.6875rem] text-[var(--text-muted)] md:hidden">
-        Swipe left or right to browse photos
-      </p>
-
-      <div className="mt-3 grid grid-cols-4 gap-2 sm:gap-3">
-        {thumbnails.map((src, i) => (
+      <div className="mt-4 flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {images.map((src, i) => (
           <button
-            key={src}
+            key={`${src}-${i}`}
             type="button"
             onClick={() => setActiveIndex(i)}
             aria-label={`View image ${i + 1}`}
             aria-current={activeIndex === i ? "true" : undefined}
-            className={`img-zoom-wrap relative aspect-[4/3] overflow-hidden rounded-sm border-2 transition-all duration-300 ease-in-out ${
+            className={`relative h-16 w-24 shrink-0 overflow-hidden rounded-sm border-2 transition-all duration-300 ease-in-out sm:h-20 sm:w-28 ${
               activeIndex === i
-                ? "border-[var(--sand)]"
-                : "border-transparent opacity-80 hover:opacity-100"
+                ? "border-[var(--sand)] opacity-100"
+                : "border-transparent opacity-70 hover:opacity-100"
             }`}
           >
             <Image
               src={src}
               alt={`${villaName} thumbnail ${i + 1}`}
               fill
-              className="zoom-target object-cover"
-              sizes="25vw"
+              className="object-cover"
+              sizes="112px"
             />
           </button>
         ))}

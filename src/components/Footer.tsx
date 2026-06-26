@@ -65,6 +65,7 @@ export default function Footer() {
     { label: t.navOurVillas, href: "/villas", key: "villas" },
     { label: t.navAboutUs, href: "/about", key: "about" },
     { label: t.navContactUs, href: "/contact", key: "contact" },
+    { label: "FAQ", href: "#faq", key: "faq" },
     { label: "Terms & Conditions", href: "/contact", key: "terms" },
   ];
 

@@ -1,5 +1,6 @@
 import Hero from "@/components/Hero";
 import VillaCards from "@/components/VillaCards";
+import RatingsTrustBar from "@/components/RatingsTrustBar";
 import WhySeminyak from "@/components/WhySeminyak";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import MapSection from "@/components/MapSection";
@@ -10,6 +11,7 @@ export default function Home() {
     <>
       <Hero />
       <VillaCards />
+      <RatingsTrustBar />
       <WhySeminyak />
       <WhyChooseUs />
       <MapSection />

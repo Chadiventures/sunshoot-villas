@@ -153,6 +153,10 @@ body {
   transform: translateX(32px);
 }
 
+.scroll-reveal-pop {
+  transform: scale(0.94) translateY(20px);
+}
+
 .scroll-reveal-visible {
   opacity: 1;
   transform: translate(0, 0);
@@ -281,4 +285,74 @@ body {
   visibility: visible;
   transform: translateY(0);
   pointer-events: auto;
+}
+
+/* Villa page animations */
+.villa-highlights-strip-in {
+  opacity: 0;
+  animation: villaHighlightsSlideUp 0.7s ease-out forwards;
+}
+
+@keyframes villaHighlightsSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.villa-highlight-bob {
+  animation: villaHighlightBob 3s ease-in-out infinite;
+}
+
+@keyframes villaHighlightBob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.gallery-main-zoom {
+  animation: galleryImageZoom 0.45s ease-out;
+}
+
+@keyframes galleryImageZoom {
+  from {
+    transform: scale(1.05);
+    opacity: 0.88;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.villa-section-divider {
+  color: var(--sand);
+  opacity: 0.45;
+  line-height: 0;
+}
+
+.villa-hero-parallax-image {
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .villa-highlight-bob,
+  .villa-highlights-strip-in,
+  .gallery-main-zoom {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .villa-hero-parallax-image {
+    transform: none !important;
+  }
 }

@@ -2,37 +2,33 @@
 
 import Image from "next/image";
 import ScrollReveal from "@/components/ScrollReveal";
+import { BOOKING_PHOTOS } from "@/lib/media";
 
 const GRID_IMAGES = [
   {
-    src: "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg",
-    alt: "Private pool villa in Seminyak",
+    src: BOOKING_PHOTOS[0],
+    alt: "Sun Shoot Villas private pool",
     tall: true,
   },
   {
-    src: "https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg",
-    alt: "Tropical villa living space",
+    src: BOOKING_PHOTOS[1],
+    alt: "Villa living area at Sun Shoot Villas",
     tall: false,
   },
   {
-    src: "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg",
-    alt: "Bali villa bedroom",
+    src: BOOKING_PHOTOS[2],
+    alt: "Bedroom at Sun Shoot Villas Seminyak",
     tall: false,
   },
   {
-    src: "https://images.pexels.com/photos/189296/pexels-photo-189296.jpeg",
-    alt: "Seminyak villa pool area",
+    src: BOOKING_PHOTOS[3],
+    alt: "Pool area at Sun Shoot Villas",
     tall: true,
   },
   {
-    src: "https://images.pexels.com/photos/1268871/pexels-photo-1268871.jpeg",
-    alt: "Tropical garden villa",
+    src: BOOKING_PHOTOS[4],
+    alt: "Sun Shoot Villas garden villa",
     tall: false,
-  },
-  {
-    src: "https://images.pexels.com/photos/3601425/pexels-photo-3601425.jpeg",
-    alt: "Bali holiday villa",
-    tall: true,
   },
 ];
 

@@ -1,92 +1,108 @@
 import type { Metadata } from "next";
-import dynamic from "next/dynamic";
-import Link from "next/link";
-import ContactSection from "@/components/contact/ContactSection";
 import Footer from "@/components/Footer";
+import PageHero from "@/components/PageHero";
+import InquiryForm from "@/components/InquiryForm";
+import MapSection from "@/components/MapSection";
 import { SITE } from "@/lib/site";
-
-const ContactHeroVideo = dynamic(
-  () => import("@/components/contact/ContactHeroVideo"),
-  {
-    loading: () => (
-      <div
-        className="absolute inset-0 h-full w-full bg-[var(--beige)]"
-        aria-hidden="true"
-      />
-    ),
-  },
-);
 
 export const metadata: Metadata = {
   title: `Contact | ${SITE.name}`,
   description:
-    "Get in touch with Sun Shoot Villas Seminyak. Call, email, or send a booking enquiry via WhatsApp.",
+    "Contact Sun Shoot Villas Seminyak. Call, email, or send a booking enquiry via WhatsApp.",
 };
 
 export default function ContactPage() {
   return (
     <>
-      <section
-        className="relative flex flex-col items-center justify-center overflow-hidden px-6 text-center"
-        style={{
-          marginTop: "-80px",
-          height: "40vh",
-          minHeight: "280px",
-        }}
-      >
-        <ContactHeroVideo />
+      <PageHero
+        title="Contact Us"
+        subtitle="We'd love to hear from you. Send an enquiry and we'll get back to you promptly."
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "Contact" },
+        ]}
+      />
 
-        <div
-          className="absolute inset-0"
-          style={{ backgroundColor: "rgba(31, 46, 36, 0.70)" }}
-        />
+      <section className="bg-[var(--bg)] py-16 md:py-24">
+        <div className="container-site">
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
+            <div>
+              <h2
+                className="mb-8 text-[var(--dark)]"
+                style={{
+                  fontFamily: "var(--font-cormorant)",
+                  fontSize: "1.75rem",
+                  fontWeight: 300,
+                }}
+              >
+                Get in Touch
+              </h2>
 
-        <div className="relative z-10">
-          <p
-            className="mb-3 text-[var(--brand-green-light)]"
-            style={{
-              fontFamily: "var(--font-inter)",
-              fontSize: "11px",
-              fontWeight: 500,
-              letterSpacing: "0.25em",
-              textTransform: "uppercase",
-            }}
-          >
-            Get in Touch
-          </p>
+              <div className="space-y-6">
+                <div>
+                  <p className="section-eyebrow mb-1">Phone</p>
+                  <a
+                    href={`tel:${SITE.phoneRaw}`}
+                    className="text-[var(--text)] transition-colors hover:text-[var(--sand)]"
+                    style={{
+                      fontFamily: "var(--font-inter)",
+                      fontSize: "1rem",
+                      fontWeight: 400,
+                    }}
+                  >
+                    {SITE.phone}
+                  </a>
+                </div>
+                <div>
+                  <p className="section-eyebrow mb-1">Email</p>
+                  <a
+                    href={`mailto:${SITE.email}`}
+                    className="text-[var(--text)] transition-colors hover:text-[var(--sand)]"
+                    style={{
+                      fontFamily: "var(--font-inter)",
+                      fontSize: "1rem",
+                      fontWeight: 400,
+                    }}
+                  >
+                    {SITE.email}
+                  </a>
+                </div>
+                <div>
+                  <p className="section-eyebrow mb-1">Address</p>
+                  <p
+                    className="text-[var(--text-muted)]"
+                    style={{
+                      fontFamily: "var(--font-inter)",
+                      fontSize: "1rem",
+                      fontWeight: 300,
+                      lineHeight: 1.7,
+                    }}
+                  >
+                    {SITE.address}
+                  </p>
+                </div>
+                <div>
+                  <p className="section-eyebrow mb-1">WhatsApp</p>
+                  <a
+                    href={`https://wa.me/${SITE.whatsapp}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-primary inline-block"
+                  >
+                    Chat on WhatsApp
+                  </a>
+                </div>
+              </div>
+            </div>
 
-          <h1
-            className="mb-4 text-white"
-            style={{
-              fontFamily: "var(--font-cormorant)",
-              fontSize: "clamp(2rem, 5vw, 4rem)",
-              fontWeight: 300,
-              fontStyle: "italic",
-              lineHeight: 1.15,
-            }}
-          >
-            Contact Us
-          </h1>
-
-          <nav
-            aria-label="Breadcrumb"
-            style={{
-              fontFamily: "var(--font-inter)",
-              fontSize: "12px",
-              fontWeight: 300,
-              color: "rgba(255,255,255,0.6)",
-            }}
-          >
-            <Link href="/" className="transition-colors hover:text-[var(--brand-green-light)]">
-              Home
-            </Link>
-            <span className="mx-2">/</span>
-            <span className="text-white/80">Contact</span>
-          </nav>
+            <div className="rounded-sm bg-white p-6 shadow-sm md:p-8">
+              <InquiryForm />
+            </div>
+          </div>
         </div>
       </section>
 
-      <ContactSection />
+      <MapSection />
       <Footer />
     </>
   );

@@ -30,36 +30,6 @@ const initialForm: FormFields = {
   message: "",
 };
 
-const labelStyle = {
-  fontFamily: "var(--font-inter)",
-  fontSize: "10px",
-  fontWeight: 500,
-  letterSpacing: "0.2em",
-  textTransform: "uppercase" as const,
-  color: "var(--brand-green)",
-};
-
-const inputClassName =
-  "w-full bg-transparent py-2.5 text-[#1A1A1A] outline-none transition-colors duration-300 placeholder:text-[#6B6B6B]/60";
-
-const inputStyle = {
-  fontFamily: "var(--font-inter)",
-  fontSize: "14px",
-  fontWeight: 300,
-};
-
-function fieldBorderStyle(hasError: boolean, isFocused = false) {
-  return {
-    borderBottom: `1px solid ${
-      hasError
-        ? "rgba(220, 100, 100, 0.7)"
-        : isFocused
-          ? "var(--brand-green)"
-          : "rgba(26, 26, 26, 0.2)"
-    }`,
-  };
-}
-
 function buildWhatsAppMessage(form: FormFields): string {
   const villaName =
     VILLAS.find((v) => v.slug === form.villa)?.name ?? form.villa;
@@ -86,19 +56,20 @@ function buildWhatsAppMessage(form: FormFields): string {
 
 type InquiryFormProps = {
   defaultVilla?: string;
-  compact?: boolean;
+  hideVillaSelect?: boolean;
+  showHeading?: boolean;
 };
 
 export default function InquiryForm({
   defaultVilla = "",
-  compact = false,
+  hideVillaSelect = false,
+  showHeading = true,
 }: InquiryFormProps) {
   const [form, setForm] = useState<FormFields>({
     ...initialForm,
     villa: defaultVilla,
   });
   const [errors, setErrors] = useState<Partial<Record<FieldKey, boolean>>>({});
-  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const updateField = <K extends FieldKey>(key: K, value: FormFields[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -113,11 +84,11 @@ export default function InquiryForm({
       "name",
       "email",
       "phone",
-      "villa",
       "arrivalDate",
       "departureDate",
       "adults",
     ];
+    if (!hideVillaSelect) required.push("villa");
 
     required.forEach((key) => {
       if (!form[key]) nextErrors[key] = true;
@@ -137,48 +108,20 @@ export default function InquiryForm({
   };
 
   const fieldError = (key: FieldKey) => Boolean(errors[key]);
-  const borderFor = (key: string, hasError: boolean) =>
-    fieldBorderStyle(hasError, focusedField === key);
 
-  const FormField = ({
-    label,
-    name,
-    error,
-    children,
-    className = "",
-  }: {
-    label: string;
-    name: string;
-    error?: boolean;
-    children: React.ReactNode;
-    className?: string;
-  }) => (
-    <div className={className}>
-      <label htmlFor={name} className="mb-2 block" style={labelStyle}>
-        {label}
-      </label>
-      {children}
-      {error && (
-        <p
-          className="mt-1"
-          style={{
-            fontFamily: "var(--font-inter)",
-            fontSize: "11px",
-            color: "rgba(220, 100, 100, 0.9)",
-          }}
-        >
-          This field is required
-        </p>
-      )}
-    </div>
-  );
+  const inputClass = (hasError: boolean) =>
+    `w-full rounded-sm border bg-white px-4 py-3 text-[var(--text)] outline-none transition-colors placeholder:text-[var(--text-muted)]/50 ${
+      hasError
+        ? "border-red-400"
+        : "border-[var(--text)]/15 focus:border-[var(--sand)]"
+    }`;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6" noValidate>
-      {!compact && (
-        <div>
+    <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+      {showHeading && (
+        <div className="mb-2">
           <h3
-            className="mb-2 text-[#1A1A1A]"
+            className="mb-2 text-[var(--dark)]"
             style={{
               fontFamily: "var(--font-cormorant)",
               fontSize: "clamp(1.5rem, 3vw, 2rem)",
@@ -188,49 +131,69 @@ export default function InquiryForm({
             Send an Enquiry
           </h3>
           <p
+            className="text-[var(--text-muted)]"
             style={{
               fontFamily: "var(--font-inter)",
-              fontSize: "13px",
+              fontSize: "0.875rem",
               fontWeight: 300,
               lineHeight: 1.7,
-              color: "rgba(26, 26, 26, 0.6)",
             }}
           >
-            Fill in the form and we&apos;ll open WhatsApp with your details
+            Complete the form and we&apos;ll open WhatsApp with your details
             ready to send.
           </p>
         </div>
       )}
 
-      <FormField label="Name" name="name" error={fieldError("name")}>
+      <div>
+        <label
+          htmlFor="name"
+          className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
+        >
+          Name
+        </label>
         <input
           id="name"
           type="text"
           required
           value={form.name}
           onChange={(e) => updateField("name", e.target.value)}
-          onFocus={() => setFocusedField("name")}
-          onBlur={() => setFocusedField(null)}
-          className={inputClassName}
-          style={{ ...inputStyle, ...borderFor("name", fieldError("name")) }}
+          className={inputClass(fieldError("name"))}
+          style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
         />
-      </FormField>
+        {fieldError("name") && (
+          <p className="mt-1 text-xs text-red-500">Required</p>
+        )}
+      </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <FormField label="Email" name="email" error={fieldError("email")}>
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+        <div>
+          <label
+            htmlFor="email"
+            className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
+          >
+            Email
+          </label>
           <input
             id="email"
             type="email"
             required
             value={form.email}
             onChange={(e) => updateField("email", e.target.value)}
-            onFocus={() => setFocusedField("email")}
-            onBlur={() => setFocusedField(null)}
-            className={inputClassName}
-            style={{ ...inputStyle, ...borderFor("email", fieldError("email")) }}
+            className={inputClass(fieldError("email"))}
+            style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
           />
-        </FormField>
-        <FormField label="Phone" name="phone" error={fieldError("phone")}>
+          {fieldError("email") && (
+            <p className="mt-1 text-xs text-red-500">Required</p>
+          )}
+        </div>
+        <div>
+          <label
+            htmlFor="phone"
+            className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
+          >
+            Phone
+          </label>
           <input
             id="phone"
             type="tel"
@@ -238,145 +201,160 @@ export default function InquiryForm({
             placeholder="+62"
             value={form.phone}
             onChange={(e) => updateField("phone", e.target.value)}
-            onFocus={() => setFocusedField("phone")}
-            onBlur={() => setFocusedField(null)}
-            className={inputClassName}
-            style={{ ...inputStyle, ...borderFor("phone", fieldError("phone")) }}
+            className={inputClass(fieldError("phone"))}
+            style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
           />
-        </FormField>
+          {fieldError("phone") && (
+            <p className="mt-1 text-xs text-red-500">Required</p>
+          )}
+        </div>
       </div>
 
-      <FormField label="Villa" name="villa" error={fieldError("villa")}>
-        <select
-          id="villa"
-          required
-          value={form.villa}
-          onChange={(e) => updateField("villa", e.target.value)}
-          onFocus={() => setFocusedField("villa")}
-          onBlur={() => setFocusedField(null)}
-          className={`${inputClassName} cursor-pointer appearance-none`}
-          style={{ ...inputStyle, ...borderFor("villa", fieldError("villa")) }}
-        >
-          <option value="" disabled className="bg-[#E8DFD4]">
-            Select a villa
-          </option>
-          {VILLAS.map((v) => (
-            <option key={v.slug} value={v.slug} className="bg-[#E8DFD4]">
-              {v.name}
+      {!hideVillaSelect && (
+        <div>
+          <label
+            htmlFor="villa"
+            className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
+          >
+            Villa
+          </label>
+          <select
+            id="villa"
+            required
+            value={form.villa}
+            onChange={(e) => updateField("villa", e.target.value)}
+            className={`${inputClass(fieldError("villa"))} cursor-pointer`}
+            style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
+          >
+            <option value="" disabled>
+              Select a villa
             </option>
-          ))}
-        </select>
-      </FormField>
+            {VILLAS.map((v) => (
+              <option key={v.slug} value={v.slug}>
+                {v.name}
+              </option>
+            ))}
+          </select>
+          {fieldError("villa") && (
+            <p className="mt-1 text-xs text-red-500">Required</p>
+          )}
+        </div>
+      )}
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <FormField
-          label="Arrival Date"
-          name="arrivalDate"
-          error={fieldError("arrivalDate")}
-        >
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+        <div>
+          <label
+            htmlFor="arrivalDate"
+            className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
+          >
+            Arrival Date
+          </label>
           <input
             id="arrivalDate"
             type="date"
             required
             value={form.arrivalDate}
             onChange={(e) => updateField("arrivalDate", e.target.value)}
-            onFocus={() => setFocusedField("arrivalDate")}
-            onBlur={() => setFocusedField(null)}
-            className={`${inputClassName} [color-scheme:light]`}
-            style={{
-              ...inputStyle,
-              ...borderFor("arrivalDate", fieldError("arrivalDate")),
-            }}
+            className={`${inputClass(fieldError("arrivalDate"))} [color-scheme:light]`}
+            style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
           />
-        </FormField>
-        <FormField
-          label="Departure Date"
-          name="departureDate"
-          error={fieldError("departureDate")}
-        >
+          {fieldError("arrivalDate") && (
+            <p className="mt-1 text-xs text-red-500">Required</p>
+          )}
+        </div>
+        <div>
+          <label
+            htmlFor="departureDate"
+            className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
+          >
+            Departure Date
+          </label>
           <input
             id="departureDate"
             type="date"
             required
             value={form.departureDate}
             onChange={(e) => updateField("departureDate", e.target.value)}
-            onFocus={() => setFocusedField("departureDate")}
-            onBlur={() => setFocusedField(null)}
-            className={`${inputClassName} [color-scheme:light]`}
-            style={{
-              ...inputStyle,
-              ...borderFor("departureDate", fieldError("departureDate")),
-            }}
+            className={`${inputClass(fieldError("departureDate"))} [color-scheme:light]`}
+            style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
           />
-        </FormField>
+          {fieldError("departureDate") && (
+            <p className="mt-1 text-xs text-red-500">Required</p>
+          )}
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <FormField label="Adults" name="adults" error={fieldError("adults")}>
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+        <div>
+          <label
+            htmlFor="adults"
+            className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
+          >
+            Adults
+          </label>
           <select
             id="adults"
             required
             value={form.adults}
             onChange={(e) => updateField("adults", e.target.value)}
-            onFocus={() => setFocusedField("adults")}
-            onBlur={() => setFocusedField(null)}
-            className={`${inputClassName} cursor-pointer appearance-none`}
-            style={{ ...inputStyle, ...borderFor("adults", fieldError("adults")) }}
+            className={`${inputClass(fieldError("adults"))} cursor-pointer`}
+            style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
           >
-            <option value="" disabled className="bg-[#E8DFD4]">
+            <option value="" disabled>
               Select
             </option>
             {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
-              <option key={n} value={String(n)} className="bg-[#E8DFD4]">
+              <option key={n} value={String(n)}>
                 {n}
               </option>
             ))}
           </select>
-        </FormField>
-        <FormField label="Children" name="children">
+          {fieldError("adults") && (
+            <p className="mt-1 text-xs text-red-500">Required</p>
+          )}
+        </div>
+        <div>
+          <label
+            htmlFor="children"
+            className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
+          >
+            Children
+          </label>
           <select
             id="children"
             value={form.children}
             onChange={(e) => updateField("children", e.target.value)}
-            onFocus={() => setFocusedField("children")}
-            onBlur={() => setFocusedField(null)}
-            className={`${inputClassName} cursor-pointer appearance-none`}
-            style={{ ...inputStyle, ...borderFor("children", false) }}
+            className={`${inputClass(false)} cursor-pointer`}
+            style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
           >
             {Array.from({ length: 7 }, (_, i) => i).map((n) => (
-              <option key={n} value={String(n)} className="bg-[#E8DFD4]">
+              <option key={n} value={String(n)}>
                 {n}
               </option>
             ))}
           </select>
-        </FormField>
+        </div>
       </div>
 
-      <FormField label="Message" name="message">
+      <div>
+        <label
+          htmlFor="message"
+          className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
+        >
+          Message
+        </label>
         <textarea
           id="message"
           rows={4}
           placeholder="Any special requests or questions..."
           value={form.message}
           onChange={(e) => updateField("message", e.target.value)}
-          onFocus={() => setFocusedField("message")}
-          onBlur={() => setFocusedField(null)}
-          className={`${inputClassName} resize-none`}
-          style={{ ...inputStyle, ...borderFor("message", false) }}
+          className={`${inputClass(false)} resize-none`}
+          style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
         />
-      </FormField>
+      </div>
 
-      <button
-        type="submit"
-        className="btn-alive w-full bg-[var(--brand-green)] py-4 text-white transition-colors duration-300 hover:bg-[var(--brand-green-hover)]"
-        style={{
-          fontFamily: "var(--font-inter)",
-          fontSize: "11px",
-          fontWeight: 500,
-          letterSpacing: "0.2em",
-          textTransform: "uppercase",
-        }}
-      >
+      <button type="submit" className="btn-primary w-full">
         Send via WhatsApp
       </button>
     </form>

@@ -1,20 +1,16 @@
 import Hero from "@/components/Hero";
-import Carousel from "@/components/Carousel";
-import About from "@/components/About";
-import Features from "@/components/Features";
-import Testimonials from "@/components/Testimonials";
-import Location from "@/components/Location";
+import VillaCards from "@/components/VillaCards";
+import WhyChooseUs from "@/components/WhyChooseUs";
+import MapSection from "@/components/MapSection";
 import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
     <>
       <Hero />
-      <Carousel />
-      <About />
-      <Features />
-      <Testimonials />
-      <Location />
+      <VillaCards />
+      <WhyChooseUs />
+      <MapSection />
       <Footer />
     </>
   );

@@ -10,26 +10,26 @@ const policies = [
 
 export default function VillaPolicies() {
   return (
-    <div className="space-y-6">
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
       {policies.map((policy) => (
         <div key={policy.label}>
           <h4
-            className="mb-2 text-[var(--brand-green)]"
+            className="mb-2 text-[var(--sand)]"
             style={{
               fontFamily: "var(--font-inter)",
-              fontSize: "10px",
-              fontWeight: 500,
-              letterSpacing: "0.2em",
+              fontSize: "0.6875rem",
+              fontWeight: 600,
+              letterSpacing: "0.15em",
               textTransform: "uppercase",
             }}
           >
             {policy.label}
           </h4>
           <p
-            className="text-[#6B6B6B]"
+            className="text-white/70"
             style={{
               fontFamily: "var(--font-inter)",
-              fontSize: "14px",
+              fontSize: "0.875rem",
               fontWeight: 300,
               lineHeight: 1.7,
             }}

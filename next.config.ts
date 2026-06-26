@@ -10,15 +10,11 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "images.pexels.com",
+      },
+      {
+        protocol: "https",
         hostname: "images.unsplash.com",
-      },
-      {
-        protocol: "https",
-        hostname: "upload.wikimedia.org",
-      },
-      {
-        protocol: "https",
-        hostname: "cdn.gtranslate.net",
       },
     ],
   },
@@ -27,7 +23,6 @@ const nextConfig: NextConfig = {
       { source: "/families", destination: "/about", permanent: true },
       { source: "/rates", destination: "/villas", permanent: true },
       { source: "/promos", destination: "/contact", permanent: true },
-      { source: "/book", destination: "/admin", permanent: false },
     ];
   },
 };

@@ -187,7 +187,7 @@ export default function VillaPageContent({
                 fontWeight: 300,
               }}
             >
-              Photo Gallery
+              Villa Gallery
             </h2>
           </ScrollReveal>
           <ScrollReveal delay={120}>

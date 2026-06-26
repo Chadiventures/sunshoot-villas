@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 type VillaPageGalleryProps = {
@@ -13,9 +13,15 @@ export default function VillaPageGallery({
   villaName,
 }: VillaPageGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const swipeRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+  const isHorizontalSwipe = useRef(false);
+  const activeIndexRef = useRef(activeIndex);
 
   const total = images.length;
+
+  activeIndexRef.current = activeIndex;
 
   const goTo = useCallback(
     (index: number) => {
@@ -28,29 +34,72 @@ export default function VillaPageGallery({
   const goPrev = () => goTo(activeIndex - 1);
   const goNext = () => goTo(activeIndex + 1);
 
-  const onTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
+  useEffect(() => {
+    const el = swipeRef.current;
+    if (!el) return;
 
-  const onTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null) return;
-    const diff = e.changedTouches[0].clientX - touchStartX.current;
-    touchStartX.current = null;
-    if (Math.abs(diff) < 40) return;
-    if (diff < 0) goNext();
-    else goPrev();
-  };
+    const onTouchStart = (e: TouchEvent) => {
+      touchStartX.current = e.touches[0].clientX;
+      touchStartY.current = e.touches[0].clientY;
+      isHorizontalSwipe.current = false;
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (touchStartX.current === null || touchStartY.current === null) return;
+
+      const dx = e.touches[0].clientX - touchStartX.current;
+      const dy = e.touches[0].clientY - touchStartY.current;
+
+      if (!isHorizontalSwipe.current) {
+        if (Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) {
+          isHorizontalSwipe.current = true;
+        }
+      }
+
+      if (isHorizontalSwipe.current) {
+        e.preventDefault();
+      }
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
+      if (touchStartX.current === null) return;
+
+      const diff = e.changedTouches[0].clientX - touchStartX.current;
+      const wasHorizontal = isHorizontalSwipe.current;
+
+      touchStartX.current = null;
+      touchStartY.current = null;
+      isHorizontalSwipe.current = false;
+
+      if (wasHorizontal && Math.abs(diff) >= 40) {
+        if (diff < 0) {
+          goTo(activeIndexRef.current + 1);
+        } else {
+          goTo(activeIndexRef.current - 1);
+        }
+      }
+    };
+
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchmove", onTouchMove, { passive: false });
+    el.addEventListener("touchend", onTouchEnd, { passive: true });
+
+    return () => {
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchmove", onTouchMove);
+      el.removeEventListener("touchend", onTouchEnd);
+    };
+  }, [goTo]);
 
   if (total === 0) return null;
 
   return (
-    <div className="w-full">
+    <div className="w-full touch-pan-y">
       <div className="flex flex-col items-center">
         <div
-          className="relative w-full max-h-[500px] overflow-hidden rounded-sm bg-[var(--dark)] md:w-[65%]"
+          ref={swipeRef}
+          className="relative w-full max-h-[500px] touch-none overflow-hidden rounded-sm bg-[var(--dark)] md:w-[65%]"
           style={{ height: "min(500px, 55vw)" }}
-          onTouchStart={onTouchStart}
-          onTouchEnd={onTouchEnd}
         >
           {images.map((src, i) => (
             <Image
@@ -63,6 +112,7 @@ export default function VillaPageGallery({
               }`}
               sizes="(max-width: 768px) 100vw, 65vw"
               priority={i === 0}
+              draggable={false}
             />
           ))}
 

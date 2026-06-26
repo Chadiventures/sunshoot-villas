@@ -9,6 +9,11 @@ type VillaPageFacilitiesProps = {
   facilities: VillaFacilitiesType;
 };
 
+const HIDDEN_FACILITIES: (keyof VillaFacilitiesType)[] = [
+  "petsAllowed",
+  "suitableForEvents",
+];
+
 const iconProps = {
   width: 16,
   height: 16,
@@ -220,10 +225,9 @@ function FacilityPill({
 export default function VillaPageFacilities({
   facilities,
 }: VillaPageFacilitiesProps) {
-  const entries = Object.entries(FACILITY_LABELS) as [
-    keyof VillaFacilitiesType,
-    string,
-  ][];
+  const entries = (
+    Object.entries(FACILITY_LABELS) as [keyof VillaFacilitiesType, string][]
+  ).filter(([key]) => !HIDDEN_FACILITIES.includes(key));
 
   const included = entries.filter(([key]) => facilities[key]);
   const notIncluded = entries.filter(([key]) => !facilities[key]);

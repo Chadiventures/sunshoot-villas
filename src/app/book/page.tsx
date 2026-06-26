@@ -141,10 +141,14 @@ const trustItems = [
 ];
 
 const labelClass =
-  "mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase";
+  "mb-1 block text-[0.625rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase md:mb-1.5 md:text-[0.6875rem]";
 
 const inputClass =
-  "w-full rounded-sm border border-[var(--text)]/15 bg-white px-4 py-3 text-[var(--text)] outline-none transition-colors focus:border-[var(--sand)]";
+  "w-full rounded-sm border border-[var(--text)]/15 bg-white px-3 py-2 text-sm text-[var(--text)] outline-none transition-colors focus:border-[var(--sand)] md:px-4 md:py-3 md:text-[0.875rem]";
+
+const inputStyle = {
+  fontFamily: "var(--font-inter)",
+} as const;
 
 export default function BookPage() {
   const { t } = useLanguage();
@@ -255,11 +259,11 @@ export default function BookPage() {
 
   return (
     <>
-      <section className="bg-[var(--dark)] pt-28 pb-14 md:pt-32 md:pb-16">
+      <section className="bg-[var(--dark)] pt-20 pb-7 md:pt-32 md:pb-16">
         <div className="container-site text-center">
-          <p className="section-eyebrow mb-3">Reservations</p>
+          <p className="section-eyebrow mb-2 md:mb-3">Reservations</p>
           <h1
-            className="mb-4 text-white"
+            className="mb-3 text-white md:mb-4"
             style={{
               fontFamily: "var(--font-cormorant)",
               fontSize: "clamp(2rem, 5vw, 3.5rem)",
@@ -284,7 +288,7 @@ export default function BookPage() {
 
       {submitted && (
         <div className="border-b border-[var(--sand)]/30 bg-[var(--sand)]/15">
-          <div className="container-site py-5">
+          <div className="container-site py-2.5 md:py-5">
             <p
               className="text-center text-[var(--dark)]"
               style={{
@@ -301,14 +305,14 @@ export default function BookPage() {
         </div>
       )}
 
-      <section className="bg-[var(--bg)] py-12 md:py-20">
+      <section className="bg-[var(--bg)] py-6 md:py-20">
         <div className="container-site">
-          <div className="grid grid-cols-1 gap-10 lg:grid-cols-3 lg:gap-12">
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-3 lg:gap-12">
             {/* Booking fields */}
             <div className="order-1 lg:col-span-2">
-              <div className="rounded-sm bg-white p-6 shadow-sm md:p-8">
+              <div className="rounded-sm bg-white p-3 shadow-sm md:p-8">
                 <h2
-                  className="mb-8 text-[var(--dark)]"
+                  className="mb-4 text-[var(--dark)] md:mb-8"
                   style={{
                     fontFamily: "var(--font-cormorant)",
                     fontSize: "1.75rem",
@@ -318,7 +322,7 @@ export default function BookPage() {
                   Booking Details
                 </h2>
 
-                <div className="space-y-5">
+                <div className="space-y-3 md:space-y-5">
                   <div>
                     <label htmlFor="book-villa" className={labelClass}>
                       Select Villa
@@ -328,7 +332,7 @@ export default function BookPage() {
                       value={fields.villa}
                       onChange={(e) => update("villa", e.target.value)}
                       className={`${inputClass} cursor-pointer ${fieldError("villa") ? "border-red-400" : ""}`}
-                      style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
+                      style={inputStyle}
                     >
                       <option value="">Choose a villa</option>
                       {VILLAS.map((v) => (
@@ -342,8 +346,8 @@ export default function BookPage() {
                     )}
                   </div>
 
-                  <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                    <div>
+                  <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-5">
+                    <div className="w-full">
                       <label htmlFor="book-arrival" className={labelClass}>
                         Arrival Date
                       </label>
@@ -353,14 +357,14 @@ export default function BookPage() {
                         value={fields.arrivalDate}
                         min={arrivalMin}
                         onChange={(e) => handleArrivalDateChange(e.target.value)}
-                        className={`${inputClass} [color-scheme:light] ${fieldError("arrivalDate") ? "border-red-400" : ""}`}
-                        style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
+                        className={`${inputClass} w-full [color-scheme:light] ${fieldError("arrivalDate") ? "border-red-400" : ""}`}
+                        style={inputStyle}
                       />
                       {fieldError("arrivalDate") && (
                         <p className="mt-1 text-xs text-red-500">Required</p>
                       )}
                     </div>
-                    <div>
+                    <div className="w-full">
                       <label htmlFor="book-departure" className={labelClass}>
                         Departure Date
                       </label>
@@ -370,8 +374,8 @@ export default function BookPage() {
                         value={fields.departureDate}
                         min={departureMin}
                         onChange={(e) => handleDepartureDateChange(e.target.value)}
-                        className={`${inputClass} [color-scheme:light] ${fieldError("departureDate") ? "border-red-400" : ""}`}
-                        style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
+                        className={`${inputClass} w-full [color-scheme:light] ${fieldError("departureDate") ? "border-red-400" : ""}`}
+                        style={inputStyle}
                       />
                       {fieldError("departureDate") && (
                         <p className="mt-1 text-xs text-red-500">
@@ -381,7 +385,18 @@ export default function BookPage() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                  <p
+                    className="text-center italic text-[var(--text-muted)]"
+                    style={{
+                      fontFamily: "var(--font-inter)",
+                      fontSize: "0.75rem",
+                      fontWeight: 300,
+                    }}
+                  >
+                    Minimum stay is 4 nights
+                  </p>
+
+                  <div className="grid grid-cols-2 gap-3 md:gap-5">
                     <div>
                       <label htmlFor="book-adults" className={labelClass}>
                         Adults
@@ -394,7 +409,7 @@ export default function BookPage() {
                         value={fields.adults}
                         onChange={(e) => update("adults", e.target.value)}
                         className={`${inputClass} ${fieldError("adults") ? "border-red-400" : ""}`}
-                        style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
+                        style={inputStyle}
                       />
                       {fieldError("adults") && (
                         <p className="mt-1 text-xs text-red-500">Required</p>
@@ -412,7 +427,7 @@ export default function BookPage() {
                         value={fields.children}
                         onChange={(e) => update("children", e.target.value)}
                         className={inputClass}
-                        style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
+                        style={inputStyle}
                       />
                     </div>
                   </div>
@@ -427,30 +442,28 @@ export default function BookPage() {
                       value={fields.fullName}
                       onChange={(e) => update("fullName", e.target.value)}
                       className={`${inputClass} ${fieldError("fullName") ? "border-red-400" : ""}`}
-                      style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
+                      style={inputStyle}
                     />
                     {fieldError("fullName") && (
                       <p className="mt-1 text-xs text-red-500">Required</p>
                     )}
                   </div>
 
-                  <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                    <div>
-                      <label htmlFor="book-email" className={labelClass}>
-                        Email
-                      </label>
-                      <input
-                        id="book-email"
-                        type="email"
-                        value={fields.email}
-                        onChange={(e) => update("email", e.target.value)}
-                        className={`${inputClass} ${fieldError("email") ? "border-red-400" : ""}`}
-                        style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
-                      />
-                      {fieldError("email") && (
-                        <p className="mt-1 text-xs text-red-500">Required</p>
-                      )}
-                    </div>
+                  <div>
+                    <label htmlFor="book-email" className={labelClass}>
+                      Email
+                    </label>
+                    <input
+                      id="book-email"
+                      type="email"
+                      value={fields.email}
+                      onChange={(e) => update("email", e.target.value)}
+                      className={`${inputClass} ${fieldError("email") ? "border-red-400" : ""}`}
+                      style={inputStyle}
+                    />
+                    {fieldError("email") && (
+                      <p className="mt-1 text-xs text-red-500">Required</p>
+                    )}
                   </div>
 
                   <PhoneNumberField
@@ -467,12 +480,12 @@ export default function BookPage() {
                     </label>
                     <textarea
                       id="book-requests"
-                      rows={4}
+                      rows={3}
                       placeholder="Early check-in, dietary needs, airport pickup details..."
                       value={fields.specialRequests}
                       onChange={(e) => update("specialRequests", e.target.value)}
                       className={`${inputClass} resize-none`}
-                      style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
+                      style={inputStyle}
                     />
                   </div>
 
@@ -493,7 +506,7 @@ export default function BookPage() {
                 </div>
               </div>
 
-              <div className="mt-6 text-center">
+              <div className="mt-3 text-center md:mt-6">
                 <p
                   className="mx-auto max-w-lg italic text-[var(--text-muted)]"
                   style={{
@@ -523,9 +536,9 @@ export default function BookPage() {
 
             {/* Summary box - right on desktop, below form on mobile */}
             <div className="order-2 lg:col-span-1">
-              <div className="sticky top-24 rounded-sm border border-[var(--sand)]/30 bg-[var(--dark)] p-6 md:p-8">
+              <div className="sticky top-24 rounded-sm border border-[var(--sand)]/30 bg-[var(--dark)] p-3 md:p-8">
                 <h3
-                  className="mb-6 text-[var(--sand)]"
+                  className="mb-4 text-[var(--sand)] md:mb-6"
                   style={{
                     fontFamily: "var(--font-cormorant)",
                     fontSize: "1.5rem",
@@ -535,7 +548,7 @@ export default function BookPage() {
                   Booking Summary
                 </h3>
 
-                <dl className="space-y-4">
+                <dl className="space-y-3 md:space-y-4">
                   <div>
                     <dt
                       className="mb-1 text-white/50"
@@ -728,7 +741,7 @@ export default function BookPage() {
 
             {/* Trust section */}
             <div className="order-3 lg:col-span-3">
-              <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+              <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-6">
                 {trustItems.map((item) => (
                   <div key={item.label} className="text-center">
                     <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full border border-[var(--sand)] text-[var(--sand)]">

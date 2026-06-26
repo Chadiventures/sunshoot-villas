@@ -72,6 +72,59 @@ type PhoneNumberFieldProps = {
   idPrefix?: string;
 };
 
+type CountryListProps = {
+  filteredCountries: readonly (typeof COUNTRIES)[number][];
+  onSelect: (countryId: string) => void;
+  inputStyle: React.CSSProperties;
+  search: string;
+  onSearchChange: (value: string) => void;
+};
+
+function CountryList({
+  filteredCountries,
+  onSelect,
+  inputStyle,
+  search,
+  onSearchChange,
+}: CountryListProps) {
+  return (
+    <>
+      <div className="border-b border-[var(--text)]/10 p-2">
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => onSearchChange(e.target.value)}
+          placeholder="Search country..."
+          className="w-full rounded-sm border border-[var(--text)]/15 px-3 py-2.5 text-[var(--text)] outline-none focus:border-[var(--sand)]"
+          style={inputStyle}
+        />
+      </div>
+      <ul className="max-h-52 overflow-y-auto py-1 sm:max-h-52" role="listbox">
+        {filteredCountries.map((country) => (
+          <li key={country.id} role="option">
+            <button
+              type="button"
+              onClick={() => onSelect(country.id)}
+              className="flex min-h-[48px] w-full cursor-pointer items-center gap-2 px-3 py-2.5 text-left transition-colors hover:bg-[var(--bg)]"
+              style={inputStyle}
+            >
+              <span className="text-base" aria-hidden="true">
+                {country.flag}
+              </span>
+              <span className="min-w-0 flex-1 truncate text-[var(--dark)]">
+                {country.name}
+              </span>
+              <span className="shrink-0 text-[var(--text-muted)]">
+                {country.code || "Custom"}
+              </span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
+
 export default function PhoneNumberField({
   value,
   onChange,
@@ -81,6 +134,7 @@ export default function PhoneNumberField({
 }: PhoneNumberFieldProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const [isMobile, setIsMobile] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const selected = getCountryById(value.countryId);
@@ -97,6 +151,16 @@ export default function PhoneNumberField({
   }, [search]);
 
   useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    if (!open || isMobile) return;
+
     const onDocClick = (e: MouseEvent) => {
       if (!wrapperRef.current?.contains(e.target as Node)) {
         setOpen(false);
@@ -104,7 +168,16 @@ export default function PhoneNumberField({
     };
     document.addEventListener("mousedown", onDocClick);
     return () => document.removeEventListener("mousedown", onDocClick);
-  }, []);
+  }, [open, isMobile]);
+
+  useEffect(() => {
+    if (!open || !isMobile) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open, isMobile]);
 
   const borderClass = hasError
     ? "border-red-400"
@@ -115,10 +188,21 @@ export default function PhoneNumberField({
     fontSize: "0.875rem",
   } as const;
 
+  const selectCountry = (countryId: string) => {
+    onChange({ ...value, countryId });
+    setOpen(false);
+    setSearch("");
+  };
+
+  const displayCode =
+    value.countryId === "other"
+      ? value.customCountryCode || "+?"
+      : selected.code;
+
   return (
     <div>
       <p
-        className="mb-1.5 text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
+        className="mb-1 block text-[0.625rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase md:mb-1.5 md:text-[0.6875rem]"
         style={{ fontFamily: "var(--font-inter)" }}
       >
         {label}
@@ -126,26 +210,19 @@ export default function PhoneNumberField({
 
       <div className={`flex w-full overflow-hidden rounded-sm border bg-white transition-colors ${borderClass}`}>
         <div ref={wrapperRef} className="relative shrink-0 border-r border-[var(--text)]/15">
-          <div
-            role="button"
-            tabIndex={0}
+          <button
+            type="button"
             aria-expanded={open}
             aria-haspopup="listbox"
             onClick={() => setOpen((prev) => !prev)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                setOpen((prev) => !prev);
-              }
-            }}
-            className="flex h-full min-h-[46px] cursor-pointer items-center gap-1.5 px-3 py-3 transition-colors hover:bg-[var(--bg)] sm:gap-2 sm:px-3.5"
+            className="flex h-full min-h-[48px] min-w-[5.5rem] cursor-pointer items-center gap-1.5 px-2.5 py-2 transition-colors hover:bg-[var(--bg)] sm:min-h-[46px] sm:gap-2 sm:px-3.5 sm:py-3"
             style={inputStyle}
           >
-            <span aria-hidden="true">{selected.flag}</span>
-            <span className="whitespace-nowrap text-[var(--dark)]">
-              {value.countryId === "other"
-                ? value.customCountryCode || "+?"
-                : selected.code}
+            <span className="text-base leading-none" aria-hidden="true">
+              {selected.flag}
+            </span>
+            <span className="whitespace-nowrap text-sm font-medium text-[var(--dark)] sm:text-[0.875rem]">
+              {displayCode}
             </span>
             <svg
               width="14"
@@ -159,53 +236,17 @@ export default function PhoneNumberField({
             >
               <path d="M6 9l6 6 6-6" />
             </svg>
-          </div>
+          </button>
 
-          {open && (
+          {open && !isMobile && (
             <div className="absolute top-full left-0 z-50 mt-1 w-[min(100vw-3rem,280px)] overflow-hidden rounded-sm border border-[var(--text)]/15 bg-white shadow-lg">
-              <div className="border-b border-[var(--text)]/10 p-2">
-                <input
-                  type="text"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Search country..."
-                  className="w-full rounded-sm border border-[var(--text)]/15 px-3 py-2 text-[var(--text)] outline-none focus:border-[var(--sand)]"
-                  style={inputStyle}
-                />
-              </div>
-              <ul className="max-h-52 overflow-y-auto py-1" role="listbox">
-                {filteredCountries.map((country) => (
-                  <li key={country.id} role="option">
-                    <div
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => {
-                        onChange({ ...value, countryId: country.id });
-                        setOpen(false);
-                        setSearch("");
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          e.preventDefault();
-                          onChange({ ...value, countryId: country.id });
-                          setOpen(false);
-                          setSearch("");
-                        }
-                      }}
-                      className="flex cursor-pointer items-center gap-2 px-3 py-2.5 transition-colors hover:bg-[var(--bg)]"
-                      style={inputStyle}
-                    >
-                      <span aria-hidden="true">{country.flag}</span>
-                      <span className="min-w-0 flex-1 truncate text-[var(--dark)]">
-                        {country.name}
-                      </span>
-                      <span className="shrink-0 text-[var(--text-muted)]">
-                        {country.code || "Custom"}
-                      </span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+              <CountryList
+                filteredCountries={filteredCountries}
+                onSelect={selectCountry}
+                inputStyle={inputStyle}
+                search={search}
+                onSearchChange={setSearch}
+              />
             </div>
           )}
         </div>
@@ -219,10 +260,60 @@ export default function PhoneNumberField({
             onChange({ ...value, phoneNumber: e.target.value })
           }
           placeholder="Phone number"
-          className="min-w-0 flex-1 bg-transparent px-3 py-3 text-[var(--text)] outline-none sm:px-4"
+          className="min-w-0 flex-1 bg-transparent px-3 py-2 text-sm text-[var(--text)] outline-none sm:px-4 sm:py-3 sm:text-[0.875rem]"
           style={inputStyle}
         />
       </div>
+
+      {open && isMobile && (
+        <div className="fixed inset-0 z-[200] flex flex-col justify-end">
+          <button
+            type="button"
+            className="absolute inset-0 bg-black/40"
+            aria-label="Close country selector"
+            onClick={() => {
+              setOpen(false);
+              setSearch("");
+            }}
+          />
+          <div className="relative flex max-h-[75vh] flex-col rounded-t-xl bg-white shadow-2xl">
+            <div className="flex items-center justify-between border-b border-[var(--text)]/10 px-4 py-3">
+              <p
+                className="text-[var(--dark)]"
+                style={{
+                  fontFamily: "var(--font-inter)",
+                  fontSize: "0.9375rem",
+                  fontWeight: 500,
+                }}
+              >
+                Select country
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  setSearch("");
+                }}
+                className="min-h-[48px] px-2 text-[var(--text-muted)]"
+                style={{
+                  fontFamily: "var(--font-inter)",
+                  fontSize: "0.875rem",
+                  fontWeight: 500,
+                }}
+              >
+                Close
+              </button>
+            </div>
+            <CountryList
+              filteredCountries={filteredCountries}
+              onSelect={selectCountry}
+              inputStyle={inputStyle}
+              search={search}
+              onSearchChange={setSearch}
+            />
+          </div>
+        </div>
+      )}
 
       {value.countryId === "other" && (
         <div className="mt-2">
@@ -235,7 +326,7 @@ export default function PhoneNumberField({
               onChange({ ...value, customCountryCode: e.target.value })
             }
             placeholder="Country code e.g. +47"
-            className={`w-full rounded-sm border bg-white px-4 py-2.5 text-[var(--text)] outline-none transition-colors ${borderClass}`}
+            className={`w-full rounded-sm border bg-white px-3 py-2 text-sm text-[var(--text)] outline-none transition-colors sm:px-4 sm:py-2.5 sm:text-[0.875rem] ${borderClass}`}
             style={inputStyle}
           />
         </div>

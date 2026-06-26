@@ -5,6 +5,11 @@ type VillaFacilitiesProps = {
   facilities: VillaFacilities;
 };
 
+const HIDDEN_FACILITIES: (keyof VillaFacilities)[] = [
+  "petsAllowed",
+  "suitableForEvents",
+];
+
 function CheckIcon() {
   return (
     <svg
@@ -42,10 +47,9 @@ function XIcon() {
 }
 
 export default function VillaFacilities({ facilities }: VillaFacilitiesProps) {
-  const entries = Object.entries(FACILITY_LABELS) as [
-    keyof VillaFacilities,
-    string,
-  ][];
+  const entries = (
+    Object.entries(FACILITY_LABELS) as [keyof VillaFacilities, string][]
+  ).filter(([key]) => !HIDDEN_FACILITIES.includes(key));
 
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">

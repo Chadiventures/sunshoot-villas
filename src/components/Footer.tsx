@@ -198,11 +198,9 @@ export default function Footer() {
               <p>Jl. Bidadari II E, Seminyak</p>
             </address>
           </div>
-
-          <div className="col-span-1 md:col-span-3">
-            <FooterFaq />
-          </div>
         </div>
+
+        <FooterFaq />
       </div>
 
       <div className="border-t border-white/10">

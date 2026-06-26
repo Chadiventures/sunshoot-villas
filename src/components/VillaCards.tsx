@@ -30,14 +30,14 @@ export default function VillaCards({ showHeader = true }: { showHeader?: boolean
           {VILLAS.map((villa) => (
             <article
               key={villa.slug}
-              className="group overflow-hidden rounded-sm bg-white shadow-sm transition-shadow hover:shadow-md"
+              className="card-lift group overflow-hidden rounded-sm bg-white shadow-sm"
             >
-              <div className="relative h-56 overflow-hidden sm:h-64">
+              <div className="img-zoom-wrap relative h-56 overflow-hidden sm:h-64">
                 <Image
                   src={VILLA_IMAGES[villa.slug]}
                   alt={villa.name}
                   fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="zoom-target object-cover"
                   sizes="(max-width: 640px) 100vw, 50vw"
                 />
               </div>
@@ -79,7 +79,7 @@ export default function VillaCards({ showHeader = true }: { showHeader?: boolean
                 </p>
                 <Link
                   href={`/villas/${villa.slug}`}
-                  className="btn-outline-dark !px-6 !py-2.5 !text-[10px]"
+                  className="btn-outline-dark btn-hover !px-6 !py-2.5 !text-[10px]"
                 >
                   View Villa
                 </Link>

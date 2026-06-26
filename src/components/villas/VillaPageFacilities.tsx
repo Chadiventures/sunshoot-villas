@@ -1,5 +1,6 @@
 import type { VillaFacilities as VillaFacilitiesType } from "@/lib/villas";
 import { FACILITY_LABELS } from "@/lib/villas";
+import ScrollReveal from "@/components/ScrollReveal";
 import type { ReactNode } from "react";
 
 type VillaPageFacilitiesProps = {
@@ -161,29 +162,31 @@ export default function VillaPageFacilities({
   return (
     <section className="bg-[var(--bg)] py-14 md:py-20">
       <div className="container-site">
-        <h2
-          className="mb-8 text-center text-[var(--dark)] md:mb-10"
-          style={{
-            fontFamily: "var(--font-cormorant)",
-            fontSize: "clamp(1.75rem, 4vw, 2.25rem)",
-            fontWeight: 300,
-          }}
-        >
-          Villa Facilities
-        </h2>
+        <ScrollReveal className="mb-8 text-center md:mb-10">
+          <h2
+            className="text-[var(--dark)]"
+            style={{
+              fontFamily: "var(--font-cormorant)",
+              fontSize: "clamp(1.75rem, 4vw, 2.25rem)",
+              fontWeight: 300,
+            }}
+          >
+            Villa Facilities
+          </h2>
+        </ScrollReveal>
 
         <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
-          {entries.map(([key, label]) => {
+          {entries.map(([key, label], index) => {
             const available = facilities[key];
             return (
-              <div
-                key={key}
-                className={`flex items-center gap-3 rounded-sm border bg-white px-3 py-3 sm:px-4 sm:py-4 ${
-                  available
-                    ? "border-[var(--text)]/8"
-                    : "border-[var(--text)]/5 opacity-75"
-                }`}
-              >
+              <ScrollReveal key={key} delay={index * 60}>
+                <div
+                  className={`card-lift flex items-center gap-3 rounded-sm border bg-white px-3 py-3 sm:px-4 sm:py-4 ${
+                    available
+                      ? "border-[var(--text)]/8"
+                      : "border-[var(--text)]/5 opacity-75"
+                  }`}
+                >
                 <span
                   className={`shrink-0 ${
                     available ? "text-[var(--sand)]" : "text-[var(--text-muted)]"
@@ -203,7 +206,8 @@ export default function VillaPageFacilities({
                   {label}
                 </span>
                 <StatusIcon available={available} />
-              </div>
+                </div>
+              </ScrollReveal>
             );
           })}
         </div>

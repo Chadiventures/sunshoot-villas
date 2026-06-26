@@ -1,5 +1,7 @@
 "use client";
 
+import ScrollReveal from "@/components/ScrollReveal";
+
 type VillaWhatsAppCtaProps = {
   villaName: string;
 };
@@ -34,7 +36,7 @@ export default function VillaWhatsAppCta({ villaName }: VillaWhatsAppCtaProps) {
   return (
     <section className="bg-[var(--bg)] py-14 md:py-20">
       <div className="container-site">
-        <div className="mx-auto max-w-lg px-4 text-center">
+        <ScrollReveal className="mx-auto max-w-lg px-4 text-center">
           <div className="mb-5 flex justify-center">
             <WhatsAppLogo />
           </div>
@@ -63,7 +65,7 @@ export default function VillaWhatsAppCta({ villaName }: VillaWhatsAppCtaProps) {
           <button
             type="button"
             onClick={handleClick}
-            className="w-full rounded-sm bg-[#25D366] px-6 py-4 text-white transition-opacity hover:opacity-90 sm:w-auto sm:min-w-[280px]"
+            className="btn-hover w-full rounded-sm bg-[#25D366] px-6 py-4 text-white transition-all duration-300 ease-in-out hover:opacity-90 sm:w-auto sm:min-w-[280px]"
             style={{
               fontFamily: "var(--font-inter)",
               fontSize: "0.75rem",
@@ -74,7 +76,7 @@ export default function VillaWhatsAppCta({ villaName }: VillaWhatsAppCtaProps) {
           >
             Send Inquiry on WhatsApp
           </button>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

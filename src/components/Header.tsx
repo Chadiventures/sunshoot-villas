@@ -3,21 +3,23 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SITE } from "@/lib/site";
 
-const navLinks = [
-  { label: "Our Villas", href: "/villas" },
-  { label: "About Us", href: "/about" },
-  { label: "Contact Us", href: "/contact" },
-];
+const STORAGE_KEY = "villa-promo-dismissed";
+
+function getReviewsHref(pathname: string): string {
+  const isVillaDetail = /^\/villas\/[^/]+$/.test(pathname);
+  return isVillaDetail ? "#reviews" : "/villas/mawar#reviews";
+}
 
 export default function Header() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [bannerActive, setBannerActive] = useState(false);
 
   const isAdmin = pathname.startsWith("/admin");
   const isHome = pathname === "/";
+  const isVillaDetail = /^\/villas\/[^/]+$/.test(pathname);
 
   useEffect(() => {
     if (isAdmin) return;
@@ -26,6 +28,19 @@ export default function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [isAdmin]);
+
+  useEffect(() => {
+    if (!isVillaDetail) {
+      setBannerActive(false);
+      return;
+    }
+    const check = () => {
+      setBannerActive(localStorage.getItem(STORAGE_KEY) !== "1");
+    };
+    check();
+    window.addEventListener("villa-banner-dismissed", check);
+    return () => window.removeEventListener("villa-banner-dismissed", check);
+  }, [isVillaDetail, pathname]);
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
@@ -37,49 +52,51 @@ export default function Header() {
   if (isAdmin) return null;
 
   const solid = scrolled || !isHome;
+  const headerTop =
+    bannerActive && isVillaDetail ? "var(--villa-banner-h, 44px)" : "0px";
+  const reviewsHref = getReviewsHref(pathname);
+
+  const navLinks = [
+    { label: "Our Villas", href: "/villas" },
+    { label: "Reviews", href: reviewsHref },
+    { label: "About Us", href: "/about" },
+    { label: "Contact Us", href: "/contact" },
+  ];
 
   return (
     <>
       <header
-        className={`fixed top-0 right-0 left-0 z-50 transition-all duration-300 ${
-          solid
-            ? "bg-[var(--dark)] shadow-lg"
-            : "bg-transparent"
+        className={`fixed right-0 left-0 z-50 transition-all duration-300 ease-in-out ${
+          solid ? "bg-[var(--dark)] shadow-lg" : "bg-transparent"
         }`}
+        style={{ top: headerTop }}
       >
         <div className="container-site flex h-[72px] items-center justify-between md:h-20">
           <Link
             href="/"
-            className={`font-[family-name:var(--font-cormorant)] text-xl font-light tracking-wide transition-colors md:text-2xl ${
-              solid ? "text-white" : "text-white"
-            }`}
+            className="font-[family-name:var(--font-cormorant)] text-xl font-light tracking-wide text-white transition-all duration-300 ease-in-out md:text-2xl"
           >
             Sun Shoot Villas
           </Link>
 
-          <nav className="hidden items-center gap-8 md:flex">
+          <nav className="hidden items-center gap-6 lg:gap-8 md:flex">
             {navLinks.map((link) => (
               <Link
-                key={link.href}
+                key={link.label}
                 href={link.href}
-                className="text-[11px] font-medium tracking-[0.15em] text-white/85 uppercase transition-colors hover:text-[var(--sand)]"
+                className="text-[11px] font-medium tracking-[0.15em] text-white/85 uppercase transition-all duration-300 ease-in-out hover:scale-105 hover:text-[var(--sand)]"
               >
                 {link.label}
               </Link>
             ))}
-            <a
-              href={`https://wa.me/${SITE.whatsapp}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary !py-2.5 !text-[10px]"
-            >
+            <Link href="/book" className="btn-primary btn-hover !py-2.5 !text-[10px]">
               Book Now
-            </a>
+            </Link>
           </nav>
 
           <button
             type="button"
-            className="flex h-10 w-10 items-center justify-center text-white md:hidden"
+            className="btn-hover flex h-10 w-10 items-center justify-center text-white md:hidden"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -99,7 +116,8 @@ export default function Header() {
 
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-[60] flex flex-col bg-[var(--dark)] pt-24"
+          className="fixed inset-0 z-[60] flex flex-col bg-[var(--dark)]"
+          style={{ paddingTop: `calc(6rem + ${headerTop})` }}
           role="dialog"
           aria-modal="true"
           aria-label="Mobile navigation"
@@ -107,23 +125,21 @@ export default function Header() {
           <nav className="flex flex-col px-6">
             {navLinks.map((link) => (
               <Link
-                key={link.href}
+                key={link.label}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="border-b border-white/10 py-5 font-[family-name:var(--font-cormorant)] text-2xl font-light text-white"
+                className="border-b border-white/10 py-5 font-[family-name:var(--font-cormorant)] text-2xl font-light text-white transition-colors hover:text-[var(--sand)]"
               >
                 {link.label}
               </Link>
             ))}
-            <a
-              href={`https://wa.me/${SITE.whatsapp}`}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/book"
               onClick={() => setMobileOpen(false)}
-              className="btn-primary mt-8 w-full text-center"
+              className="btn-primary btn-hover mt-8 w-full text-center"
             >
               Book Now
-            </a>
+            </Link>
           </nav>
         </div>
       )}

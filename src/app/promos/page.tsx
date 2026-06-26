@@ -154,7 +154,7 @@ function PromoSection({
         ))}
       </ul>
       <Link
-        href="/contact"
+        href="/book"
         className="btn-alive inline-block w-fit border border-[#67bc6a] bg-[#67bc6a] px-8 py-3 text-white transition-all duration-300 hover:bg-[#5aaa5d]"
         style={buttonStyle}
       >

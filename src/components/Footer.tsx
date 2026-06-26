@@ -3,6 +3,7 @@ import { SITE } from "@/lib/site";
 
 const quickLinks = [
   { label: "Our Villas", href: "/villas" },
+  { label: "Reviews", href: "/villas/mawar#reviews" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
   { label: "Terms & Conditions", href: "/contact" },

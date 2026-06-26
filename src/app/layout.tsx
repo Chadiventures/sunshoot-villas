@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import Header from "@/components/Header";
+import FloatingWhatsAppButton from "@/components/FloatingWhatsAppButton";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
@@ -33,6 +34,7 @@ export default function RootLayout({
       <body className="antialiased">
         <Header />
         <main>{children}</main>
+        <FloatingWhatsAppButton />
       </body>
     </html>
   );

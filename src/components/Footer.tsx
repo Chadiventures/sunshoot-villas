@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import FooterFaq from "@/components/FooterFaq";
 import { SITE } from "@/lib/site";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -65,7 +64,7 @@ export default function Footer() {
     { label: t.navOurVillas, href: "/villas", key: "villas" },
     { label: t.navAboutUs, href: "/about", key: "about" },
     { label: t.navContactUs, href: "/contact", key: "contact" },
-    { label: "FAQ", href: "#faq", key: "faq", isAnchor: true },
+    { label: "FAQ", href: "/faq", key: "faq" },
     { label: "Terms & Conditions", href: "/contact", key: "terms" },
   ];
 
@@ -127,7 +126,7 @@ export default function Footer() {
             <ul className="space-y-2">
               {quickLinks.map((link) => (
                 <li key={link.key}>
-                  {link.isAnchor ? (
+                  {"isAnchor" in link && link.isAnchor ? (
                     <a
                       href={link.href}
                       className="text-white/60 transition-colors hover:text-[var(--sand)]"
@@ -199,8 +198,6 @@ export default function Footer() {
             </address>
           </div>
         </div>
-
-        <FooterFaq />
       </div>
 
       <div className="border-t border-white/10">

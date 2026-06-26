@@ -1,9 +1,11 @@
 "use client";
 
 import Footer from "@/components/Footer";
+import ScrollReveal from "@/components/ScrollReveal";
 import VillaReviewsCarousel from "@/components/villas/VillaReviewsCarousel";
 import AboutHero from "@/components/about/AboutHero";
 import AboutIntro from "@/components/about/AboutIntro";
+import AboutFeaturedIn from "@/components/about/AboutFeaturedIn";
 import AboutImageGrid from "@/components/about/AboutImageGrid";
 import AboutOurVillas from "@/components/about/AboutOurVillas";
 import AboutLocation from "@/components/about/AboutLocation";
@@ -16,12 +18,15 @@ export default function AboutPageContent() {
     <>
       <AboutHero />
       <AboutIntro />
+      <AboutFeaturedIn />
       <AboutImageGrid />
       <AboutOurVillas />
       <AboutLocation />
       <AboutMeetHost />
       <AboutValues />
-      <VillaReviewsCarousel />
+      <ScrollReveal>
+        <VillaReviewsCarousel />
+      </ScrollReveal>
       <AboutCta />
       <Footer />
     </>

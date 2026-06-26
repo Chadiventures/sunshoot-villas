@@ -65,7 +65,7 @@ export default function Footer() {
     { label: t.navOurVillas, href: "/villas", key: "villas" },
     { label: t.navAboutUs, href: "/about", key: "about" },
     { label: t.navContactUs, href: "/contact", key: "contact" },
-    { label: "FAQ", href: "#faq", key: "faq" },
+    { label: "FAQ", href: "#faq", key: "faq", isAnchor: true },
     { label: "Terms & Conditions", href: "/contact", key: "terms" },
   ];
 
@@ -113,17 +113,31 @@ export default function Footer() {
             <ul className="space-y-2">
               {quickLinks.map((link) => (
                 <li key={link.key}>
-                  <Link
-                    href={link.href}
-                    className="text-white/60 transition-colors hover:text-[var(--sand)]"
-                    style={{
-                      fontFamily: "var(--font-inter)",
-                      fontSize: "0.875rem",
-                      fontWeight: 300,
-                    }}
-                  >
-                    {link.label}
-                  </Link>
+                  {link.isAnchor ? (
+                    <a
+                      href={link.href}
+                      className="text-white/60 transition-colors hover:text-[var(--sand)]"
+                      style={{
+                        fontFamily: "var(--font-inter)",
+                        fontSize: "0.875rem",
+                        fontWeight: 300,
+                      }}
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className="text-white/60 transition-colors hover:text-[var(--sand)]"
+                      style={{
+                        fontFamily: "var(--font-inter)",
+                        fontSize: "0.875rem",
+                        fontWeight: 300,
+                      }}
+                    >
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -186,9 +200,9 @@ export default function Footer() {
             </div>
           </div>
         </div>
-      </div>
 
-      <FooterFaq />
+        <FooterFaq />
+      </div>
 
       <div className="border-t border-white/10">
         <div className="container-site py-6">

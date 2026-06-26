@@ -52,21 +52,25 @@ export default function VillaPageGallery({
           onTouchStart={onTouchStart}
           onTouchEnd={onTouchEnd}
         >
-          <Image
-            key={activeIndex}
-            src={images[activeIndex]}
-            alt={`${villaName} gallery image ${activeIndex + 1}`}
-            fill
-            className="gallery-main-zoom object-cover object-center"
-            sizes="(max-width: 768px) 100vw, 65vw"
-            priority={activeIndex === 0}
-          />
+          {images.map((src, i) => (
+            <Image
+              key={src}
+              src={src}
+              alt={`${villaName} gallery image ${i + 1}`}
+              fill
+              className={`object-cover object-center transition-opacity duration-500 ease-in-out ${
+                i === activeIndex ? "opacity-100" : "opacity-0"
+              }`}
+              sizes="(max-width: 768px) 100vw, 65vw"
+              priority={i === 0}
+            />
+          ))}
 
           <button
             type="button"
             onClick={goPrev}
             aria-label="Previous image"
-            className="btn-hover absolute top-1/2 left-3 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[var(--dark)] shadow-md transition-all duration-300 ease-in-out hover:bg-white md:flex"
+            className="btn-hover absolute top-1/2 left-3 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[var(--dark)] shadow-md transition-all duration-300 ease-in-out hover:bg-white md:flex"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
               <path d="M15 18l-6-6 6-6" />
@@ -76,14 +80,14 @@ export default function VillaPageGallery({
             type="button"
             onClick={goNext}
             aria-label="Next image"
-            className="btn-hover absolute top-1/2 right-3 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[var(--dark)] shadow-md transition-all duration-300 ease-in-out hover:bg-white md:flex"
+            className="btn-hover absolute top-1/2 right-3 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[var(--dark)] shadow-md transition-all duration-300 ease-in-out hover:bg-white md:flex"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
               <path d="M9 18l6-6-6-6" />
             </svg>
           </button>
 
-          <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5 md:hidden">
+          <div className="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 gap-1.5 md:hidden">
             {images.map((_, i) => (
               <span
                 key={i}
@@ -101,29 +105,31 @@ export default function VillaPageGallery({
         </p>
       </div>
 
-      <div className="mt-4 flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {images.map((src, i) => (
-          <button
-            key={`${src}-${i}`}
-            type="button"
-            onClick={() => setActiveIndex(i)}
-            aria-label={`View image ${i + 1}`}
-            aria-current={activeIndex === i ? "true" : undefined}
-            className={`relative h-16 w-24 shrink-0 overflow-hidden rounded-sm border-2 transition-all duration-300 ease-in-out sm:h-20 sm:w-28 ${
-              activeIndex === i
-                ? "border-[var(--sand)] opacity-100"
-                : "border-transparent opacity-70 hover:opacity-100"
-            }`}
-          >
-            <Image
-              src={src}
-              alt={`${villaName} thumbnail ${i + 1}`}
-              fill
-              className="object-cover"
-              sizes="112px"
-            />
-          </button>
-        ))}
+      <div className="mt-5 flex justify-center px-2">
+        <div className="flex max-w-full gap-3 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {images.map((src, i) => (
+            <button
+              key={`${src}-${i}`}
+              type="button"
+              onClick={() => setActiveIndex(i)}
+              aria-label={`View image ${i + 1}`}
+              aria-current={activeIndex === i ? "true" : undefined}
+              className={`gallery-thumbnail relative h-16 w-24 shrink-0 overflow-hidden rounded-md border-2 transition-all duration-300 ease-in-out sm:h-20 sm:w-28 ${
+                activeIndex === i
+                  ? "scale-105 border-[#C9A96E] opacity-100"
+                  : "scale-100 border-transparent opacity-75 hover:scale-105 hover:opacity-100"
+              }`}
+            >
+              <Image
+                src={src}
+                alt={`${villaName} thumbnail ${i + 1}`}
+                fill
+                className="object-cover"
+                sizes="112px"
+              />
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

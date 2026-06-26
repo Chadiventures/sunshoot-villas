@@ -189,8 +189,8 @@ export default function FooterFaq() {
   const [openId, setOpenId] = useState<string | null>(null);
 
   return (
-    <section id="faq" className="border-t border-white/10 bg-[var(--dark)]">
-      <div className="container-site py-10 md:py-12">
+    <div id="faq" className="scroll-mt-28 mt-12 border-t border-white/10 pt-10 md:pt-12">
+      <div className="py-2 md:py-4">
         <h2
           className="mb-6 text-center text-white md:mb-8"
           style={{
@@ -216,6 +216,6 @@ export default function FooterFaq() {
           ))}
         </div>
       </div>
-    </section>
+    </div>
   );
 }

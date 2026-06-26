@@ -31,8 +31,8 @@ const RATINGS: RatingItem[] = [
 function StarIcon() {
   return (
     <svg
-      width="12"
-      height="12"
+      width="10"
+      height="10"
       viewBox="0 0 24 24"
       fill="#C9A96E"
       aria-hidden="true"
@@ -43,35 +43,37 @@ function StarIcon() {
   );
 }
 
-function RatingCard({ item }: { item: RatingItem }) {
-  const scoreContent = (
-    <div className="mt-1.5 flex items-center justify-center gap-1.5 md:justify-start">
-      <StarIcon />
+function RatingEntry({ item }: { item: RatingItem }) {
+  const content = (
+    <div className="flex flex-col items-center gap-0.5 px-2 text-center md:flex-row md:gap-1.5 md:px-4">
       <span
-        className="text-[#C9A96E]"
+        className="text-white"
         style={{
           fontFamily: "var(--font-inter)",
-          fontSize: "0.9375rem",
+          fontSize: "12px",
           fontWeight: 500,
+          letterSpacing: "0.12em",
+          textTransform: "uppercase",
+          lineHeight: 1.2,
         }}
       >
-        {item.score} / {item.max}
+        {item.platform}
+      </span>
+      <span className="flex items-center gap-1">
+        <StarIcon />
+        <span
+          className="text-[#C9A96E]"
+          style={{
+            fontFamily: "var(--font-inter)",
+            fontSize: "12px",
+            fontWeight: 700,
+            lineHeight: 1,
+          }}
+        >
+          {item.score} / {item.max}
+        </span>
       </span>
     </div>
-  );
-
-  const platformName = (
-    <p
-      className="text-white"
-      style={{
-        fontFamily: "var(--font-inter)",
-        fontSize: "0.8125rem",
-        fontWeight: 600,
-        lineHeight: 1.4,
-      }}
-    >
-      {item.platform}
-    </p>
   );
 
   if (item.href) {
@@ -80,43 +82,53 @@ function RatingCard({ item }: { item: RatingItem }) {
         href={item.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="block rounded-sm px-3 py-4 text-center transition-all duration-300 ease-in-out hover:bg-white/5 md:px-4 md:text-left"
+        className="transition-opacity duration-300 ease-in-out hover:opacity-80"
       >
-        {platformName}
-        {scoreContent}
+        {content}
       </a>
     );
   }
 
-  return (
-    <div className="rounded-sm px-3 py-4 text-center md:px-4 md:text-left">
-      {platformName}
-      {scoreContent}
-    </div>
-  );
+  return content;
 }
 
 export default function RatingsTrustBar() {
   return (
-    <section className="bg-[#1A2E1A] py-10 md:py-12">
+    <section className="bg-[#1A2E1A] py-4 md:max-h-[80px]">
       <div className="container-site">
         <ScrollReveal>
-          <h2
-            className="mb-6 text-center text-white md:mb-8"
+          <p
+            className="mb-2 text-center text-white uppercase"
             style={{
-              fontFamily: "var(--font-cormorant)",
-              fontSize: "clamp(1.5rem, 4vw, 2rem)",
-              fontWeight: 300,
+              fontFamily: "var(--font-inter)",
+              fontSize: "10px",
+              fontWeight: 500,
+              letterSpacing: "0.15em",
+              opacity: 0.6,
+              lineHeight: 1,
             }}
           >
-            Ratings &amp; Reviews
-          </h2>
+            Trusted by guests worldwide
+          </p>
 
-          <div className="grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-6">
+          <div className="grid grid-cols-3 gap-x-2 gap-y-3 md:hidden">
+            {RATINGS.map((item) => (
+              <RatingEntry key={item.platform} item={item} />
+            ))}
+          </div>
+
+          <div className="hidden items-center justify-center md:flex">
             {RATINGS.map((item, index) => (
-              <ScrollReveal key={item.platform} delay={index * 60}>
-                <RatingCard item={item} />
-              </ScrollReveal>
+              <div key={item.platform} className="flex items-center">
+                {index > 0 && (
+                  <div
+                    className="h-6 w-px shrink-0"
+                    style={{ backgroundColor: "rgba(255, 255, 255, 0.2)" }}
+                    aria-hidden="true"
+                  />
+                )}
+                <RatingEntry item={item} />
+              </div>
             ))}
           </div>
         </ScrollReveal>

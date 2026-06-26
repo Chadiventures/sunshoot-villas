@@ -13,7 +13,7 @@ import VillaKeyInfo from "@/components/villas/VillaKeyInfo";
 import VillaReviewsCarousel from "@/components/villas/VillaReviewsCarousel";
 import VillaHighlightsStrip from "@/components/villas/VillaHighlightsStrip";
 import VillaSectionDivider from "@/components/villas/VillaSectionDivider";
-import VillaImageStrip from "@/components/villas/VillaImageStrip";
+import VillaVideoStrip from "@/components/villas/VillaVideoStrip";
 import { useLanguage } from "@/context/LanguageContext";
 import type { VillaFacilities } from "@/lib/villas";
 
@@ -61,9 +61,6 @@ export default function VillaPageContent({
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  const stripImage =
-    galleryImages[1] ?? galleryImages[0] ?? heroImage;
 
   return (
     <>
@@ -174,7 +171,7 @@ export default function VillaPageContent({
         </div>
       </section>
 
-      <VillaImageStrip src={stripImage} alt={`${villaName} pool and garden`} />
+      <VillaVideoStrip />
 
       <VillaSectionDivider />
 
@@ -213,7 +210,7 @@ export default function VillaPageContent({
 
       <VillaSectionDivider />
 
-      {/* House Rules */}
+      {/* Good to Know */}
       <VillaHouseRules />
 
       {/* WhatsApp CTA */}

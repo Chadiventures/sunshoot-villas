@@ -4,7 +4,7 @@ import { HERO_VIDEO } from "@/lib/media";
 
 export default function AboutHero() {
   return (
-    <section className="relative flex min-h-screen items-center justify-center overflow-hidden">
+    <section className="relative flex h-[40vh] min-h-[280px] items-center justify-center overflow-hidden md:h-[50vh]">
       <video
         autoPlay
         muted
@@ -23,7 +23,7 @@ export default function AboutHero() {
         aria-hidden="true"
       />
 
-      <div className="relative z-10 mx-auto max-w-4xl px-6 py-32 text-center">
+      <div className="relative z-10 mx-auto max-w-4xl px-6 py-16 text-center md:py-20">
         <h1
           className="mb-5 text-white"
           style={{

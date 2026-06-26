@@ -2,6 +2,12 @@
 
 import { useMemo, useState } from "react";
 import Footer from "@/components/Footer";
+import PhoneNumberField, {
+  DEFAULT_PHONE_VALUE,
+  buildPhoneWhatsAppLines,
+  isPhoneValid,
+  type PhoneFieldValue,
+} from "@/components/PhoneNumberField";
 import { useLanguage } from "@/context/LanguageContext";
 import { GLOBAL_POLICIES } from "@/lib/site";
 import { VILLAS } from "@/lib/villas";
@@ -16,7 +22,7 @@ type BookingFields = {
   children: string;
   fullName: string;
   email: string;
-  phone: string;
+  phone: PhoneFieldValue;
   specialRequests: string;
 };
 
@@ -28,7 +34,7 @@ const initialFields: BookingFields = {
   children: "0",
   fullName: "",
   email: "",
-  phone: "",
+  phone: DEFAULT_PHONE_VALUE,
   specialRequests: "",
 };
 
@@ -58,7 +64,7 @@ function buildWhatsAppMessage(fields: BookingFields, nights: number | null): str
     "",
     `*Full Name:* ${fields.fullName}`,
     `*Email:* ${fields.email}`,
-    `*Phone:* ${fields.phone}`,
+    ...buildPhoneWhatsAppLines(fields.phone),
   ].filter(Boolean);
 
   if (fields.specialRequests.trim()) {
@@ -146,7 +152,11 @@ export default function BookPage() {
       "phone",
     ];
     required.forEach((key) => {
-      if (!fields[key]) next[key] = true;
+      if (key === "phone") {
+        if (!isPhoneValid(fields.phone)) next.phone = true;
+      } else if (!fields[key]) {
+        next[key] = true;
+      }
     });
     if (fields.arrivalDate && fields.departureDate && nights === null) {
       next.departureDate = true;
@@ -366,24 +376,15 @@ export default function BookPage() {
                         <p className="mt-1 text-xs text-red-500">Required</p>
                       )}
                     </div>
-                    <div>
-                      <label htmlFor="book-phone" className={labelClass}>
-                        Phone Number
-                      </label>
-                      <input
-                        id="book-phone"
-                        type="tel"
-                        placeholder="+62"
-                        value={fields.phone}
-                        onChange={(e) => update("phone", e.target.value)}
-                        className={`${inputClass} ${fieldError("phone") ? "border-red-400" : ""}`}
-                        style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
-                      />
-                      {fieldError("phone") && (
-                        <p className="mt-1 text-xs text-red-500">Required</p>
-                      )}
-                    </div>
                   </div>
+
+                  <PhoneNumberField
+                    idPrefix="book"
+                    label="Phone Number"
+                    value={fields.phone}
+                    onChange={(phone) => update("phone", phone)}
+                    hasError={fieldError("phone")}
+                  />
 
                   <div>
                     <label htmlFor="book-requests" className={labelClass}>

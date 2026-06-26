@@ -1,13 +1,19 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
+import PhoneNumberField, {
+  DEFAULT_PHONE_VALUE,
+  buildPhoneWhatsAppLines,
+  isPhoneValid,
+  type PhoneFieldValue,
+} from "@/components/PhoneNumberField";
 import { VILLAS } from "@/lib/villas";
 import { SITE } from "@/lib/site";
 
 type FormFields = {
   name: string;
   email: string;
-  phone: string;
+  phone: PhoneFieldValue;
   villa: string;
   arrivalDate: string;
   departureDate: string;
@@ -21,7 +27,7 @@ type FieldKey = keyof FormFields;
 const initialForm: FormFields = {
   name: "",
   email: "",
-  phone: "",
+  phone: DEFAULT_PHONE_VALUE,
   villa: "",
   arrivalDate: "",
   departureDate: "",
@@ -39,7 +45,7 @@ function buildWhatsAppMessage(form: FormFields): string {
     "",
     `*Name:* ${form.name}`,
     `*Email:* ${form.email}`,
-    `*Phone:* ${form.phone}`,
+    ...buildPhoneWhatsAppLines(form.phone),
     `*Villa:* ${villaName}`,
     `*Arrival:* ${form.arrivalDate}`,
     `*Departure:* ${form.departureDate}`,
@@ -91,15 +97,18 @@ export default function InquiryForm({
     if (!hideVillaSelect) required.push("villa");
 
     required.forEach((key) => {
-      if (!form[key]) nextErrors[key] = true;
+      if (key === "phone") {
+        if (!isPhoneValid(form.phone)) nextErrors.phone = true;
+      } else if (!form[key]) {
+        nextErrors[key] = true;
+      }
     });
 
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   };
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     if (!validate()) return;
 
     const message = buildWhatsAppMessage(form);
@@ -117,7 +126,7 @@ export default function InquiryForm({
     }`;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+    <div className="space-y-5">
       {showHeading && (
         <div className="mb-2">
           <h3
@@ -155,7 +164,6 @@ export default function InquiryForm({
         <input
           id="name"
           type="text"
-          required
           value={form.name}
           onChange={(e) => updateField("name", e.target.value)}
           className={inputClass(fieldError("name"))}
@@ -166,49 +174,33 @@ export default function InquiryForm({
         )}
       </div>
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <div>
-          <label
-            htmlFor="email"
-            className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
-          >
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            required
-            value={form.email}
-            onChange={(e) => updateField("email", e.target.value)}
-            className={inputClass(fieldError("email"))}
-            style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
-          />
-          {fieldError("email") && (
-            <p className="mt-1 text-xs text-red-500">Required</p>
-          )}
-        </div>
-        <div>
-          <label
-            htmlFor="phone"
-            className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
-          >
-            Phone
-          </label>
-          <input
-            id="phone"
-            type="tel"
-            required
-            placeholder="+62"
-            value={form.phone}
-            onChange={(e) => updateField("phone", e.target.value)}
-            className={inputClass(fieldError("phone"))}
-            style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
-          />
-          {fieldError("phone") && (
-            <p className="mt-1 text-xs text-red-500">Required</p>
-          )}
-        </div>
+      <div>
+        <label
+          htmlFor="email"
+          className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
+        >
+          Email
+        </label>
+        <input
+          id="email"
+          type="email"
+          value={form.email}
+          onChange={(e) => updateField("email", e.target.value)}
+          className={inputClass(fieldError("email"))}
+          style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
+        />
+        {fieldError("email") && (
+          <p className="mt-1 text-xs text-red-500">Required</p>
+        )}
       </div>
+
+      <PhoneNumberField
+        idPrefix="inquiry"
+        label="Phone"
+        value={form.phone}
+        onChange={(phone) => updateField("phone", phone)}
+        hasError={fieldError("phone")}
+      />
 
       {!hideVillaSelect && (
         <div>
@@ -220,7 +212,6 @@ export default function InquiryForm({
           </label>
           <select
             id="villa"
-            required
             value={form.villa}
             onChange={(e) => updateField("villa", e.target.value)}
             className={`${inputClass(fieldError("villa"))} cursor-pointer`}
@@ -252,7 +243,6 @@ export default function InquiryForm({
           <input
             id="arrivalDate"
             type="date"
-            required
             value={form.arrivalDate}
             onChange={(e) => updateField("arrivalDate", e.target.value)}
             className={`${inputClass(fieldError("arrivalDate"))} [color-scheme:light]`}
@@ -272,7 +262,6 @@ export default function InquiryForm({
           <input
             id="departureDate"
             type="date"
-            required
             value={form.departureDate}
             onChange={(e) => updateField("departureDate", e.target.value)}
             className={`${inputClass(fieldError("departureDate"))} [color-scheme:light]`}
@@ -294,7 +283,6 @@ export default function InquiryForm({
           </label>
           <select
             id="adults"
-            required
             value={form.adults}
             onChange={(e) => updateField("adults", e.target.value)}
             className={`${inputClass(fieldError("adults"))} cursor-pointer`}
@@ -354,9 +342,20 @@ export default function InquiryForm({
         />
       </div>
 
-      <button type="submit" className="btn-primary w-full">
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handleSubmit();
+          }
+        }}
+        className="btn-primary w-full cursor-pointer text-center"
+      >
         Send via WhatsApp
-      </button>
-    </form>
+      </div>
+    </div>
   );
 }

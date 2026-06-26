@@ -138,7 +138,7 @@ export default function VillaHouseRules() {
               fontWeight: 300,
             }}
           >
-            House Rules
+            Good to Know
           </h2>
         </ScrollReveal>
 

@@ -54,7 +54,7 @@ export default function AboutValues() {
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
           {VALUES.map((value, index) => (
-            <ScrollReveal key={value.title} delay={index * 100}>
+            <ScrollReveal key={value.title} direction="pop" delay={index * 100}>
               <article className="card-lift h-full rounded-sm border border-white/10 bg-white/5 p-6 md:p-8">
                 <div className="mb-5 text-[var(--sand)]">{value.icon}</div>
                 <h3

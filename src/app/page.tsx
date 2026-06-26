@@ -10,8 +10,8 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <VillaCards />
       <RatingsTrustBar />
+      <VillaCards />
       <WhySeminyak />
       <WhyChooseUs />
       <MapSection />

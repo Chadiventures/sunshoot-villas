@@ -35,9 +35,15 @@ export default function VillaCards({ showHeader = true }: { showHeader?: boolean
           {VILLAS.map((villa) => (
             <article
               key={villa.slug}
-              className="card-lift group overflow-hidden rounded-sm bg-white shadow-sm"
+              className="card-lift group relative cursor-pointer overflow-hidden rounded-sm bg-white shadow-sm"
             >
-              <div className="img-zoom-wrap relative h-56 overflow-hidden sm:h-64">
+              <Link
+                href={`/villas/${villa.slug}`}
+                className="absolute inset-0 z-0"
+                aria-label={`View ${villa.name}`}
+              />
+
+              <div className="img-zoom-wrap pointer-events-none relative z-[1] h-56 overflow-hidden sm:h-64">
                 <Image
                   src={VILLA_IMAGES[villa.slug]}
                   alt={villa.name}
@@ -46,7 +52,8 @@ export default function VillaCards({ showHeader = true }: { showHeader?: boolean
                   sizes="(max-width: 640px) 100vw, 50vw"
                 />
               </div>
-              <div className="p-6 md:p-8">
+
+              <div className="pointer-events-none relative z-[1] p-6 md:p-8">
                 <p
                   className="mb-2 text-[var(--sand)]"
                   style={{
@@ -82,7 +89,7 @@ export default function VillaCards({ showHeader = true }: { showHeader?: boolean
                     ? `${villa.description.slice(0, 140)}…`
                     : villa.description}
                 </p>
-                <div className="flex flex-wrap gap-3">
+                <div className="pointer-events-auto relative z-[2] flex flex-wrap gap-3">
                   <Link
                     href={`/villas/${villa.slug}`}
                     className="btn-outline-dark btn-hover !px-6 !py-2.5 !text-[10px]"
@@ -92,6 +99,7 @@ export default function VillaCards({ showHeader = true }: { showHeader?: boolean
                   <Link
                     href="/book"
                     className="btn-primary btn-hover !px-6 !py-2.5 !text-[10px]"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     {t.villaCardBookNow}
                   </Link>

@@ -63,6 +63,57 @@ function getDepartureMinYmd(arrivalDate: string): string {
   return arrivalDate ? addDaysToYmd(arrivalDate, 1) : getTomorrowYmd();
 }
 
+const REQUIRED_MESSAGE = "This field is required";
+
+function RequiredMark() {
+  return <span className="text-red-500"> *</span>;
+}
+
+const CONTACT_FIELD_ORDER: FieldKey[] = ["name", "email", "message"];
+
+const FULL_FIELD_ORDER: FieldKey[] = [
+  "name",
+  "email",
+  "phone",
+  "villa",
+  "arrivalDate",
+  "departureDate",
+  "adults",
+];
+
+const FIELD_ELEMENT_IDS: Partial<Record<FieldKey, string>> = {
+  name: "name",
+  email: "email",
+  message: "message",
+  phone: "inquiry-phone-field",
+  villa: "villa",
+  arrivalDate: "arrivalDate",
+  departureDate: "departureDate",
+  adults: "adults",
+};
+
+function scrollToFirstError(
+  nextErrors: Partial<Record<FieldKey, boolean>>,
+  order: FieldKey[],
+) {
+  const firstKey = order.find((key) => nextErrors[key]);
+  if (!firstKey) return;
+
+  const elementId = FIELD_ELEMENT_IDS[firstKey];
+  if (!elementId) return;
+
+  const el = document.getElementById(elementId);
+  if (!el) return;
+
+  el.scrollIntoView({ behavior: "smooth", block: "center" });
+  const focusable = el.querySelector<HTMLElement>(
+    "input, select, textarea, button",
+  );
+  if (focusable) {
+    focusable.focus();
+  }
+}
+
 function buildWhatsAppMessage(form: FormFields): string {
   const villaName =
     VILLAS.find((v) => v.slug === form.villa)?.name ?? form.villa;
@@ -91,12 +142,14 @@ type InquiryFormProps = {
   defaultVilla?: string;
   hideVillaSelect?: boolean;
   showHeading?: boolean;
+  contactMode?: boolean;
 };
 
 export default function InquiryForm({
   defaultVilla = "",
   hideVillaSelect = false,
   showHeading = true,
+  contactMode = false,
 }: InquiryFormProps) {
   const [form, setForm] = useState<FormFields>({
     ...initialForm,
@@ -113,26 +166,44 @@ export default function InquiryForm({
 
   const validate = () => {
     const nextErrors: Partial<Record<FieldKey, boolean>> = {};
-    const required: FieldKey[] = [
-      "name",
-      "email",
-      "phone",
-      "arrivalDate",
-      "departureDate",
-      "adults",
-    ];
-    if (!hideVillaSelect) required.push("villa");
 
-    required.forEach((key) => {
-      if (key === "phone") {
-        if (!isPhoneValid(form.phone)) nextErrors.phone = true;
-      } else if (!form[key]) {
-        nextErrors[key] = true;
-      }
-    });
+    if (contactMode) {
+      if (!form.name.trim()) nextErrors.name = true;
+      if (!form.email.trim()) nextErrors.email = true;
+      if (!form.message.trim()) nextErrors.message = true;
+    } else {
+      const required: FieldKey[] = [
+        "name",
+        "email",
+        "phone",
+        "arrivalDate",
+        "departureDate",
+        "adults",
+      ];
+      if (!hideVillaSelect) required.push("villa");
+
+      required.forEach((key) => {
+        if (key === "phone") {
+          if (!isPhoneValid(form.phone)) nextErrors.phone = true;
+        } else if (!form[key]) {
+          nextErrors[key] = true;
+        }
+      });
+    }
 
     setErrors(nextErrors);
-    return Object.keys(nextErrors).length === 0;
+
+    if (Object.keys(nextErrors).length > 0) {
+      const order = contactMode
+        ? CONTACT_FIELD_ORDER
+        : FULL_FIELD_ORDER.filter(
+            (key) => key !== "villa" || !hideVillaSelect,
+          );
+      scrollToFirstError(nextErrors, order);
+      return false;
+    }
+
+    return true;
   };
 
   const handleSubmit = () => {
@@ -232,6 +303,7 @@ export default function InquiryForm({
           className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
         >
           Name
+          <RequiredMark />
         </label>
         <input
           id="name"
@@ -242,7 +314,7 @@ export default function InquiryForm({
           style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
         />
         {fieldError("name") && (
-          <p className="mt-1 text-xs text-red-500">Required</p>
+          <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
         )}
       </div>
 
@@ -252,6 +324,7 @@ export default function InquiryForm({
           className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
         >
           Email
+          <RequiredMark />
         </label>
         <input
           id="email"
@@ -262,16 +335,18 @@ export default function InquiryForm({
           style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
         />
         {fieldError("email") && (
-          <p className="mt-1 text-xs text-red-500">Required</p>
+          <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
         )}
       </div>
 
       <PhoneNumberField
         idPrefix="inquiry"
+        fieldId="inquiry-phone-field"
         label="Phone"
         value={form.phone}
         onChange={(phone) => updateField("phone", phone)}
         hasError={fieldError("phone")}
+        required={!contactMode}
       />
 
       {!hideVillaSelect && (
@@ -281,6 +356,7 @@ export default function InquiryForm({
             className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
           >
             Villa
+            {!contactMode && <RequiredMark />}
           </label>
           <select
             id="villa"
@@ -299,7 +375,7 @@ export default function InquiryForm({
             ))}
           </select>
           {fieldError("villa") && (
-            <p className="mt-1 text-xs text-red-500">Required</p>
+            <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
           )}
         </div>
       )}
@@ -311,6 +387,7 @@ export default function InquiryForm({
             className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
           >
             Arrival Date
+            {!contactMode && <RequiredMark />}
           </label>
           <input
             id="arrivalDate"
@@ -322,7 +399,7 @@ export default function InquiryForm({
             style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
           />
           {fieldError("arrivalDate") && (
-            <p className="mt-1 text-xs text-red-500">Required</p>
+            <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
           )}
         </div>
         <div>
@@ -331,6 +408,7 @@ export default function InquiryForm({
             className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
           >
             Departure Date
+            {!contactMode && <RequiredMark />}
           </label>
           <input
             id="departureDate"
@@ -342,7 +420,7 @@ export default function InquiryForm({
             style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
           />
           {fieldError("departureDate") && (
-            <p className="mt-1 text-xs text-red-500">Required</p>
+            <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
           )}
         </div>
       </div>
@@ -354,6 +432,7 @@ export default function InquiryForm({
             className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
           >
             Adults
+            {!contactMode && <RequiredMark />}
           </label>
           <select
             id="adults"
@@ -372,7 +451,7 @@ export default function InquiryForm({
             ))}
           </select>
           {fieldError("adults") && (
-            <p className="mt-1 text-xs text-red-500">Required</p>
+            <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
           )}
         </div>
         <div>
@@ -404,6 +483,7 @@ export default function InquiryForm({
           className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
         >
           Message
+          {contactMode && <RequiredMark />}
         </label>
         <textarea
           id="message"
@@ -411,9 +491,12 @@ export default function InquiryForm({
           placeholder="Any special requests or questions..."
           value={form.message}
           onChange={(e) => updateField("message", e.target.value)}
-          className={`${inputClass(false)} resize-none`}
+          className={`${inputClass(fieldError("message"))} resize-none`}
           style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
         />
+        {fieldError("message") && (
+          <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
+        )}
       </div>
 
       <div

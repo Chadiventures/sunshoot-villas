@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import Header from "@/components/Header";
+import TopBanner from "@/components/TopBanner";
 import FloatingWhatsAppButton from "@/components/FloatingWhatsAppButton";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { SITE } from "@/lib/site";
@@ -34,6 +35,7 @@ export default function RootLayout({
     <html lang="en" className={`${cormorant.variable} ${inter.variable}`}>
       <body className="antialiased">
         <LanguageProvider>
+          <TopBanner />
           <Header />
           <main>{children}</main>
           <FloatingWhatsAppButton />

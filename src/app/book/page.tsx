@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import Footer from "@/components/Footer";
 import PhoneNumberField, {
@@ -13,6 +14,9 @@ import { GLOBAL_POLICIES } from "@/lib/site";
 import { VILLAS } from "@/lib/villas";
 
 const WHATSAPP = "6281239701978";
+
+const BOOK_HERO_IMAGE =
+  "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=1920&q=80";
 
 type BookingFields = {
   villa: string;
@@ -101,6 +105,51 @@ function buildWhatsAppMessage(fields: BookingFields, nights: number | null): str
   return lines.join("\n");
 }
 
+const REQUIRED_MESSAGE = "This field is required";
+
+function RequiredMark() {
+  return <span className="text-red-500"> *</span>;
+}
+
+const BOOK_FIELD_ORDER: (keyof BookingFields)[] = [
+  "villa",
+  "arrivalDate",
+  "departureDate",
+  "fullName",
+  "email",
+  "phone",
+];
+
+const BOOK_FIELD_ELEMENT_IDS: Partial<Record<keyof BookingFields, string>> = {
+  villa: "book-villa",
+  arrivalDate: "book-arrival",
+  departureDate: "book-departure",
+  fullName: "book-name",
+  email: "book-email",
+  phone: "book-phone-field",
+};
+
+function scrollToFirstBookError(
+  nextErrors: Partial<Record<keyof BookingFields, boolean>>,
+) {
+  const firstKey = BOOK_FIELD_ORDER.find((key) => nextErrors[key]);
+  if (!firstKey) return;
+
+  const elementId = BOOK_FIELD_ELEMENT_IDS[firstKey];
+  if (!elementId) return;
+
+  const el = document.getElementById(elementId);
+  if (!el) return;
+
+  el.scrollIntoView({ behavior: "smooth", block: "center" });
+  const focusable = el.querySelector<HTMLElement>(
+    "input, select, textarea, button",
+  );
+  if (focusable) {
+    focusable.focus();
+  }
+}
+
 const trustItems = [
   {
     label: "Secure Booking",
@@ -177,7 +226,6 @@ export default function BookPage() {
       "villa",
       "arrivalDate",
       "departureDate",
-      "adults",
       "fullName",
       "email",
       "phone",
@@ -185,6 +233,8 @@ export default function BookPage() {
     required.forEach((key) => {
       if (key === "phone") {
         if (!isPhoneValid(fields.phone)) next.phone = true;
+      } else if (key === "fullName" || key === "email") {
+        if (!fields[key].trim()) next[key] = true;
       } else if (!fields[key]) {
         next[key] = true;
       }
@@ -193,7 +243,13 @@ export default function BookPage() {
       next.departureDate = true;
     }
     setErrors(next);
-    return Object.keys(next).length === 0;
+
+    if (Object.keys(next).length > 0) {
+      scrollToFirstBookError(next);
+      return false;
+    }
+
+    return true;
   };
 
   const handleSubmit = () => {
@@ -259,8 +315,22 @@ export default function BookPage() {
 
   return (
     <>
-      <section className="bg-[var(--dark)] pt-20 pb-7 md:pt-32 md:pb-16">
-        <div className="container-site text-center">
+      <section className="relative overflow-hidden pt-20 pb-7 md:pt-32 md:pb-16">
+        <Image
+          src={BOOK_HERO_IMAGE}
+          alt=""
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
+          aria-hidden="true"
+        />
+        <div
+          className="absolute inset-0"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          aria-hidden="true"
+        />
+        <div className="container-site relative z-10 text-center">
           <p className="section-eyebrow mb-2 md:mb-3">Reservations</p>
           <h1
             className="mb-3 text-white md:mb-4"
@@ -326,6 +396,7 @@ export default function BookPage() {
                   <div>
                     <label htmlFor="book-villa" className={labelClass}>
                       Select Villa
+                      <RequiredMark />
                     </label>
                     <select
                       id="book-villa"
@@ -343,7 +414,7 @@ export default function BookPage() {
                       ))}
                     </select>
                     {fieldError("villa") && (
-                      <p className="mt-1 text-xs text-red-500">Please select a villa</p>
+                      <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
                     )}
                   </div>
 
@@ -351,6 +422,7 @@ export default function BookPage() {
                     <div className="w-full">
                       <label htmlFor="book-arrival" className={labelClass}>
                         Arrival Date
+                        <RequiredMark />
                       </label>
                       <input
                         id="book-arrival"
@@ -362,12 +434,13 @@ export default function BookPage() {
                         style={inputStyle}
                       />
                       {fieldError("arrivalDate") && (
-                        <p className="mt-1 text-xs text-red-500">Required</p>
+                        <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
                       )}
                     </div>
                     <div className="w-full">
                       <label htmlFor="book-departure" className={labelClass}>
                         Departure Date
+                        <RequiredMark />
                       </label>
                       <input
                         id="book-departure"
@@ -379,9 +452,7 @@ export default function BookPage() {
                         style={inputStyle}
                       />
                       {fieldError("departureDate") && (
-                        <p className="mt-1 text-xs text-red-500">
-                          Required - must be after arrival
-                        </p>
+                        <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
                       )}
                     </div>
                   </div>
@@ -413,7 +484,7 @@ export default function BookPage() {
                         style={inputStyle}
                       />
                       {fieldError("adults") && (
-                        <p className="mt-1 text-xs text-red-500">Required</p>
+                        <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
                       )}
                     </div>
                     <div>
@@ -436,6 +507,7 @@ export default function BookPage() {
                   <div>
                     <label htmlFor="book-name" className={labelClass}>
                       Full Name
+                      <RequiredMark />
                     </label>
                     <input
                       id="book-name"
@@ -446,13 +518,14 @@ export default function BookPage() {
                       style={inputStyle}
                     />
                     {fieldError("fullName") && (
-                      <p className="mt-1 text-xs text-red-500">Required</p>
+                      <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
                     )}
                   </div>
 
                   <div>
                     <label htmlFor="book-email" className={labelClass}>
                       Email
+                      <RequiredMark />
                     </label>
                     <input
                       id="book-email"
@@ -463,16 +536,18 @@ export default function BookPage() {
                       style={inputStyle}
                     />
                     {fieldError("email") && (
-                      <p className="mt-1 text-xs text-red-500">Required</p>
+                      <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
                     )}
                   </div>
 
                   <PhoneNumberField
                     idPrefix="book"
+                    fieldId="book-phone-field"
                     label="Phone Number"
                     value={fields.phone}
                     onChange={(phone) => update("phone", phone)}
                     hasError={fieldError("phone")}
+                    required
                   />
 
                   <div>

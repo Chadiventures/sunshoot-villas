@@ -8,7 +8,7 @@ const features = [
     title: "Prime Seminyak Location",
     mobileTitle: "Perfect Location",
     description:
-      "Walking distance to restaurants, supermarkets, salons and Seminyak Beach in the famous Bidadari area.",
+      "Minutes from restaurants, supermarkets, salons and Seminyak Beach in the famous Bidadari area.",
     icon: (
       <svg className="h-6 w-6 sm:h-8 sm:w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M12 21s7-4.5 7-11a7 7 0 10-14 0c0 6.5 7 11 7 11z" />

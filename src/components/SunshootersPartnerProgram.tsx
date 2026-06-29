@@ -1,3 +1,7 @@
+"use client";
+
+import ScrollReveal from "@/components/ScrollReveal";
+
 const BENEFITS = [
   "10% OFF all food and drinks",
   "Free welcome drink (juice, soda, tea or coffee)",
@@ -8,25 +12,23 @@ const BENEFITS = [
 
 export default function SunshootersPartnerProgram() {
   return (
-    <section className="bg-[var(--bg)] py-14 md:py-20">
+    <section className="bg-[var(--bg)] pt-6 pb-14 md:pt-8 md:pb-20">
       <div className="container-site">
-        <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-14">
-          <div className="flex justify-center md:justify-start">
+        <ScrollReveal>
+          <div className="rounded-sm border border-white/10 bg-[var(--dark)] px-8 py-10 text-center md:px-12 md:py-14">
             <img
               src="/sunshooters-logo.png"
               alt="Sunshooters Villa Partner Program"
-              width={120}
-              height={120}
-              className="h-auto w-[120px]"
+              width={190}
+              height={190}
+              className="mx-auto mb-8 h-auto w-[190px] md:mb-10 md:w-[200px]"
               style={{
-                filter: "drop-shadow(0 0 18px rgba(201, 169, 110, 0.45))",
+                filter: "drop-shadow(0 0 24px rgba(201, 169, 110, 0.5))",
               }}
             />
-          </div>
 
-          <div className="text-center md:text-left">
             <p
-              className="mb-2 text-[var(--sand)]"
+              className="mb-3 text-[var(--sand)]"
               style={{
                 fontFamily: "var(--font-inter)",
                 fontSize: "0.6875rem",
@@ -38,7 +40,7 @@ export default function SunshootersPartnerProgram() {
               Official Partner Villas
             </p>
             <h2
-              className="mb-4 text-[var(--dark)]"
+              className="mb-5 text-white"
               style={{
                 fontFamily: "var(--font-cormorant)",
                 fontSize: "clamp(1.75rem, 4vw, 2.25rem)",
@@ -48,7 +50,7 @@ export default function SunshootersPartnerProgram() {
               Sunshooters Villa Partner Program
             </h2>
             <p
-              className="mb-6 text-[var(--text-muted)]"
+              className="mx-auto mb-8 max-w-2xl text-white/75"
               style={{
                 fontFamily: "var(--font-inter)",
                 fontSize: "0.9375rem",
@@ -61,11 +63,11 @@ export default function SunshootersPartnerProgram() {
               just steps away.
             </p>
 
-            <ul className="mx-auto mb-6 w-fit space-y-2.5 text-left md:mx-0">
+            <ul className="mx-auto mb-8 w-fit max-w-xl space-y-3 text-left">
               {BENEFITS.map((benefit) => (
                 <li
                   key={benefit}
-                  className="flex items-start gap-3 text-[var(--text)]"
+                  className="flex items-start gap-3 text-white/90"
                   style={{
                     fontFamily: "var(--font-inter)",
                     fontSize: "0.875rem",
@@ -83,7 +85,7 @@ export default function SunshootersPartnerProgram() {
             </ul>
 
             <p
-              className="text-[var(--text-muted)] italic"
+              className="text-white/60 italic"
               style={{
                 fontFamily: "var(--font-inter)",
                 fontSize: "0.8125rem",
@@ -94,7 +96,7 @@ export default function SunshootersPartnerProgram() {
               Simply mention your villa name when ordering or arriving.
             </p>
           </div>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

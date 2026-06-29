@@ -32,8 +32,9 @@ export default function VillaTopBanner() {
 
   return (
     <div
-      className="fixed top-0 right-0 left-0 z-[60] flex items-center"
+      className="fixed right-0 left-0 z-[60] flex items-center"
       style={{
+        top: "var(--top-banner-h, 32px)",
         backgroundColor: "#1A2E1A",
         color: "#ffffff",
         minHeight: `${BANNER_HEIGHT}px`,

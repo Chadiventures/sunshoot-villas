@@ -50,8 +50,11 @@ export default function Header() {
   if (isAdmin) return null;
 
   const solid = scrolled || !isHome;
-  const headerTop =
-    bannerActive && isVillaDetail ? "var(--villa-banner-h, 44px)" : "0px";
+  const headerTop = isAdmin
+    ? "0px"
+    : `calc(var(--top-banner-h, 32px) + ${
+        bannerActive && isVillaDetail ? "var(--villa-banner-h, 0px)" : "0px"
+      })`;
 
   const navLinks = [
     { label: t.navOurVillas, href: "/villas", key: "villas" },

@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const bannerOffer =
   "BOOK DIRECT · PRIVATE POOL VILLAS IN SEMINYAK · PERSONAL BALINESE HOSPITALITY";
@@ -30,15 +33,19 @@ function BannerSegment({ hidden }: { hidden?: boolean }) {
 }
 
 export default function TopBanner() {
+  const pathname = usePathname();
+
+  if (pathname.startsWith("/admin")) {
+    return null;
+  }
+
   return (
     <div
-      className="top-banner overflow-hidden bg-[var(--brand-green)] transition-colors duration-300 hover:bg-[var(--brand-green-hover)]"
+      className="top-banner fixed top-0 right-0 left-0 z-[70] block overflow-hidden bg-[var(--brand-green)] transition-colors duration-300 hover:bg-[var(--brand-green-hover)]"
       style={{
-        position: "relative",
-        height: "32px",
+        height: "var(--top-banner-h)",
         margin: 0,
         padding: 0,
-        display: "block",
       }}
     >
       <Link

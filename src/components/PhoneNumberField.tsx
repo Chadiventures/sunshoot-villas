@@ -70,6 +70,8 @@ type PhoneNumberFieldProps = {
   hasError?: boolean;
   label?: string;
   idPrefix?: string;
+  required?: boolean;
+  fieldId?: string;
 };
 
 type CountryListProps = {
@@ -131,6 +133,8 @@ export default function PhoneNumberField({
   hasError = false,
   label = "Phone",
   idPrefix = "phone",
+  required = false,
+  fieldId,
 }: PhoneNumberFieldProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -201,12 +205,13 @@ export default function PhoneNumberField({
       : selected.code;
 
   return (
-    <div>
+    <div id={fieldId}>
       <p
         className="mb-1 block text-[0.625rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase md:mb-1.5 md:text-[0.6875rem]"
         style={{ fontFamily: "var(--font-inter)" }}
       >
         {label}
+        {required && <span className="text-red-500"> *</span>}
       </p>
 
       <div ref={wrapperRef} className="relative">
@@ -396,7 +401,7 @@ export default function PhoneNumberField({
       </div>
 
       {hasError && (
-        <p className="mt-1 text-xs text-red-500">Required</p>
+        <p className="mt-1 text-xs text-red-500">This field is required</p>
       )}
     </div>
   );

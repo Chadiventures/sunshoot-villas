@@ -90,7 +90,7 @@ export default function VillaPageContent({
         />
         <div
           className="hero-fade-in absolute inset-0 flex flex-col items-center justify-end px-4 pb-10 pt-28 text-center sm:pb-14"
-          style={{ paddingTop: "calc(5rem + var(--villa-banner-h, 0px))" }}
+          style={{ paddingTop: "calc(5rem + var(--top-banner-h, 32px) + var(--villa-banner-h, 0px))" }}
         >
           <h1
             className="mb-3 max-w-3xl text-white"

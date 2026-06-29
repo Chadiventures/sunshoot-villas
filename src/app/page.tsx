@@ -5,6 +5,7 @@ import WhySeminyak from "@/components/WhySeminyak";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import MapSection from "@/components/MapSection";
 import SunshootersPartnerProgram from "@/components/SunshootersPartnerProgram";
+import AboutCta from "@/components/about/AboutCta";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -17,6 +18,7 @@ export default function Home() {
       <WhyChooseUs />
       <MapSection />
       <SunshootersPartnerProgram />
+      <AboutCta />
       <Footer />
     </>
   );

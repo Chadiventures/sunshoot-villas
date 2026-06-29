@@ -123,7 +123,7 @@ export default function ContactPage() {
             </div>
 
             <div className="rounded-sm bg-white p-6 shadow-sm md:p-8">
-              <InquiryForm />
+              <InquiryForm contactMode />
             </div>
           </div>
         </div>

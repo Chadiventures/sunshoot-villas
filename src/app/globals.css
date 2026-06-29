@@ -9,6 +9,10 @@
   --text: #2c2c2c;
   --text-muted: #6b6b6b;
   --white: #ffffff;
+  --brand-green: #1a2e1a;
+  --brand-green-hover: #243824;
+  --brand-green-light: #c9a96e;
+  --top-banner-h: 32px;
 }
 
 @theme inline {
@@ -238,6 +242,26 @@ body {
   100% {
     transform: scale(1.45);
     opacity: 0;
+  }
+}
+
+/* Site top banner marquee */
+.top-banner-track {
+  animation: topBannerMarquee 40s linear infinite;
+}
+
+@keyframes topBannerMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .top-banner-track {
+    animation: none;
   }
 }
 

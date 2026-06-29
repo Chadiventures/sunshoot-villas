@@ -13,6 +13,11 @@
   --brand-green-hover: #243824;
   --brand-green-light: #c9a96e;
   --top-banner-h: 32px;
+  --header-h: 72px;
+  --site-chrome-h: calc(var(--top-banner-h) + var(--header-h));
+  --villa-chrome-h: calc(
+    var(--top-banner-h) + var(--villa-banner-h, 0px) + var(--header-h)
+  );
 }
 
 @theme inline {
@@ -214,6 +219,10 @@ body {
 }
 
 @media (min-width: 768px) {
+  :root {
+    --header-h: 80px;
+  }
+
   .container-site {
     padding-left: 2rem;
     padding-right: 2rem;

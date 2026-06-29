@@ -9,7 +9,10 @@ export default function Hero() {
   const { t } = useLanguage();
 
   return (
-    <section className="relative flex min-h-screen items-center justify-center overflow-hidden">
+    <section
+      className="relative flex min-h-screen items-center justify-center overflow-hidden"
+      style={{ paddingTop: "var(--site-chrome-h)" }}
+    >
       <video
         autoPlay
         muted

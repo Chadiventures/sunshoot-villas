@@ -8,7 +8,10 @@ type PageHeroProps = {
 
 export default function PageHero({ title, subtitle, breadcrumb }: PageHeroProps) {
   return (
-    <section className="bg-[var(--dark)] pt-28 pb-16 md:pt-32 md:pb-20">
+    <section
+      className="bg-[var(--dark)] pb-16 md:pb-20"
+      style={{ paddingTop: "var(--site-chrome-h)" }}
+    >
       <div className="container-site text-center">
         {breadcrumb && (
           <nav

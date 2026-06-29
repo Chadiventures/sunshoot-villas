@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import ScrollReveal from "@/components/ScrollReveal";
 import { BOOKING_PHOTOS } from "@/lib/media";
 
@@ -143,6 +144,51 @@ export default function AboutImageGrid() {
         <p className="mt-4 text-center text-[0.6875rem] text-[var(--text-muted)] md:hidden">
           Swipe to see more photos
         </p>
+
+        <ScrollReveal className="mt-10 text-center md:mt-12">
+          <h3
+            className="mb-4 text-[var(--dark)]"
+            style={{
+              fontFamily: "var(--font-cormorant)",
+              fontSize: "clamp(1.75rem, 4vw, 2.5rem)",
+              fontWeight: 300,
+            }}
+          >
+            Ready to Book Your Bali Escape?
+          </h3>
+          <p
+            className="mx-auto mb-8 max-w-xl text-[var(--text-muted)]"
+            style={{
+              fontFamily: "var(--font-inter)",
+              fontSize: "1rem",
+              fontWeight: 300,
+              lineHeight: 1.7,
+            }}
+          >
+            Secure your villa today and start planning the holiday you deserve.
+          </p>
+          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Link
+              href="/book"
+              className="btn-hover inline-flex min-w-[200px] items-center justify-center rounded-sm border-2 border-[var(--dark)] bg-[var(--dark)] px-8 py-3.5 text-white transition-all duration-300 ease-in-out hover:border-[var(--dark-light)] hover:bg-[var(--dark-light)]"
+              style={{
+                fontFamily: "var(--font-inter)",
+                fontSize: "0.75rem",
+                fontWeight: 500,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+              }}
+            >
+              Book Now
+            </Link>
+            <Link
+              href="/villas"
+              className="btn-outline-dark btn-hover min-w-[200px]"
+            >
+              View Our Villas
+            </Link>
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   );

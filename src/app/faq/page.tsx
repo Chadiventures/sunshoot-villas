@@ -2,7 +2,10 @@ import FooterFaq from "@/components/FooterFaq";
 
 export default function FaqPage() {
   return (
-    <div className="min-h-screen bg-[#1A2E1A] pt-32">
+    <div
+      className="min-h-screen bg-[#1A2E1A]"
+      style={{ paddingTop: "calc(var(--site-chrome-h) + 3rem)" }}
+    >
       <div className="container-site pb-16">
         <h1
           className="mb-8 text-center text-white"

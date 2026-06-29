@@ -18,7 +18,8 @@ export default function FamiliesPage() {
       <section
         className="relative flex flex-col items-center justify-center overflow-hidden px-6 pb-0 text-center"
         style={{
-          marginTop: "-80px",
+          marginTop: "calc(-1 * var(--site-chrome-h))",
+          paddingTop: "var(--site-chrome-h)",
           height: "35vh",
           minHeight: "280px",
           background:

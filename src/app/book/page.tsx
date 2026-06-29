@@ -315,7 +315,10 @@ export default function BookPage() {
 
   return (
     <>
-      <section className="relative overflow-hidden pt-20 pb-7 md:pt-32 md:pb-16">
+      <section
+        className="relative overflow-hidden pb-7 md:pb-16"
+        style={{ paddingTop: "var(--site-chrome-h)" }}
+      >
         <Image
           src={BOOK_HERO_IMAGE}
           alt=""

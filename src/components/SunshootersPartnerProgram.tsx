@@ -12,23 +12,20 @@ const BENEFITS = [
 
 export default function SunshootersPartnerProgram() {
   return (
-    <section className="bg-[var(--bg)] pt-6 pb-14 md:pt-8 md:pb-20">
+    <section className="bg-[var(--bg)] py-8 md:py-12">
       <div className="container-site">
         <ScrollReveal>
-          <div className="rounded-sm border border-white/10 bg-[var(--dark)] px-8 py-10 text-center md:px-12 md:py-14">
+          <div className="mx-auto max-w-3xl rounded-lg border-[2.5px] border-[var(--dark)] bg-white px-6 py-7 text-center md:px-10 md:py-9">
             <img
               src="/sunshooters-logo.png"
               alt="Sunshooters Villa Partner Program"
-              width={190}
-              height={190}
-              className="mx-auto mb-8 h-auto w-[190px] md:mb-10 md:w-[200px]"
-              style={{
-                filter: "drop-shadow(0 0 24px rgba(201, 169, 110, 0.5))",
-              }}
+              width={150}
+              height={150}
+              className="mx-auto mb-5 h-auto w-[130px] md:mb-6 md:w-[150px]"
             />
 
             <p
-              className="mb-3 text-[var(--sand)]"
+              className="mb-2 text-[var(--sand)]"
               style={{
                 fontFamily: "var(--font-inter)",
                 fontSize: "0.6875rem",
@@ -40,22 +37,22 @@ export default function SunshootersPartnerProgram() {
               Official Partner Villas
             </p>
             <h2
-              className="mb-5 text-white"
+              className="mb-3 text-[var(--dark)]"
               style={{
                 fontFamily: "var(--font-cormorant)",
-                fontSize: "clamp(1.75rem, 4vw, 2.25rem)",
+                fontSize: "clamp(1.5rem, 3.5vw, 2rem)",
                 fontWeight: 300,
               }}
             >
               Sunshooters Villa Partner Program
             </h2>
             <p
-              className="mx-auto mb-8 max-w-2xl text-white/75"
+              className="mx-auto mb-6 max-w-2xl text-[var(--dark)]"
               style={{
                 fontFamily: "var(--font-inter)",
-                fontSize: "0.9375rem",
+                fontSize: "0.875rem",
                 fontWeight: 300,
-                lineHeight: 1.75,
+                lineHeight: 1.7,
               }}
             >
               As an official partner of the Sunshooters Villa Partner Program, our
@@ -63,20 +60,20 @@ export default function SunshootersPartnerProgram() {
               just steps away.
             </p>
 
-            <ul className="mx-auto mb-8 w-fit max-w-xl space-y-3 text-left">
+            <ul className="mx-auto mb-5 w-fit max-w-xl space-y-2 text-left">
               {BENEFITS.map((benefit) => (
                 <li
                   key={benefit}
-                  className="flex items-start gap-3 text-white/90"
+                  className="flex items-start gap-3 text-[var(--dark)]"
                   style={{
                     fontFamily: "var(--font-inter)",
-                    fontSize: "0.875rem",
+                    fontSize: "0.8125rem",
                     fontWeight: 400,
                     lineHeight: 1.5,
                   }}
                 >
                   <span
-                    className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#C9A96E]"
+                    className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--sand)]"
                     aria-hidden="true"
                   />
                   {benefit}
@@ -85,10 +82,10 @@ export default function SunshootersPartnerProgram() {
             </ul>
 
             <p
-              className="text-white/60 italic"
+              className="text-[var(--dark)]/60 italic"
               style={{
                 fontFamily: "var(--font-inter)",
-                fontSize: "0.8125rem",
+                fontSize: "0.75rem",
                 fontWeight: 300,
                 lineHeight: 1.6,
               }}

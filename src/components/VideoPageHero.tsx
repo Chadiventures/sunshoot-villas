@@ -16,7 +16,10 @@ export default function VideoPageHero({
   subtitle,
 }: VideoPageHeroProps) {
   return (
-    <section className="relative flex h-[40vh] min-h-[280px] items-center justify-center overflow-hidden md:h-[50vh]">
+    <section
+      className="relative flex h-[40vh] min-h-[280px] items-center justify-center overflow-hidden md:h-[50vh]"
+      style={{ paddingTop: "var(--site-chrome-h)" }}
+    >
       {imageSrc ? (
         <Image
           src={imageSrc}

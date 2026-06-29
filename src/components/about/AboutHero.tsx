@@ -4,7 +4,10 @@ import { HERO_VIDEO } from "@/lib/media";
 
 export default function AboutHero() {
   return (
-    <section className="relative flex h-[40vh] min-h-[280px] items-center justify-center overflow-hidden md:h-[50vh]">
+    <section
+      className="relative flex h-[40vh] min-h-[280px] items-center justify-center overflow-hidden md:h-[50vh]"
+      style={{ paddingTop: "var(--site-chrome-h)" }}
+    >
       <video
         autoPlay
         muted

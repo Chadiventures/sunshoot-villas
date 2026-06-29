@@ -179,8 +179,10 @@ export default function RatesPage() {
   return (
     <>
       <section
-        className="relative -mt-[80px] flex flex-col items-center justify-center px-6 text-center"
+        className="relative flex flex-col items-center justify-center px-6 text-center"
         style={{
+          marginTop: "calc(-1 * var(--site-chrome-h))",
+          paddingTop: "var(--site-chrome-h)",
           height: "40vh",
           minHeight: "280px",
           background:

@@ -91,8 +91,21 @@ export default function ContactPage() {
                     href={`https://wa.me/${SITE.whatsapp}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-primary inline-block"
-                    style={{ backgroundColor: "#25D366" }}
+                    className="inline-flex items-center justify-center border-0 outline-none ring-0 hover:border-0 hover:outline-none hover:ring-0 focus:border-0 focus:outline-none focus:ring-0"
+                    style={{
+                      backgroundColor: "#25D366",
+                      color: "#ffffff",
+                      border: "none",
+                      outline: "none",
+                      boxShadow: "none",
+                      fontFamily: "var(--font-inter)",
+                      fontSize: "0.75rem",
+                      fontWeight: 500,
+                      letterSpacing: "0.12em",
+                      textTransform: "uppercase",
+                      padding: "0.875rem 2rem",
+                      textDecoration: "none",
+                    }}
                   >
                     Chat on WhatsApp
                   </a>

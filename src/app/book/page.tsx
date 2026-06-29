@@ -335,6 +335,7 @@ export default function BookPage() {
                       style={inputStyle}
                     >
                       <option value="">Choose a villa</option>
+                      <option value="any">Any villa</option>
                       {VILLAS.map((v) => (
                         <option key={v.slug} value={v.slug}>
                           {v.name.replace("Villa ", "")}

@@ -6,8 +6,8 @@ import InquiryForm from "@/components/InquiryForm";
 import MapSection from "@/components/MapSection";
 import { SITE } from "@/lib/site";
 
-const CONTACT_HERO_VIDEO =
-  "https://videos.pexels.com/video-files/3125908/3125908-hd_1920_1080_25fps.mp4";
+const CONTACT_HERO_IMAGE =
+  "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80";
 
 const CONTACT_IMAGE =
   "https://cf.bstatic.com/xdata/images/hotel/max1280x900/185354560.jpg?k=6a8de904dbd7d2121d6e233fd5a13746df529ac987d74da48410ae3357898cfa&o=&hp=1";
@@ -22,7 +22,7 @@ export default function ContactPage() {
   return (
     <>
       <VideoPageHero
-        videoSrc={CONTACT_HERO_VIDEO}
+        imageSrc={CONTACT_HERO_IMAGE}
         title="Contact Us"
         subtitle="We are always just a message away"
       />
@@ -92,6 +92,7 @@ export default function ContactPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn-primary inline-block"
+                    style={{ backgroundColor: "#25D366" }}
                   >
                     Chat on WhatsApp
                   </a>

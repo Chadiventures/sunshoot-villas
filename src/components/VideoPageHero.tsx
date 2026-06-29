@@ -1,29 +1,45 @@
 "use client";
 
+import Image from "next/image";
+
 type VideoPageHeroProps = {
-  videoSrc: string;
+  videoSrc?: string;
+  imageSrc?: string;
   title: string;
   subtitle: string;
 };
 
 export default function VideoPageHero({
   videoSrc,
+  imageSrc,
   title,
   subtitle,
 }: VideoPageHeroProps) {
   return (
     <section className="relative flex h-[40vh] min-h-[280px] items-center justify-center overflow-hidden md:h-[50vh]">
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        className="absolute inset-0 h-full w-full object-cover"
-        aria-hidden="true"
-      >
-        <source src={videoSrc} type="video/mp4" />
-      </video>
+      {imageSrc ? (
+        <Image
+          src={imageSrc}
+          alt=""
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
+          aria-hidden="true"
+        />
+      ) : (
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          className="absolute inset-0 h-full w-full object-cover"
+          aria-hidden="true"
+        >
+          <source src={videoSrc} type="video/mp4" />
+        </video>
+      )}
 
       <div
         className="absolute inset-0"

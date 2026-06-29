@@ -164,10 +164,11 @@ export default function PhoneNumberField({
     const onDocClick = (e: MouseEvent) => {
       if (!wrapperRef.current?.contains(e.target as Node)) {
         setOpen(false);
+        setSearch("");
       }
     };
-    document.addEventListener("mousedown", onDocClick);
-    return () => document.removeEventListener("mousedown", onDocClick);
+    document.addEventListener("click", onDocClick);
+    return () => document.removeEventListener("click", onDocClick);
   }, [open, isMobile]);
 
   useEffect(() => {
@@ -208,61 +209,66 @@ export default function PhoneNumberField({
         {label}
       </p>
 
-      <div className={`flex w-full overflow-hidden rounded-sm border bg-white transition-colors ${borderClass}`}>
-        <div ref={wrapperRef} className="relative shrink-0 border-r border-[var(--text)]/15">
-          <button
-            type="button"
-            aria-expanded={open}
-            aria-haspopup="listbox"
-            onClick={() => setOpen((prev) => !prev)}
-            className="flex h-full min-h-[48px] min-w-[5.5rem] cursor-pointer items-center gap-1.5 px-2.5 py-2 transition-colors hover:bg-[var(--bg)] sm:min-h-[46px] sm:gap-2 sm:px-3.5 sm:py-3"
-            style={inputStyle}
-          >
-            <span className="text-base leading-none" aria-hidden="true">
-              {selected.flag}
-            </span>
-            <span className="whitespace-nowrap text-sm font-medium text-[var(--dark)] sm:text-[0.875rem]">
-              {displayCode}
-            </span>
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              className={`shrink-0 text-[var(--text-muted)] transition-transform ${open ? "rotate-180" : ""}`}
-              aria-hidden="true"
+      <div ref={wrapperRef} className="relative">
+        <div className={`flex w-full overflow-hidden rounded-sm border bg-white transition-colors ${borderClass}`}>
+          <div className="shrink-0 border-r border-[var(--text)]/15">
+            <button
+              type="button"
+              aria-expanded={open}
+              aria-haspopup="listbox"
+              onClick={() => setOpen((prev) => !prev)}
+              className="flex h-full min-h-[48px] min-w-[5.5rem] cursor-pointer items-center gap-1.5 px-2.5 py-2 transition-colors hover:bg-[var(--bg)] sm:min-h-[46px] sm:gap-2 sm:px-3.5 sm:py-3"
+              style={inputStyle}
             >
-              <path d="M6 9l6 6 6-6" />
-            </svg>
-          </button>
+              <span className="text-base leading-none" aria-hidden="true">
+                {selected.flag}
+              </span>
+              <span className="whitespace-nowrap text-sm font-medium text-[var(--dark)] sm:text-[0.875rem]">
+                {displayCode}
+              </span>
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                className={`shrink-0 text-[var(--text-muted)] transition-transform ${open ? "rotate-180" : ""}`}
+                aria-hidden="true"
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </button>
+          </div>
 
-          {open && !isMobile && (
-            <div className="absolute top-full left-0 z-50 mt-1 w-[min(100vw-3rem,280px)] overflow-hidden rounded-sm border border-[var(--text)]/15 bg-white shadow-lg">
-              <CountryList
-                filteredCountries={filteredCountries}
-                onSelect={selectCountry}
-                inputStyle={inputStyle}
-                search={search}
-                onSearchChange={setSearch}
-              />
-            </div>
-          )}
+          <input
+            id={`${idPrefix}-number`}
+            type="tel"
+            inputMode="tel"
+            value={value.phoneNumber}
+            onChange={(e) =>
+              onChange({ ...value, phoneNumber: e.target.value })
+            }
+            placeholder="Phone number"
+            className="min-w-0 flex-1 bg-transparent px-3 py-2 text-sm text-[var(--text)] outline-none sm:px-4 sm:py-3 sm:text-[0.875rem]"
+            style={inputStyle}
+          />
         </div>
 
-        <input
-          id={`${idPrefix}-number`}
-          type="tel"
-          inputMode="tel"
-          value={value.phoneNumber}
-          onChange={(e) =>
-            onChange({ ...value, phoneNumber: e.target.value })
-          }
-          placeholder="Phone number"
-          className="min-w-0 flex-1 bg-transparent px-3 py-2 text-sm text-[var(--text)] outline-none sm:px-4 sm:py-3 sm:text-[0.875rem]"
-          style={inputStyle}
-        />
+        {open && !isMobile && (
+          <div
+            className="absolute top-full left-0 z-50 mt-1 w-[min(100vw-3rem,280px)] overflow-hidden rounded-sm border border-[var(--text)]/15 bg-white shadow-lg"
+            onMouseDown={(e) => e.stopPropagation()}
+          >
+            <CountryList
+              filteredCountries={filteredCountries}
+              onSelect={selectCountry}
+              inputStyle={inputStyle}
+              search={search}
+              onSearchChange={setSearch}
+            />
+          </div>
+        )}
       </div>
 
       {open && isMobile && (
@@ -276,7 +282,10 @@ export default function PhoneNumberField({
               setSearch("");
             }}
           />
-          <div className="relative flex max-h-[75vh] flex-col rounded-t-xl bg-white shadow-2xl">
+          <div
+            className="relative flex max-h-[75vh] flex-col rounded-t-xl bg-white shadow-2xl"
+            onMouseDown={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between border-b border-[var(--text)]/10 px-4 py-3">
               <p
                 className="text-[var(--dark)]"

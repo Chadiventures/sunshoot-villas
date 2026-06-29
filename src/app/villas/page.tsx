@@ -19,7 +19,7 @@ export default function VillasPage() {
         title="Our Villas"
         subtitle="Four private pool villas in the heart of Seminyak"
       />
-      <VillaCards showHeader={false} />
+      <VillaCards showHeader={false} animateEntrance />
       <Footer />
     </>
   );

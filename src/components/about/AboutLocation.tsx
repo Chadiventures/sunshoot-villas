@@ -1,9 +1,12 @@
 "use client";
 
 import ScrollReveal from "@/components/ScrollReveal";
+import { useLanguage } from "@/context/LanguageContext";
 import { HERO_VIDEO } from "@/lib/media";
 
 export default function AboutLocation() {
+  const { t } = useLanguage();
+
   return (
     <section className="relative overflow-hidden py-12 md:py-16">
       <video
@@ -34,7 +37,7 @@ export default function AboutLocation() {
               fontWeight: 300,
             }}
           >
-            Location
+            {t.aboutLocationTitle}
           </h2>
           <p
             className="text-white"
@@ -45,14 +48,7 @@ export default function AboutLocation() {
               lineHeight: 1.85,
             }}
           >
-            Our villas are just a few hundred metres from Sunset Road, the main
-            road connecting the airport to Seminyak. The airport is only 20
-            minutes away depending on traffic. Seminyak Square and the famous
-            Eat Street (Jl Kayu Aya) are just a 10 minute walk. Restaurants like
-            La Favella and Ultimo are within easy walking distance. More famous
-            spots like KuDeTa, Potato Head and Mexicola are a short 10 minute
-            taxi or Grab ride away. The beaches at Kuta, Legian and Seminyak are
-            approximately 15 minutes by taxi or scooter.
+            {t.aboutLocationBody}
           </p>
         </ScrollReveal>
       </div>

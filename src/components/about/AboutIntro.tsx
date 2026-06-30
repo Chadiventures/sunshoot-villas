@@ -2,11 +2,14 @@
 
 import Image from "next/image";
 import ScrollReveal from "@/components/ScrollReveal";
+import { useLanguage } from "@/context/LanguageContext";
 
 const STORY_IMAGE =
   "https://cf.bstatic.com/xdata/images/hotel/max1280x900/185354554.jpg?k=5541438d3715f06575d9cf5298bbf73db085483cebce43802645af39a6bdeb0f&o=&hp=1";
 
 export default function AboutIntro() {
+  const { t } = useLanguage();
+
   return (
     <section className="bg-[var(--bg)] py-12 md:py-16">
       <div className="container-site">
@@ -20,7 +23,7 @@ export default function AboutIntro() {
                 fontWeight: 300,
               }}
             >
-              Our Story
+              {t.aboutStoryTitle}
             </h2>
             <p
               className="text-[var(--text)]"
@@ -31,19 +34,14 @@ export default function AboutIntro() {
                 lineHeight: 1.85,
               }}
             >
-              Sun Shoot Villas Seminyak was born from a simple belief: that every
-              guest deserves more than just a place to sleep. Nestled in the famous
-              Bidadari area of Seminyak, our four private pool villas have been
-              welcoming families, couples, and groups of friends from all over the
-              world for years. We are not a hotel. We are a home away from home,
-              and that difference matters to us deeply.
+              {t.aboutStoryBody}
             </p>
           </ScrollReveal>
 
           <div className="relative min-h-[260px] w-full overflow-hidden rounded-sm lg:min-h-0 lg:h-full">
             <Image
               src={STORY_IMAGE}
-              alt="Sun Shoot Villas Seminyak"
+              alt={t.aboutStoryImageAlt}
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"

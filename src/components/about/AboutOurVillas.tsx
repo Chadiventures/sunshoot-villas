@@ -1,8 +1,11 @@
 "use client";
 
 import ScrollReveal from "@/components/ScrollReveal";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function AboutOurVillas() {
+  const { t } = useLanguage();
+
   return (
     <section className="bg-white py-12 md:py-16">
       <div className="container-site">
@@ -15,7 +18,7 @@ export default function AboutOurVillas() {
               fontWeight: 300,
             }}
           >
-            Our Villas
+            {t.aboutOurVillasTitle}
           </h2>
           <p
             className="text-[var(--text)]"
@@ -26,12 +29,7 @@ export default function AboutOurVillas() {
               lineHeight: 1.85,
             }}
           >
-            All four of our villas have their own private pool, because we know
-            most guests value their privacy when relaxing. Every villa is cleaned
-            daily by our friendly team. Over the past few years we have invested
-            heavily in renovating and upgrading all our villas to give guests
-            the best possible value for money. When you arrive, you will find a
-            clean, fresh and beautifully maintained villa ready for your holiday.
+            {t.aboutOurVillasBody}
           </p>
         </ScrollReveal>
       </div>

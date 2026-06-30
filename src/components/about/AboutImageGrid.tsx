@@ -149,10 +149,9 @@ export default function AboutImageGrid() {
 
         <ScrollReveal className="mt-10 text-center md:mt-12">
           <h3
-            className="mb-4 text-[var(--dark)]"
+            className="mb-4 text-[var(--dark)] text-[clamp(1.375rem,3.5vw,1.75rem)] md:text-[clamp(1.75rem,4vw,2.5rem)]"
             style={{
               fontFamily: "var(--font-cormorant)",
-              fontSize: "clamp(1.75rem, 4vw, 2.5rem)",
               fontWeight: 300,
             }}
           >
@@ -169,10 +168,10 @@ export default function AboutImageGrid() {
           >
             {t.lifeAtCtaSubtext}
           </p>
-          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <div className="flex flex-row items-center justify-center gap-2 sm:gap-4">
             <Link
               href="/book"
-              className="btn-hover inline-flex min-w-[200px] items-center justify-center rounded-sm border-2 border-[var(--dark)] bg-[var(--dark)] px-8 py-3.5 text-white transition-all duration-300 ease-in-out hover:border-[var(--dark-light)] hover:bg-[var(--dark-light)]"
+              className="btn-hover inline-flex min-w-[200px] max-sm:min-w-0 max-sm:flex-1 max-sm:px-3 items-center justify-center rounded-sm border-2 border-[var(--dark)] bg-[var(--dark)] py-3.5 text-white transition-all duration-300 ease-in-out hover:border-[var(--dark-light)] hover:bg-[var(--dark-light)] sm:px-8"
               style={{
                 fontFamily: "var(--font-inter)",
                 fontSize: "0.75rem",
@@ -185,7 +184,7 @@ export default function AboutImageGrid() {
             </Link>
             <Link
               href="/villas"
-              className="btn-outline-dark btn-hover min-w-[200px]"
+              className="btn-outline-dark btn-hover min-w-[200px] max-sm:min-w-0 max-sm:flex-1 max-sm:px-3"
             >
               {t.homeCtaViewVillas}
             </Link>

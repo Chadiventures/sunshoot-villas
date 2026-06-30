@@ -1,11 +1,14 @@
 "use client";
 
 import ScrollReveal from "@/components/ScrollReveal";
+import { useLanguage } from "@/context/LanguageContext";
 
 const ARTICLE_URL =
   "https://thebaliguideline.com/stay/seminyak/sun-shoot-villas-private-pool-villa-anggrek";
 
 export default function AboutFeaturedIn() {
+  const { t } = useLanguage();
+
   return (
     <section className="bg-[var(--dark)] py-4 md:max-h-[80px] md:py-0">
       <ScrollReveal>
@@ -18,7 +21,7 @@ export default function AboutFeaturedIn() {
               fontWeight: 400,
             }}
           >
-            Featured in The Bali Guideline
+            {t.aboutFeaturedTitle}
           </p>
 
           <p
@@ -45,7 +48,7 @@ export default function AboutFeaturedIn() {
               textTransform: "uppercase",
             }}
           >
-            Read Article
+            {t.aboutFeaturedReadArticle}
           </a>
         </div>
       </ScrollReveal>

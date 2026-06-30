@@ -1,8 +1,11 @@
 "use client";
 
 import ScrollReveal from "@/components/ScrollReveal";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function AboutMeetHost() {
+  const { t } = useLanguage();
+
   return (
     <section className="bg-[var(--bg)] py-12 md:py-16">
       <div className="container-site">
@@ -25,9 +28,9 @@ export default function AboutMeetHost() {
                   color: "#C9A96E",
                 }}
               >
-                <span className="lg:hidden">[ Photo ]</span>
+                <span className="lg:hidden">{t.aboutMeetHostPhotoShort}</span>
                 <span className="hidden lg:inline" style={{ fontSize: "1rem" }}>
-                  [ Your photo here ]
+                  {t.aboutMeetHostPhotoLong}
                 </span>
               </p>
             </div>
@@ -43,7 +46,7 @@ export default function AboutMeetHost() {
                   fontWeight: 300,
                 }}
               >
-                Meet Warren, Your Host
+                {t.aboutMeetHostTitle}
               </h2>
               <p
                 className="text-[var(--text)]"
@@ -54,31 +57,9 @@ export default function AboutMeetHost() {
                   lineHeight: 1.7,
                 }}
               >
-                <span className="lg:hidden">
-                  Warren is originally from Perth, Australia and has been living
-                  in Bali for over 9 years. Together with his wife Lianah, he
-                  manages the Sunshoot Villas complex with a small dedicated team.
-                  Warren speaks English and some Indonesian, Lianah speaks both
-                  Indonesian and English fluently, and the team can assist in other
-                  languages using online translation. Warren and Lianah are
-                  passionate about giving every guest personal attention and
-                  making sure your Bali holiday is everything you hoped for. They
-                  are always contactable via WhatsApp, even outside of regular
-                  hours, so you never have to worry if something comes up during
-                  your stay.
-                </span>
+                <span className="lg:hidden">{t.aboutMeetHostBody}</span>
                 <span className="hidden lg:inline" style={{ fontSize: "1rem", lineHeight: 1.85 }}>
-                  Warren is originally from Perth, Australia and has been living
-                  in Bali for over 9 years. Together with his wife Lianah, he
-                  manages the Sunshoot Villas complex with a small dedicated team.
-                  Warren speaks English and some Indonesian, Lianah speaks both
-                  Indonesian and English fluently, and the team can assist in other
-                  languages using online translation. Warren and Lianah are
-                  passionate about giving every guest personal attention and
-                  making sure your Bali holiday is everything you hoped for. They
-                  are always contactable via WhatsApp, even outside of regular
-                  hours, so you never have to worry if something comes up during
-                  your stay.
+                  {t.aboutMeetHostBody}
                 </span>
               </p>
             </div>

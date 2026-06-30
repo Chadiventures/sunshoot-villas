@@ -32,14 +32,13 @@ type VillaPageContentProps = {
 export default function VillaPageContent({
   slug,
   villaName,
-  villaDescription,
+  villaDescription: _villaDescription,
   facilities,
   heroImage,
   galleryImages,
 }: VillaPageContentProps) {
-  const { language, getVillaDescription } = useLanguage();
-  const description =
-    language === "id" ? getVillaDescription(slug) : villaDescription;
+  const { t, getVillaDescription } = useLanguage();
+  const description = getVillaDescription(slug);
 
   const heroRef = useRef<HTMLElement>(null);
   const parallaxRef = useRef<HTMLDivElement>(null);
@@ -113,7 +112,7 @@ export default function VillaPageContent({
               textTransform: "uppercase",
             }}
           >
-            2 Bedrooms | Private Pool | Seminyak, Bali
+            {t.villaHeroSubtext}
           </p>
         </div>
       </section>

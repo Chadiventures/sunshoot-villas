@@ -15,7 +15,7 @@ export default function VillaCards({
   showHeader?: boolean;
   animateEntrance?: boolean;
 }) {
-  const { t } = useLanguage();
+  const { t, getVillaDescription } = useLanguage();
 
   return (
     <section className="bg-[var(--bg)] py-12 md:py-28">
@@ -40,6 +40,7 @@ export default function VillaCards({
 
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-8">
           {VILLAS.map((villa, index) => {
+            const description = getVillaDescription(villa.slug);
             const card = (
               <article className="card-lift group relative cursor-pointer overflow-hidden rounded-sm bg-white shadow-sm">
                 <Link
@@ -91,17 +92,17 @@ export default function VillaCards({
                     }}
                   >
                     <span className="sm:hidden">
-                      {villa.description.length > 90
-                        ? `${villa.description.slice(0, 90)}…`
-                        : villa.description}
+                      {description.length > 90
+                        ? `${description.slice(0, 90)}…`
+                        : description}
                     </span>
                     <span
                       className="hidden sm:inline"
                       style={{ fontSize: "0.875rem", lineHeight: 1.7 }}
                     >
-                      {villa.description.length > 140
-                        ? `${villa.description.slice(0, 140)}…`
-                        : villa.description}
+                      {description.length > 140
+                        ? `${description.slice(0, 140)}…`
+                        : description}
                     </span>
                   </p>
                   <div className="pointer-events-auto relative z-[2] flex flex-wrap gap-2 sm:gap-3">

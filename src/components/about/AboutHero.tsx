@@ -1,8 +1,11 @@
 "use client";
 
 import { HERO_VIDEO } from "@/lib/media";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function AboutHero() {
+  const { t } = useLanguage();
+
   return (
     <section
       className="relative flex h-[40vh] min-h-[280px] items-center justify-center overflow-hidden md:h-[50vh]"
@@ -37,7 +40,7 @@ export default function AboutHero() {
             letterSpacing: "0.02em",
           }}
         >
-          About Sun Shoot Villas
+          {t.aboutHeroTitle}
         </h1>
         <p
           className="mx-auto max-w-2xl text-white/90"
@@ -48,7 +51,7 @@ export default function AboutHero() {
             lineHeight: 1.7,
           }}
         >
-          A family of villas in the heart of Seminyak, Bali
+          {t.aboutHeroSubtitle}
         </p>
       </div>
     </section>

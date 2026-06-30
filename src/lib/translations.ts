@@ -65,7 +65,102 @@ export type Translations = {
   sunshootersPartnerBenefits: string[];
   sunshootersPartnerNote: string;
   sunshootersPartnerLogoAlt: string;
-  villaDescriptions: Record<VillaSlug, string>;
+  villaMawarDescription: string;
+  villaJepunDescription: string;
+  villaAnggrekDescription: string;
+  villaSandatDescription: string;
+  villaHeroSubtext: string;
+  fieldRequired: string;
+  formLabelName: string;
+  formLabelEmail: string;
+  formLabelPhone: string;
+  formLabelPhoneNumber: string;
+  formLabelVilla: string;
+  formLabelArrivalDate: string;
+  formLabelDepartureDate: string;
+  formLabelAdults: string;
+  formLabelChildren: string;
+  formLabelMessage: string;
+  formLabelFullName: string;
+  formLabelSpecialRequests: string;
+  formLabelFlightNumber: string;
+  formLabelSelectVilla: string;
+  formPlaceholderMessage: string;
+  formPlaceholderSpecialRequests: string;
+  formPlaceholderFlightNumber: string;
+  formPlaceholderCountryCode: string;
+  formSelectVilla: string;
+  formSelectChooseVilla: string;
+  formSelectAnyVilla: string;
+  formSelectAdults: string;
+  formInquiryTitle: string;
+  formInquirySubtitle: string;
+  formSubmitWhatsApp: string;
+  phoneSearchCountry: string;
+  phoneNumberPlaceholder: string;
+  phoneWhatsAppToggle: string;
+  phoneCloseCountry: string;
+  phoneSelectCountry: string;
+  phoneCloseButton: string;
+  phoneContactViaEmail: string;
+  phoneCountryCustom: string;
+  contactHeroSubtitle: string;
+  contactGetInTouch: string;
+  contactLabelPhone: string;
+  contactLabelEmail: string;
+  contactLabelAddress: string;
+  contactLabelWhatsApp: string;
+  contactChatWhatsApp: string;
+  contactImageCaption: string;
+  contactImageAlt: string;
+  aboutHeroTitle: string;
+  aboutHeroSubtitle: string;
+  aboutStoryTitle: string;
+  aboutStoryBody: string;
+  aboutStoryImageAlt: string;
+  aboutFeaturedTitle: string;
+  aboutFeaturedReadArticle: string;
+  aboutOurVillasTitle: string;
+  aboutOurVillasBody: string;
+  aboutLocationTitle: string;
+  aboutLocationBody: string;
+  aboutMeetHostTitle: string;
+  aboutMeetHostBody: string;
+  aboutMeetHostPhotoShort: string;
+  aboutMeetHostPhotoLong: string;
+  aboutValuesTitle: string;
+  aboutValuePersonalTitle: string;
+  aboutValuePersonalDescription: string;
+  aboutValueHomeTitle: string;
+  aboutValueHomeDescription: string;
+  aboutValueHonestTitle: string;
+  aboutValueHonestDescription: string;
+  bookPageEyebrow: string;
+  bookSubmittedMessage: string;
+  bookDetailsTitle: string;
+  bookMinimumStay: string;
+  bookAirportPickupToggle: string;
+  bookSubmitButton: string;
+  bookPaymentNote: string;
+  bookPaymentMethodsLine: string;
+  bookSummaryTitle: string;
+  bookSummaryVilla: string;
+  bookSummaryArrival: string;
+  bookSummaryDeparture: string;
+  bookSummaryNights: string;
+  bookSummaryGuests: string;
+  bookSummaryPolicies: string;
+  bookSummaryConfirmNote: string;
+  bookSummaryPaymentTitle: string;
+  bookSummaryPaymentText: string;
+  bookTrustSecure: string;
+  bookTrustPersonalHost: string;
+  bookTrustAirportPickup: string;
+  bookTrustFlexibleDates: string;
+  bookGuestAdult: string;
+  bookGuestAdults: string;
+  bookGuestChild: string;
+  bookGuestChildren: string;
 };
 
 export const translations: Record<Language, Translations> = {
@@ -137,12 +232,119 @@ export const translations: Record<Language, Translations> = {
     sunshootersPartnerNote:
       "Simply mention your villa name when ordering or arriving.",
     sunshootersPartnerLogoAlt: "Sunshooters Villa Partner Program",
-    villaDescriptions: {
-      mawar: "",
-      jepun: "",
-      anggrek: "",
-      sandat: "",
-    },
+    villaMawarDescription:
+      "Villa Mawar is a beautiful two-storey garden villa set within the lush Sunshoot Villas Complex. At 150 m2, this private villa offers a stunning private pool, 2 bathrooms with walk-in shower and bidet, and a fully equipped kitchen. The open plan living and dining area is flooded with natural light, creating a warm and welcoming space for families and groups. Connecting rooms are available on request.",
+    villaJepunDescription:
+      "Located in the heart of Seminyak, Villa Jepun blends modern elegance with traditional Balinese architecture. This 150 m2 private villa features a stunning private pool, 3 bathrooms with walk-in shower and bidet, and a fully equipped kitchen with stovetop, oven, refrigerator and kitchenware. The spacious living and dining area opens to pool views, making it perfect for couples, honeymooners or small families seeking a stylish and intimate Bali retreat.",
+    villaAnggrekDescription:
+      "The largest of the garden villas at 175 m2, Villa Anggrek is Bali's best kept secret for value and space. With 4 bathrooms including a luxurious bathtub, a private terrace with pool views, outdoor dining area, and lightning fast 20Mbps fiber WiFi, this villa is perfect for families, remote workers, and groups who want extra space without compromising on style.",
+    villaSandatDescription:
+      "The most spacious villa in the complex at 190 m2, Villa Sandat is a luxurious retreat in the famous Bidadari area of Seminyak. With 4 bathrooms, a private balcony, terrace, outdoor dining, and a stunning private pool, this villa is ideal for larger families or groups. The Sunshooter Bar nearby offers guests special discounts and is just steps away.",
+    villaHeroSubtext: "2 Bedrooms | Private Pool | Seminyak, Bali",
+    fieldRequired: "This field is required",
+    formLabelName: "Name",
+    formLabelEmail: "Email",
+    formLabelPhone: "Phone",
+    formLabelPhoneNumber: "Phone Number",
+    formLabelVilla: "Villa",
+    formLabelArrivalDate: "Arrival Date",
+    formLabelDepartureDate: "Departure Date",
+    formLabelAdults: "Adults",
+    formLabelChildren: "Children",
+    formLabelMessage: "Message",
+    formLabelFullName: "Full Name",
+    formLabelSpecialRequests: "Special Requests",
+    formLabelFlightNumber: "Flight number",
+    formLabelSelectVilla: "Select Villa",
+    formPlaceholderMessage: "Any special requests or questions...",
+    formPlaceholderSpecialRequests:
+      "Early check-in, dietary needs, airport pickup details...",
+    formPlaceholderFlightNumber: "e.g. QF123",
+    formPlaceholderCountryCode: "Country code e.g. +47",
+    formSelectVilla: "Select a villa",
+    formSelectChooseVilla: "Choose a villa",
+    formSelectAnyVilla: "Any villa",
+    formSelectAdults: "Select",
+    formInquiryTitle: "Send an Enquiry",
+    formInquirySubtitle:
+      "Complete the form and we'll open WhatsApp with your details ready to send.",
+    formSubmitWhatsApp: "Send via WhatsApp",
+    phoneSearchCountry: "Search country...",
+    phoneNumberPlaceholder: "Phone number",
+    phoneWhatsAppToggle: "I have WhatsApp on this number",
+    phoneCloseCountry: "Close country selector",
+    phoneSelectCountry: "Select country",
+    phoneCloseButton: "Close",
+    phoneContactViaEmail: "We will contact you via email",
+    phoneCountryCustom: "Custom",
+    contactHeroSubtitle: "We are always just a message away",
+    contactGetInTouch: "Get in Touch",
+    contactLabelPhone: "Phone",
+    contactLabelEmail: "Email",
+    contactLabelAddress: "Address",
+    contactLabelWhatsApp: "WhatsApp",
+    contactChatWhatsApp: "Chat on WhatsApp",
+    contactImageCaption: "Jl. Bidadari II E, Seminyak, Bali",
+    contactImageAlt: "Sun Shoot Villas Seminyak",
+    aboutHeroTitle: "About Sun Shoot Villas",
+    aboutHeroSubtitle: "A family of villas in the heart of Seminyak, Bali",
+    aboutStoryTitle: "Our Story",
+    aboutStoryBody:
+      "Sun Shoot Villas Seminyak was born from a simple belief: that every guest deserves more than just a place to sleep. Nestled in the famous Bidadari area of Seminyak, our four private pool villas have been welcoming families, couples, and groups of friends from all over the world for years. We are not a hotel. We are a home away from home, and that difference matters to us deeply.",
+    aboutStoryImageAlt: "Sun Shoot Villas Seminyak",
+    aboutFeaturedTitle: "Featured in The Bali Guideline",
+    aboutFeaturedReadArticle: "Read Article",
+    aboutOurVillasTitle: "Our Villas",
+    aboutOurVillasBody:
+      "All four of our villas have their own private pool, because we know most guests value their privacy when relaxing. Every villa is cleaned daily by our friendly team. Over the past few years we have invested heavily in renovating and upgrading all our villas to give guests the best possible value for money. When you arrive, you will find a clean, fresh and beautifully maintained villa ready for your holiday.",
+    aboutLocationTitle: "Location",
+    aboutLocationBody:
+      "Our villas are just a few hundred metres from Sunset Road, the main road connecting the airport to Seminyak. The airport is only 20 minutes away depending on traffic. Seminyak Square and the famous Eat Street (Jl Kayu Aya) are just a 10 minute walk. Restaurants like La Favella and Ultimo are within easy walking distance. More famous spots like KuDeTa, Potato Head and Mexicola are a short 10 minute taxi or Grab ride away. The beaches at Kuta, Legian and Seminyak are approximately 15 minutes by taxi or scooter.",
+    aboutMeetHostTitle: "Meet Warren, Your Host",
+    aboutMeetHostBody:
+      "Warren is originally from Perth, Australia and has been living in Bali for over 9 years. Together with his wife Lianah, he manages the Sunshoot Villas complex with a small dedicated team. Warren speaks English and some Indonesian, Lianah speaks both Indonesian and English fluently, and the team can assist in other languages using online translation. Warren and Lianah are passionate about giving every guest personal attention and making sure your Bali holiday is everything you hoped for. They are always contactable via WhatsApp, even outside of regular hours, so you never have to worry if something comes up during your stay.",
+    aboutMeetHostPhotoShort: "[ Photo ]",
+    aboutMeetHostPhotoLong: "[ Your photo here ]",
+    aboutValuesTitle: "What We Believe In",
+    aboutValuePersonalTitle: "Personal Service",
+    aboutValuePersonalDescription:
+      "Every guest is treated like family. We remember your preferences, anticipate your needs, and are always available.",
+    aboutValueHomeTitle: "Your Home in Bali",
+    aboutValueHomeDescription:
+      "Our villas are not just accommodation. They are your private sanctuary, designed for comfort, relaxation, and connection.",
+    aboutValueHonestTitle: "Honest Hospitality",
+    aboutValueHonestDescription:
+      "No hidden fees, no surprises. Just genuine Balinese hospitality from a team that truly cares about your experience.",
+    bookPageEyebrow: "Reservations",
+    bookSubmittedMessage:
+      "Thank you! Your booking request has been sent. Warren will be in touch within 24 hours.",
+    bookDetailsTitle: "Booking Details",
+    bookMinimumStay: "Minimum stay is 4 nights",
+    bookAirportPickupToggle: "Add free airport pickup",
+    bookSubmitButton: "Send Booking Request",
+    bookPaymentNote:
+      "Secure payment is handled via our booking system. You will receive payment instructions by email or WhatsApp after your booking is confirmed.",
+    bookPaymentMethodsLine: "Visa | Mastercard | Cash",
+    bookSummaryTitle: "Booking Summary",
+    bookSummaryVilla: "Villa",
+    bookSummaryArrival: "Arrival",
+    bookSummaryDeparture: "Departure",
+    bookSummaryNights: "Nights",
+    bookSummaryGuests: "Guests",
+    bookSummaryPolicies:
+      "Check-in: {checkIn}. Check-out: By {checkOut}.",
+    bookSummaryConfirmNote:
+      "Our team will confirm availability and pricing via WhatsApp within 24 hours.",
+    bookSummaryPaymentTitle: "Payment Methods",
+    bookSummaryPaymentText: "We accept Visa, Mastercard and Cash.",
+    bookTrustSecure: "Secure Booking",
+    bookTrustPersonalHost: "Personal Host",
+    bookTrustAirportPickup: "Free Airport Pickup",
+    bookTrustFlexibleDates: "Flexible Dates",
+    bookGuestAdult: "adult",
+    bookGuestAdults: "adults",
+    bookGuestChild: "child",
+    bookGuestChildren: "children",
   },
   id: {
     navOurVillas: "Vila Kami",
@@ -212,15 +414,118 @@ export const translations: Record<Language, Translations> = {
     sunshootersPartnerNote:
       "Cukup sebutkan nama vila Anda saat memesan atau tiba.",
     sunshootersPartnerLogoAlt: "Program Mitra Vila Sunshooters",
-    villaDescriptions: {
-      mawar:
-        "Terletak di dalam Kompleks Sunshoot Villas yang rimbun di Jl. Bidadari II E, Villa Mawar adalah vila taman dua lantai yang menakjubkan, hanya beberapa menit dari jantung Seminyak. Vila ini ideal untuk keluarga, pasangan yang bepergian bersama, atau kelompok kecil yang mencari retret pribadi di Bali.",
-      jepun:
-        "Terletak di jantung Seminyak, Villa Jepun memadukan keeleganan modern dengan arsitektur Bali tradisional. Sempurna untuk pasangan, bulan madu, atau keluarga kecil yang menginginkan pangkalan yang intim dan bergaya untuk liburan Bali mereka.",
-      anggrek:
-        "Villa Anggrek menawarkan nilai luar biasa tanpa mengorbankan kenyamanan atau gaya. Sempurna untuk pasangan dan keluarga dengan anak kecil. WiFi serat optik 20Mbps tersedia untuk tamu yang bekerja jarak jauh.",
-      sandat:
-        "Terletak di area Bidadari Seminyak yang terkenal, Villa Sandat adalah retret yang luas dan indah dengan semua yang Anda butuhkan untuk liburan Bali yang sempurna. Sunshooter Bar mengantarkan langsung ke pintu vila Anda.",
-    },
+    villaMawarDescription:
+      "Terletak di dalam Kompleks Sunshoot Villas yang rimbun di Jl. Bidadari II E, Villa Mawar adalah vila taman dua lantai yang menakjubkan, hanya beberapa menit dari jantung Seminyak. Vila ini ideal untuk keluarga, pasangan yang bepergian bersama, atau kelompok kecil yang mencari retret pribadi di Bali.",
+    villaJepunDescription:
+      "Terletak di jantung Seminyak, Villa Jepun memadukan keeleganan modern dengan arsitektur Bali tradisional. Sempurna untuk pasangan, bulan madu, atau keluarga kecil yang menginginkan pangkalan yang intim dan bergaya untuk liburan Bali mereka.",
+    villaAnggrekDescription:
+      "Villa Anggrek menawarkan nilai luar biasa tanpa mengorbankan kenyamanan atau gaya. Sempurna untuk pasangan dan keluarga dengan anak kecil. WiFi serat optik 20Mbps tersedia untuk tamu yang bekerja jarak jauh.",
+    villaSandatDescription:
+      "Terletak di area Bidadari Seminyak yang terkenal, Villa Sandat adalah retret yang luas dan indah dengan semua yang Anda butuhkan untuk liburan Bali yang sempurna. Sunshooter Bar mengantarkan langsung ke pintu vila Anda.",
+    villaHeroSubtext: "2 Kamar Tidur | Kolam Renang Pribadi | Seminyak, Bali",
+    fieldRequired: "Bidang ini wajib diisi",
+    formLabelName: "Nama",
+    formLabelEmail: "Email",
+    formLabelPhone: "Telepon",
+    formLabelPhoneNumber: "Nomor Telepon",
+    formLabelVilla: "Vila",
+    formLabelArrivalDate: "Tanggal Kedatangan",
+    formLabelDepartureDate: "Tanggal Keberangkatan",
+    formLabelAdults: "Dewasa",
+    formLabelChildren: "Anak-anak",
+    formLabelMessage: "Pesan",
+    formLabelFullName: "Nama Lengkap",
+    formLabelSpecialRequests: "Permintaan Khusus",
+    formLabelFlightNumber: "Nomor penerbangan",
+    formLabelSelectVilla: "Pilih Vila",
+    formPlaceholderMessage: "Permintaan khusus atau pertanyaan...",
+    formPlaceholderSpecialRequests:
+      "Check-in lebih awal, kebutuhan diet, detail antar jemput bandara...",
+    formPlaceholderFlightNumber: "mis. QF123",
+    formPlaceholderCountryCode: "Kode negara mis. +62",
+    formSelectVilla: "Pilih vila",
+    formSelectChooseVilla: "Pilih vila",
+    formSelectAnyVilla: "Vila mana saja",
+    formSelectAdults: "Pilih",
+    formInquiryTitle: "Kirim Pertanyaan",
+    formInquirySubtitle:
+      "Lengkapi formulir dan kami akan membuka WhatsApp dengan detail Anda siap dikirim.",
+    formSubmitWhatsApp: "Kirim via WhatsApp",
+    phoneSearchCountry: "Cari negara...",
+    phoneNumberPlaceholder: "Nomor telepon",
+    phoneWhatsAppToggle: "Saya punya WhatsApp di nomor ini",
+    phoneCloseCountry: "Tutup pemilih negara",
+    phoneSelectCountry: "Pilih negara",
+    phoneCloseButton: "Tutup",
+    phoneContactViaEmail: "Kami akan menghubungi Anda melalui email",
+    phoneCountryCustom: "Kustom",
+    contactHeroSubtitle: "Kami selalu siap menerima pesan Anda",
+    contactGetInTouch: "Hubungi Kami",
+    contactLabelPhone: "Telepon",
+    contactLabelEmail: "Email",
+    contactLabelAddress: "Alamat",
+    contactLabelWhatsApp: "WhatsApp",
+    contactChatWhatsApp: "Chat di WhatsApp",
+    contactImageCaption: "Jl. Bidadari II E, Seminyak, Bali",
+    contactImageAlt: "Sun Shoot Villas Seminyak",
+    aboutHeroTitle: "Tentang Sun Shoot Villas",
+    aboutHeroSubtitle: "Keluarga vila di jantung Seminyak, Bali",
+    aboutStoryTitle: "Cerita Kami",
+    aboutStoryBody:
+      "Sun Shoot Villas Seminyak lahir dari keyakinan sederhana: setiap tamu layak mendapatkan lebih dari sekadar tempat tidur. Terletak di area Bidadari Seminyak yang terkenal, keempat vila kolam renang pribadi kami telah menyambut keluarga, pasangan, dan grup teman dari seluruh dunia selama bertahun-tahun. Kami bukan hotel. Kami adalah rumah jauh dari rumah, dan perbedaan itu sangat berarti bagi kami.",
+    aboutStoryImageAlt: "Sun Shoot Villas Seminyak",
+    aboutFeaturedTitle: "Ditampilkan di The Bali Guideline",
+    aboutFeaturedReadArticle: "Baca Artikel",
+    aboutOurVillasTitle: "Vila Kami",
+    aboutOurVillasBody:
+      "Keempat vila kami memiliki kolam renang pribadi masing-masing, karena kami tahu sebagian besar tamu menghargai privasi saat bersantai. Setiap vila dibersihkan setiap hari oleh tim kami yang ramah. Selama beberapa tahun terakhir kami telah berinvestasi besar untuk merenovasi dan meningkatkan semua vila agar tamu mendapatkan nilai terbaik untuk uang mereka. Saat Anda tiba, Anda akan menemukan vila yang bersih, segar, dan terawat dengan indah siap untuk liburan Anda.",
+    aboutLocationTitle: "Lokasi",
+    aboutLocationBody:
+      "Vila kami hanya berjarak beberapa ratus meter dari Sunset Road, jalan utama yang menghubungkan bandara ke Seminyak. Bandara hanya 20 menit tergantung lalu lintas. Seminyak Square dan Eat Street yang terkenal (Jl Kayu Aya) hanya 10 menit berjalan kaki. Restoran seperti La Favella dan Ultimo berada dalam jarak berjalan kaki yang mudah. Tempat terkenal seperti KuDeTa, Potato Head, dan Mexicola hanya 10 menit dengan taksi atau Grab. Pantai di Kuta, Legian, dan Seminyak sekitar 15 menit dengan taksi atau skuter.",
+    aboutMeetHostTitle: "Kenalan dengan Warren, Tuan Rumah Anda",
+    aboutMeetHostBody:
+      "Warren berasal dari Perth, Australia dan telah tinggal di Bali selama lebih dari 9 tahun. Bersama istrinya Lianah, ia mengelola kompleks Sunshoot Villas dengan tim kecil yang berdedikasi. Warren berbicara bahasa Inggris dan sedikit bahasa Indonesia, Lianah fasih berbahasa Indonesia dan Inggris, dan tim dapat membantu dalam bahasa lain menggunakan terjemahan online. Warren dan Lianah bersemangat memberikan perhatian personal kepada setiap tamu dan memastikan liburan Bali Anda sesuai harapan. Mereka selalu dapat dihubungi via WhatsApp, bahkan di luar jam reguler, sehingga Anda tidak perlu khawatir jika ada sesuatu yang muncul selama menginap.",
+    aboutMeetHostPhotoShort: "[ Foto ]",
+    aboutMeetHostPhotoLong: "[ Foto Anda di sini ]",
+    aboutValuesTitle: "Apa yang Kami Percayai",
+    aboutValuePersonalTitle: "Pelayanan Personal",
+    aboutValuePersonalDescription:
+      "Setiap tamu diperlakukan seperti keluarga. Kami mengingat preferensi Anda, mengantisipasi kebutuhan Anda, dan selalu tersedia.",
+    aboutValueHomeTitle: "Rumah Anda di Bali",
+    aboutValueHomeDescription:
+      "Vila kami bukan sekadar akomodasi. Ini adalah tempat perlindungan pribadi Anda, dirancang untuk kenyamanan, relaksasi, dan koneksi.",
+    aboutValueHonestTitle: "Hospitality yang Jujur",
+    aboutValueHonestDescription:
+      "Tanpa biaya tersembunyi, tanpa kejutan. Hanya hospitality Bali yang tulus dari tim yang benar-benar peduli pada pengalaman Anda.",
+    bookPageEyebrow: "Reservasi",
+    bookSubmittedMessage:
+      "Terima kasih! Permintaan pemesanan Anda telah dikirim. Warren akan menghubungi Anda dalam 24 jam.",
+    bookDetailsTitle: "Detail Pemesanan",
+    bookMinimumStay: "Menginap minimum 4 malam",
+    bookAirportPickupToggle: "Tambahkan antar jemput bandara gratis",
+    bookSubmitButton: "Kirim Permintaan Pemesanan",
+    bookPaymentNote:
+      "Pembayaran aman ditangani melalui sistem pemesanan kami. Anda akan menerima instruksi pembayaran melalui email atau WhatsApp setelah pemesanan dikonfirmasi.",
+    bookPaymentMethodsLine: "Visa | Mastercard | Tunai",
+    bookSummaryTitle: "Ringkasan Pemesanan",
+    bookSummaryVilla: "Vila",
+    bookSummaryArrival: "Kedatangan",
+    bookSummaryDeparture: "Keberangkatan",
+    bookSummaryNights: "Malam",
+    bookSummaryGuests: "Tamu",
+    bookSummaryPolicies:
+      "Check-in: {checkIn}. Check-out: Sebelum {checkOut}.",
+    bookSummaryConfirmNote:
+      "Tim kami akan mengkonfirmasi ketersediaan dan harga via WhatsApp dalam 24 jam.",
+    bookSummaryPaymentTitle: "Metode Pembayaran",
+    bookSummaryPaymentText: "Kami menerima Visa, Mastercard, dan Tunai.",
+    bookTrustSecure: "Pemesanan Aman",
+    bookTrustPersonalHost: "Tuan Rumah Personal",
+    bookTrustAirportPickup: "Antar Jemput Bandara Gratis",
+    bookTrustFlexibleDates: "Tanggal Fleksibel",
+    bookGuestAdult: "dewasa",
+    bookGuestAdults: "dewasa",
+    bookGuestChild: "anak",
+    bookGuestChildren: "anak",
   },
 };

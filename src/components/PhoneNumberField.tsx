@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
 export type PhoneFieldValue = {
   countryId: string;
@@ -89,6 +90,8 @@ function CountryList({
   search,
   onSearchChange,
 }: CountryListProps) {
+  const { t } = useLanguage();
+
   return (
     <>
       <div className="border-b border-[var(--text)]/10 p-2">
@@ -96,7 +99,7 @@ function CountryList({
           type="text"
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Search country..."
+          placeholder={t.phoneSearchCountry}
           className="w-full rounded-sm border border-[var(--text)]/15 px-3 py-2.5 text-[var(--text)] outline-none focus:border-[var(--sand)]"
           style={inputStyle}
         />
@@ -117,7 +120,7 @@ function CountryList({
                 {country.name}
               </span>
               <span className="shrink-0 text-[var(--text-muted)]">
-                {country.code || "Custom"}
+                {country.code || t.phoneCountryCustom}
               </span>
             </button>
           </li>
@@ -136,6 +139,7 @@ export default function PhoneNumberField({
   required = false,
   fieldId,
 }: PhoneNumberFieldProps) {
+  const { t } = useLanguage();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [isMobile, setIsMobile] = useState(false);
@@ -254,7 +258,7 @@ export default function PhoneNumberField({
             onChange={(e) =>
               onChange({ ...value, phoneNumber: e.target.value })
             }
-            placeholder="Phone number"
+            placeholder={t.phoneNumberPlaceholder}
             className="min-w-0 flex-1 bg-transparent px-3 py-2 text-sm text-[var(--text)] outline-none sm:px-4 sm:py-3 sm:text-[0.875rem]"
             style={inputStyle}
           />
@@ -281,7 +285,7 @@ export default function PhoneNumberField({
           <button
             type="button"
             className="absolute inset-0 bg-black/40"
-            aria-label="Close country selector"
+            aria-label={t.phoneCloseCountry}
             onClick={() => {
               setOpen(false);
               setSearch("");
@@ -300,7 +304,7 @@ export default function PhoneNumberField({
                   fontWeight: 500,
                 }}
               >
-                Select country
+                {t.phoneSelectCountry}
               </p>
               <button
                 type="button"
@@ -315,7 +319,7 @@ export default function PhoneNumberField({
                   fontWeight: 500,
                 }}
               >
-                Close
+                {t.phoneCloseButton}
               </button>
             </div>
             <CountryList
@@ -339,7 +343,7 @@ export default function PhoneNumberField({
             onChange={(e) =>
               onChange({ ...value, customCountryCode: e.target.value })
             }
-            placeholder="Country code e.g. +47"
+            placeholder={t.formPlaceholderCountryCode}
             className={`w-full rounded-sm border bg-white px-3 py-2 text-sm text-[var(--text)] outline-none transition-colors sm:px-4 sm:py-2.5 sm:text-[0.875rem] ${borderClass}`}
             style={inputStyle}
           />
@@ -379,7 +383,7 @@ export default function PhoneNumberField({
             className="text-[var(--text)]"
             style={{ ...inputStyle, fontSize: "0.8125rem" }}
           >
-            I have WhatsApp on this number
+            {t.phoneWhatsAppToggle}
           </span>
           {value.hasWhatsApp && <WhatsAppIcon />}
         </div>
@@ -395,13 +399,13 @@ export default function PhoneNumberField({
             className="mt-2 text-[var(--text-muted)]"
             style={{ ...inputStyle, fontSize: "0.75rem", fontStyle: "italic" }}
           >
-            We will contact you via email
+            {t.phoneContactViaEmail}
           </p>
         </div>
       </div>
 
       {hasError && (
-        <p className="mt-1 text-xs text-red-500">This field is required</p>
+        <p className="mt-1 text-xs text-red-500">{t.fieldRequired}</p>
       )}
     </div>
   );

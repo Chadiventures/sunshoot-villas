@@ -9,7 +9,6 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { getVillaLongDescription } from "@/lib/villa-descriptions";
 import {
   LANGUAGE_STORAGE_KEY,
   translations,
@@ -17,6 +16,19 @@ import {
   type Translations,
   type VillaSlug,
 } from "@/lib/translations";
+
+function getVillaDescriptionFromTranslations(
+  t: Translations,
+  slug: string,
+): string {
+  const descriptions: Record<VillaSlug, string> = {
+    mawar: t.villaMawarDescription,
+    jepun: t.villaJepunDescription,
+    anggrek: t.villaAnggrekDescription,
+    sandat: t.villaSandatDescription,
+  };
+  return descriptions[slug as VillaSlug] ?? "";
+}
 
 type LanguageContextValue = {
   language: Language;
@@ -51,14 +63,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const t = translations[language];
 
   const getVillaDescription = useCallback(
-    (slug: string) => {
-      if (language === "id") {
-        const idDesc = t.villaDescriptions[slug as VillaSlug];
-        if (idDesc) return idDesc;
-      }
-      return getVillaLongDescription(slug);
-    },
-    [language, t],
+    (slug: string) => getVillaDescriptionFromTranslations(t, slug),
+    [t],
   );
 
   const value = useMemo(

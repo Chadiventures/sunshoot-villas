@@ -9,6 +9,7 @@ import PhoneNumberField, {
 } from "@/components/PhoneNumberField";
 import { VILLAS } from "@/lib/villas";
 import { SITE } from "@/lib/site";
+import { useLanguage } from "@/context/LanguageContext";
 
 type FormFields = {
   name: string;
@@ -62,8 +63,6 @@ function addDaysToYmd(ymd: string, days: number): string {
 function getDepartureMinYmd(arrivalDate: string): string {
   return arrivalDate ? addDaysToYmd(arrivalDate, 1) : getTomorrowYmd();
 }
-
-const REQUIRED_MESSAGE = "This field is required";
 
 function RequiredMark() {
   return <span className="text-red-500"> *</span>;
@@ -151,6 +150,7 @@ export default function InquiryForm({
   showHeading = true,
   contactMode = false,
 }: InquiryFormProps) {
+  const { t } = useLanguage();
   const [form, setForm] = useState<FormFields>({
     ...initialForm,
     villa: defaultVilla,
@@ -280,7 +280,7 @@ export default function InquiryForm({
               fontWeight: 300,
             }}
           >
-            Send an Enquiry
+            {t.formInquiryTitle}
           </h3>
           <p
             className="text-[var(--text-muted)]"
@@ -291,8 +291,7 @@ export default function InquiryForm({
               lineHeight: 1.7,
             }}
           >
-            Complete the form and we&apos;ll open WhatsApp with your details
-            ready to send.
+            {t.formInquirySubtitle}
           </p>
         </div>
       )}
@@ -302,7 +301,7 @@ export default function InquiryForm({
           htmlFor="name"
           className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
         >
-          Name
+          {t.formLabelName}
           <RequiredMark />
         </label>
         <input
@@ -314,7 +313,7 @@ export default function InquiryForm({
           style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
         />
         {fieldError("name") && (
-          <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
+          <p className="mt-1 text-xs text-red-500">{t.fieldRequired}</p>
         )}
       </div>
 
@@ -323,7 +322,7 @@ export default function InquiryForm({
           htmlFor="email"
           className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
         >
-          Email
+          {t.formLabelEmail}
           <RequiredMark />
         </label>
         <input
@@ -335,14 +334,14 @@ export default function InquiryForm({
           style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
         />
         {fieldError("email") && (
-          <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
+          <p className="mt-1 text-xs text-red-500">{t.fieldRequired}</p>
         )}
       </div>
 
       <PhoneNumberField
         idPrefix="inquiry"
         fieldId="inquiry-phone-field"
-        label="Phone"
+        label={t.formLabelPhone}
         value={form.phone}
         onChange={(phone) => updateField("phone", phone)}
         hasError={fieldError("phone")}
@@ -355,7 +354,7 @@ export default function InquiryForm({
             htmlFor="villa"
             className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
           >
-            Villa
+            {t.formLabelVilla}
             {!contactMode && <RequiredMark />}
           </label>
           <select
@@ -366,7 +365,7 @@ export default function InquiryForm({
             style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
           >
             <option value="" disabled>
-              Select a villa
+              {t.formSelectVilla}
             </option>
             {VILLAS.map((v) => (
               <option key={v.slug} value={v.slug}>
@@ -375,7 +374,7 @@ export default function InquiryForm({
             ))}
           </select>
           {fieldError("villa") && (
-            <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
+            <p className="mt-1 text-xs text-red-500">{t.fieldRequired}</p>
           )}
         </div>
       )}
@@ -386,7 +385,7 @@ export default function InquiryForm({
             htmlFor="arrivalDate"
             className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
           >
-            Arrival Date
+            {t.formLabelArrivalDate}
             {!contactMode && <RequiredMark />}
           </label>
           <input
@@ -399,7 +398,7 @@ export default function InquiryForm({
             style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
           />
           {fieldError("arrivalDate") && (
-            <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
+            <p className="mt-1 text-xs text-red-500">{t.fieldRequired}</p>
           )}
         </div>
         <div>
@@ -407,7 +406,7 @@ export default function InquiryForm({
             htmlFor="departureDate"
             className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
           >
-            Departure Date
+            {t.formLabelDepartureDate}
             {!contactMode && <RequiredMark />}
           </label>
           <input
@@ -420,7 +419,7 @@ export default function InquiryForm({
             style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
           />
           {fieldError("departureDate") && (
-            <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
+            <p className="mt-1 text-xs text-red-500">{t.fieldRequired}</p>
           )}
         </div>
       </div>
@@ -431,7 +430,7 @@ export default function InquiryForm({
             htmlFor="adults"
             className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
           >
-            Adults
+            {t.formLabelAdults}
             {!contactMode && <RequiredMark />}
           </label>
           <select
@@ -442,7 +441,7 @@ export default function InquiryForm({
             style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
           >
             <option value="" disabled>
-              Select
+              {t.formSelectAdults}
             </option>
             {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
               <option key={n} value={String(n)}>
@@ -451,7 +450,7 @@ export default function InquiryForm({
             ))}
           </select>
           {fieldError("adults") && (
-            <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
+            <p className="mt-1 text-xs text-red-500">{t.fieldRequired}</p>
           )}
         </div>
         <div>
@@ -459,7 +458,7 @@ export default function InquiryForm({
             htmlFor="children"
             className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
           >
-            Children
+            {t.formLabelChildren}
           </label>
           <select
             id="children"
@@ -482,20 +481,20 @@ export default function InquiryForm({
           htmlFor="message"
           className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
         >
-          Message
+          {t.formLabelMessage}
           {contactMode && <RequiredMark />}
         </label>
         <textarea
           id="message"
           rows={4}
-          placeholder="Any special requests or questions..."
+          placeholder={t.formPlaceholderMessage}
           value={form.message}
           onChange={(e) => updateField("message", e.target.value)}
           className={`${inputClass(fieldError("message"))} resize-none`}
           style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem" }}
         />
         {fieldError("message") && (
-          <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
+          <p className="mt-1 text-xs text-red-500">{t.fieldRequired}</p>
         )}
       </div>
 
@@ -511,7 +510,7 @@ export default function InquiryForm({
         }}
         className="btn-primary w-full cursor-pointer text-center"
       >
-        Send via WhatsApp
+        {t.formSubmitWhatsApp}
       </div>
     </div>
   );

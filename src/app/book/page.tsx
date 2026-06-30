@@ -116,8 +116,6 @@ function buildWhatsAppMessage(fields: BookingFields, nights: number | null): str
   return lines.join("\n");
 }
 
-const REQUIRED_MESSAGE = "This field is required";
-
 function RequiredMark() {
   return <span className="text-red-500"> *</span>;
 }
@@ -161,45 +159,6 @@ function scrollToFirstBookError(
   }
 }
 
-const trustItems = [
-  {
-    label: "Secure Booking",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-      </svg>
-    ),
-  },
-  {
-    label: "Personal Host",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
-        <circle cx="12" cy="7" r="4" />
-      </svg>
-    ),
-  },
-  {
-    label: "Free Airport Pickup",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 19 4c-1 0-2 1-3.5 2.5L12 10 3.8 8.2" />
-        <circle cx="7" cy="18" r="2" />
-        <circle cx="17" cy="18" r="2" />
-      </svg>
-    ),
-  },
-  {
-    label: "Flexible Dates",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <rect x="3" y="4" width="18" height="18" rx="2" />
-        <path d="M16 2v4M8 2v4M3 10h18" />
-      </svg>
-    ),
-  },
-];
-
 const labelClass =
   "mb-1 block text-[0.625rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase md:mb-1.5 md:text-[0.6875rem]";
 
@@ -211,10 +170,58 @@ const inputStyle = {
 } as const;
 
 export default function BookPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [fields, setFields] = useState<BookingFields>(initialFields);
   const [errors, setErrors] = useState<Partial<Record<keyof BookingFields, boolean>>>({});
   const [submitted, setSubmitted] = useState(false);
+
+  const dateLocale = language === "id" ? "id-ID" : "en-GB";
+
+  const trustItems = useMemo(
+    () => [
+      {
+        key: "secure",
+        label: t.bookTrustSecure,
+        icon: (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>
+        ),
+      },
+      {
+        key: "host",
+        label: t.bookTrustPersonalHost,
+        icon: (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+        ),
+      },
+      {
+        key: "pickup",
+        label: t.bookTrustAirportPickup,
+        icon: (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 19 4c-1 0-2 1-3.5 2.5L12 10 3.8 8.2" />
+            <circle cx="7" cy="18" r="2" />
+            <circle cx="17" cy="18" r="2" />
+          </svg>
+        ),
+      },
+      {
+        key: "dates",
+        label: t.bookTrustFlexibleDates,
+        icon: (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <path d="M16 2v4M8 2v4M3 10h18" />
+          </svg>
+        ),
+      },
+    ],
+    [t],
+  );
 
   const nights = useMemo(
     () => calcNights(fields.arrivalDate, fields.departureDate),
@@ -354,7 +361,7 @@ export default function BookPage() {
           aria-hidden="true"
         />
         <div className="container-site relative z-10 text-center">
-          <p className="section-eyebrow mb-2 md:mb-3">Reservations</p>
+          <p className="section-eyebrow mb-2 md:mb-3">{t.bookPageEyebrow}</p>
           <h1
             className="mb-3 text-white md:mb-4"
             style={{
@@ -391,8 +398,7 @@ export default function BookPage() {
                 lineHeight: 1.6,
               }}
             >
-              Thank you! Your booking request has been sent. Warren will be in
-              touch within 24 hours.
+              {t.bookSubmittedMessage}
             </p>
           </div>
         </div>
@@ -412,13 +418,13 @@ export default function BookPage() {
                     fontWeight: 300,
                   }}
                 >
-                  Booking Details
+                  {t.bookDetailsTitle}
                 </h2>
 
                 <div className="space-y-3 md:space-y-5">
                   <div>
                     <label htmlFor="book-villa" className={labelClass}>
-                      Select Villa
+                      {t.formLabelSelectVilla}
                       <RequiredMark />
                     </label>
                     <select
@@ -428,8 +434,8 @@ export default function BookPage() {
                       className={`${inputClass} cursor-pointer ${fieldError("villa") ? "border-red-400" : ""}`}
                       style={inputStyle}
                     >
-                      <option value="">Choose a villa</option>
-                      <option value="any">Any villa</option>
+                      <option value="">{t.formSelectChooseVilla}</option>
+                      <option value="any">{t.formSelectAnyVilla}</option>
                       {VILLAS.map((v) => (
                         <option key={v.slug} value={v.slug}>
                           {v.name.replace("Villa ", "")}
@@ -437,14 +443,14 @@ export default function BookPage() {
                       ))}
                     </select>
                     {fieldError("villa") && (
-                      <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
+                      <p className="mt-1 text-xs text-red-500">{t.fieldRequired}</p>
                     )}
                   </div>
 
                   <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-5">
                     <div className="w-full">
                       <label htmlFor="book-arrival" className={labelClass}>
-                        Arrival Date
+                        {t.formLabelArrivalDate}
                         <RequiredMark />
                       </label>
                       <input
@@ -457,12 +463,12 @@ export default function BookPage() {
                         style={inputStyle}
                       />
                       {fieldError("arrivalDate") && (
-                        <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
+                        <p className="mt-1 text-xs text-red-500">{t.fieldRequired}</p>
                       )}
                     </div>
                     <div className="w-full">
                       <label htmlFor="book-departure" className={labelClass}>
-                        Departure Date
+                        {t.formLabelDepartureDate}
                         <RequiredMark />
                       </label>
                       <input
@@ -475,7 +481,7 @@ export default function BookPage() {
                         style={inputStyle}
                       />
                       {fieldError("departureDate") && (
-                        <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
+                        <p className="mt-1 text-xs text-red-500">{t.fieldRequired}</p>
                       )}
                     </div>
                   </div>
@@ -488,13 +494,13 @@ export default function BookPage() {
                       fontWeight: 300,
                     }}
                   >
-                    Minimum stay is 4 nights
+                    {t.bookMinimumStay}
                   </p>
 
                   <div className="grid grid-cols-2 gap-3 md:gap-5">
                     <div>
                       <label htmlFor="book-adults" className={labelClass}>
-                        Adults
+                        {t.formLabelAdults}
                       </label>
                       <input
                         id="book-adults"
@@ -507,12 +513,12 @@ export default function BookPage() {
                         style={inputStyle}
                       />
                       {fieldError("adults") && (
-                        <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
+                        <p className="mt-1 text-xs text-red-500">{t.fieldRequired}</p>
                       )}
                     </div>
                     <div>
                       <label htmlFor="book-children" className={labelClass}>
-                        Children
+                        {t.formLabelChildren}
                       </label>
                       <input
                         id="book-children"
@@ -529,7 +535,7 @@ export default function BookPage() {
 
                   <div>
                     <label htmlFor="book-name" className={labelClass}>
-                      Full Name
+                      {t.formLabelFullName}
                       <RequiredMark />
                     </label>
                     <input
@@ -541,13 +547,13 @@ export default function BookPage() {
                       style={inputStyle}
                     />
                     {fieldError("fullName") && (
-                      <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
+                      <p className="mt-1 text-xs text-red-500">{t.fieldRequired}</p>
                     )}
                   </div>
 
                   <div>
                     <label htmlFor="book-email" className={labelClass}>
-                      Email
+                      {t.formLabelEmail}
                       <RequiredMark />
                     </label>
                     <input
@@ -559,14 +565,14 @@ export default function BookPage() {
                       style={inputStyle}
                     />
                     {fieldError("email") && (
-                      <p className="mt-1 text-xs text-red-500">{REQUIRED_MESSAGE}</p>
+                      <p className="mt-1 text-xs text-red-500">{t.fieldRequired}</p>
                     )}
                   </div>
 
                   <PhoneNumberField
                     idPrefix="book"
                     fieldId="book-phone-field"
-                    label="Phone Number"
+                    label={t.formLabelPhoneNumber}
                     value={fields.phone}
                     onChange={(phone) => update("phone", phone)}
                     hasError={fieldError("phone")}
@@ -614,19 +620,19 @@ export default function BookPage() {
                         className="text-[var(--text)]"
                         style={{ ...inputStyle, fontSize: "0.8125rem" }}
                       >
-                        Add free airport pickup
+                        {t.bookAirportPickupToggle}
                       </span>
                     </div>
 
                     {fields.airportPickup && (
                       <div className="mt-3">
                         <label htmlFor="book-flight-number" className={labelClass}>
-                          Flight number
+                          {t.formLabelFlightNumber}
                         </label>
                         <input
                           id="book-flight-number"
                           type="text"
-                          placeholder="e.g. QF123"
+                          placeholder={t.formPlaceholderFlightNumber}
                           value={fields.flightNumber}
                           onChange={(e) => update("flightNumber", e.target.value)}
                           className={inputClass}
@@ -638,12 +644,12 @@ export default function BookPage() {
 
                   <div>
                     <label htmlFor="book-requests" className={labelClass}>
-                      Special Requests
+                      {t.formLabelSpecialRequests}
                     </label>
                     <textarea
                       id="book-requests"
                       rows={3}
-                      placeholder="Early check-in, dietary needs, airport pickup details..."
+                      placeholder={t.formPlaceholderSpecialRequests}
                       value={fields.specialRequests}
                       onChange={(e) => update("specialRequests", e.target.value)}
                       className={`${inputClass} resize-none`}
@@ -663,7 +669,7 @@ export default function BookPage() {
                     }}
                     className="btn-primary w-full cursor-pointer text-center"
                   >
-                    Send Booking Request
+                    {t.bookSubmitButton}
                   </div>
                 </div>
               </div>
@@ -678,9 +684,7 @@ export default function BookPage() {
                     lineHeight: 1.7,
                   }}
                 >
-                  Secure payment is handled via our booking system. You will receive
-                  payment instructions by email or WhatsApp after your booking is
-                  confirmed.
+                  {t.bookPaymentNote}
                 </p>
                 <p
                   className="mt-3 text-[var(--text-muted)]"
@@ -691,7 +695,7 @@ export default function BookPage() {
                     letterSpacing: "0.04em",
                   }}
                 >
-                  Visa | Mastercard | Cash
+                  {t.bookPaymentMethodsLine}
                 </p>
               </div>
             </div>
@@ -707,7 +711,7 @@ export default function BookPage() {
                     fontWeight: 300,
                   }}
                 >
-                  Booking Summary
+                  {t.bookSummaryTitle}
                 </h3>
 
                 <dl className="space-y-3 md:space-y-4">
@@ -722,7 +726,7 @@ export default function BookPage() {
                         textTransform: "uppercase",
                       }}
                     >
-                      Villa
+                      {t.bookSummaryVilla}
                     </dt>
                     <dd
                       className="text-white"
@@ -748,7 +752,7 @@ export default function BookPage() {
                           textTransform: "uppercase",
                         }}
                       >
-                        Arrival
+                        {t.bookSummaryArrival}
                       </dt>
                       <dd
                         className="text-white"
@@ -758,7 +762,7 @@ export default function BookPage() {
                           fontWeight: 300,
                         }}
                       >
-                        {new Date(fields.arrivalDate).toLocaleDateString("en-GB", {
+                        {new Date(fields.arrivalDate).toLocaleDateString(dateLocale, {
                           weekday: "short",
                           day: "numeric",
                           month: "long",
@@ -780,7 +784,7 @@ export default function BookPage() {
                           textTransform: "uppercase",
                         }}
                       >
-                        Departure
+                        {t.bookSummaryDeparture}
                       </dt>
                       <dd
                         className="text-white"
@@ -790,7 +794,7 @@ export default function BookPage() {
                           fontWeight: 300,
                         }}
                       >
-                        {new Date(fields.departureDate).toLocaleDateString("en-GB", {
+                        {new Date(fields.departureDate).toLocaleDateString(dateLocale, {
                           weekday: "short",
                           day: "numeric",
                           month: "long",
@@ -811,7 +815,7 @@ export default function BookPage() {
                         textTransform: "uppercase",
                       }}
                     >
-                      Nights
+                      {t.bookSummaryNights}
                     </dt>
                     <dd
                       className="text-white"
@@ -837,7 +841,7 @@ export default function BookPage() {
                           textTransform: "uppercase",
                         }}
                       >
-                        Guests
+                        {t.bookSummaryGuests}
                       </dt>
                       <dd
                         className="text-white"
@@ -847,9 +851,14 @@ export default function BookPage() {
                           fontWeight: 300,
                         }}
                       >
-                        {fields.adults} adult{fields.adults !== "1" ? "s" : ""}
+                        {fields.adults}{" "}
+                        {fields.adults !== "1" ? t.bookGuestAdults : t.bookGuestAdult}
                         {fields.children !== "0" &&
-                          `, ${fields.children} child${fields.children !== "1" ? "ren" : ""}`}
+                          `, ${fields.children} ${
+                            fields.children !== "1"
+                              ? t.bookGuestChildren
+                              : t.bookGuestChild
+                          }`}
                       </dd>
                     </div>
                   )}
@@ -866,13 +875,11 @@ export default function BookPage() {
                   }}
                 >
                   <p className="mb-3">
-                    Check-in: {GLOBAL_POLICIES.checkIn}. Check-out: By{" "}
-                    {GLOBAL_POLICIES.checkOut}.
+                    {t.bookSummaryPolicies
+                      .replace("{checkIn}", GLOBAL_POLICIES.checkIn)
+                      .replace("{checkOut}", GLOBAL_POLICIES.checkOut)}
                   </p>
-                  <p>
-                    Our team will confirm availability and pricing via WhatsApp
-                    within 24 hours.
-                  </p>
+                  <p>{t.bookSummaryConfirmNote}</p>
                 </div>
 
                 <div
@@ -894,9 +901,9 @@ export default function BookPage() {
                       textTransform: "uppercase",
                     }}
                   >
-                    Payment Methods
+                    {t.bookSummaryPaymentTitle}
                   </p>
-                  <p>We accept Visa, Mastercard and Cash.</p>
+                  <p>{t.bookSummaryPaymentText}</p>
                 </div>
               </div>
             </div>
@@ -905,7 +912,7 @@ export default function BookPage() {
             <div className="order-3 lg:col-span-3">
               <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-6">
                 {trustItems.map((item) => (
-                  <div key={item.label} className="text-center">
+                  <div key={item.key} className="text-center">
                     <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full border border-[var(--sand)] text-[var(--sand)]">
                       {item.icon}
                     </div>

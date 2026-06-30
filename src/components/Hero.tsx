@@ -34,10 +34,9 @@ export default function Hero() {
 
       <div className="relative z-10 mx-auto max-w-4xl px-6 py-32 text-center">
         <h1
-          className="mb-6 text-white"
+          className="mb-6 text-white text-[clamp(1.875rem,6vw,2.25rem)] md:text-[clamp(2.5rem,8vw,4.5rem)]"
           style={{
             fontFamily: "var(--font-cormorant)",
-            fontSize: "clamp(2.5rem, 8vw, 4.5rem)",
             fontWeight: 300,
             lineHeight: 1.15,
             letterSpacing: "0.02em",
@@ -58,11 +57,17 @@ export default function Hero() {
           {t.heroSubheadline}
         </p>
 
-        <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Link href="/villas" className="btn-primary min-w-[200px]">
+        <div className="flex flex-row items-center justify-center gap-2 sm:gap-4">
+          <Link
+            href="/villas"
+            className="btn-primary min-w-[200px] max-sm:min-w-0 max-sm:flex-1 max-sm:px-3"
+          >
             {t.navOurVillas}
           </Link>
-          <Link href="/book" className="btn-outline min-w-[200px]">
+          <Link
+            href="/book"
+            className="btn-outline min-w-[200px] max-sm:min-w-0 max-sm:flex-1 max-sm:px-3"
+          >
             {t.navBookNow}
           </Link>
         </div>

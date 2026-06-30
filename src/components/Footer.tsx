@@ -64,8 +64,8 @@ export default function Footer() {
     { label: t.navOurVillas, href: "/villas", key: "villas" },
     { label: t.navAboutUs, href: "/about", key: "about" },
     { label: t.navContactUs, href: "/contact", key: "contact" },
-    { label: "FAQ", href: "/faq", key: "faq" },
-    { label: "Terms & Conditions", href: "/terms", key: "terms" },
+    { label: t.footerLinkFaq, href: "/faq", key: "faq" },
+    { label: t.footerLinkTerms, href: "/terms", key: "terms" },
   ];
 
   return (
@@ -81,7 +81,7 @@ export default function Footer() {
                 fontWeight: 300,
               }}
             >
-              Sun Shoot Villas
+              {t.footerBrandName}
             </p>
             <p
               className="text-white/55"
@@ -92,7 +92,7 @@ export default function Footer() {
                 lineHeight: 1.7,
               }}
             >
-              Private pool villas in the heart of Seminyak, Bali.
+              {t.footerTagline}
             </p>
             <div className="mt-6 flex gap-3">
               {socialLinks.map((social) => (
@@ -194,7 +194,7 @@ export default function Footer() {
                   {SITE.email}
                 </a>
               </p>
-              <p>Jl. Bidadari II E, Seminyak</p>
+              <p>{t.footerAddress}</p>
             </address>
           </div>
         </div>
@@ -210,7 +210,7 @@ export default function Footer() {
               fontWeight: 300,
             }}
           >
-            &copy; 2026 Sun Shoot Villas Seminyak
+            {t.footerCopyright}
           </p>
         </div>
       </div>

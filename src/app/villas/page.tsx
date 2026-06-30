@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Footer from "@/components/Footer";
-import VideoPageHero from "@/components/VideoPageHero";
+import VillasPageHero from "@/components/villas/VillasPageHero";
 import VillaCards from "@/components/VillaCards";
-import { HERO_VIDEO } from "@/lib/media";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -14,11 +13,7 @@ export const metadata: Metadata = {
 export default function VillasPage() {
   return (
     <>
-      <VideoPageHero
-        videoSrc={HERO_VIDEO}
-        title="Our Villas"
-        subtitle="Four private pool villas in the heart of Seminyak"
-      />
+      <VillasPageHero />
       <VillaCards showHeader={false} animateEntrance />
       <Footer />
     </>

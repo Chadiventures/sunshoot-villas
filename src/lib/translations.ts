@@ -1,3 +1,10 @@
+/*
+ * RULE: Every new key added to the en object MUST have a matching key added to the id
+ * object in the same change. Never ship a new English string without its Indonesian
+ * translation. If a component is created or edited with hardcoded text, it must use a
+ * translation key from this file, not a literal string.
+ */
+
 export type Language = "en" | "id";
 
 export const LANGUAGE_STORAGE_KEY = "sunshoot-language";
@@ -49,6 +56,13 @@ export type Translations = {
   findUsTitle: string;
   footerQuickLinksTitle: string;
   footerContactTitle: string;
+  footerBrandName: string;
+  footerTagline: string;
+  footerLinkFaq: string;
+  footerLinkTerms: string;
+  footerAddress: string;
+  footerCopyright: string;
+  villasPageHeroSubtitle: string;
   bookPageTitle: string;
   bookPageSubtitle: string;
   whatsAppButton: string;
@@ -205,6 +219,13 @@ export const translations: Record<Language, Translations> = {
     findUsTitle: "Find Us",
     footerQuickLinksTitle: "Quick Links",
     footerContactTitle: "Contact Us",
+    footerBrandName: "Sun Shoot Villas",
+    footerTagline: "Private pool villas in the heart of Seminyak, Bali.",
+    footerLinkFaq: "FAQ",
+    footerLinkTerms: "Terms & Conditions",
+    footerAddress: "Jl. Bidadari II E, Seminyak",
+    footerCopyright: "© 2026 Sun Shoot Villas Seminyak",
+    villasPageHeroSubtitle: "Four private pool villas in the heart of Seminyak",
     bookPageTitle: "Book Your Villa",
     bookPageSubtitle:
       "Fill in your details and we will confirm availability within 24 hours",
@@ -387,6 +408,13 @@ export const translations: Record<Language, Translations> = {
     findUsTitle: "Temukan Kami",
     footerQuickLinksTitle: "Tautan Cepat",
     footerContactTitle: "Hubungi Kami",
+    footerBrandName: "Sun Shoot Villas",
+    footerTagline: "Vila dengan kolam renang pribadi di jantung Seminyak, Bali.",
+    footerLinkFaq: "FAQ",
+    footerLinkTerms: "Syarat & Ketentuan",
+    footerAddress: "Jl. Bidadari II E, Seminyak",
+    footerCopyright: "© 2026 Sun Shoot Villas Seminyak",
+    villasPageHeroSubtitle: "Empat vila dengan kolam renang pribadi di jantung Seminyak",
     bookPageTitle: "Pesan Vila Anda",
     bookPageSubtitle:
       "Isi detail Anda dan kami akan mengkonfirmasi ketersediaan dalam 24 jam",

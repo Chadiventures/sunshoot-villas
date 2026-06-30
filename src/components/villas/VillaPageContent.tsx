@@ -9,6 +9,7 @@ import VillaPageFacilities from "@/components/villas/VillaPageFacilities";
 import VillaHouseRules from "@/components/villas/VillaHouseRules";
 import VillaWhatsAppCta from "@/components/villas/VillaWhatsAppCta";
 import VillaTopBanner from "@/components/villas/VillaTopBanner";
+import VillaNightlyPrice from "@/components/pricing/VillaNightlyPrice";
 import VillaKeyInfo from "@/components/villas/VillaKeyInfo";
 import VillaReviewsCarousel from "@/components/villas/VillaReviewsCarousel";
 import VillaHighlightsStrip from "@/components/villas/VillaHighlightsStrip";
@@ -114,6 +115,7 @@ export default function VillaPageContent({
           >
             {t.villaHeroSubtext}
           </p>
+          <VillaNightlyPrice />
         </div>
       </section>
 

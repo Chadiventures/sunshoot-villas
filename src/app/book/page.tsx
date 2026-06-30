@@ -11,6 +11,8 @@ import PhoneNumberField, {
 } from "@/components/PhoneNumberField";
 import { useLanguage } from "@/context/LanguageContext";
 import { GLOBAL_POLICIES } from "@/lib/site";
+import { formatNightlyPrice, formatTotalPrice } from "@/lib/pricing";
+import PricingDiscountBadge from "@/components/pricing/PricingDiscountBadge";
 import { VILLAS } from "@/lib/villas";
 
 const WHATSAPP = "6281239701978";
@@ -229,6 +231,11 @@ export default function BookPage() {
   );
 
   const selectedVillaName = VILLAS.find((v) => v.slug === fields.villa)?.name;
+
+  const nightlyPriceLabel = formatNightlyPrice(language);
+  const showTotalPrice = Boolean(fields.villa && nights !== null);
+  const totalPriceLabel =
+    nights !== null ? formatTotalPrice(nights, language) : null;
 
   const update = <K extends keyof BookingFields>(key: K, value: BookingFields[K]) => {
     setFields((prev) => ({ ...prev, [key]: value }));
@@ -826,6 +833,61 @@ export default function BookPage() {
                       }}
                     >
                       {nights !== null ? nights : "-"}
+                    </dd>
+                  </div>
+
+                  <div>
+                    <dt
+                      className="mb-1 text-white/50"
+                      style={{
+                        fontFamily: "var(--font-inter)",
+                        fontSize: "0.6875rem",
+                        fontWeight: 500,
+                        letterSpacing: "0.12em",
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      {t.bookSummaryPrice}
+                    </dt>
+                    <dd className="text-white">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span
+                          style={{
+                            fontFamily: "var(--font-inter)",
+                            fontSize: "0.9375rem",
+                            fontWeight: 400,
+                          }}
+                        >
+                          {nightlyPriceLabel}{" "}
+                          <span className="text-white/60">{t.pricePerNight}</span>
+                        </span>
+                        <PricingDiscountBadge />
+                      </div>
+                      {showTotalPrice && totalPriceLabel && (
+                        <p
+                          className="mt-2"
+                          style={{
+                            fontFamily: "var(--font-cormorant)",
+                            fontSize: "1.75rem",
+                            fontWeight: 300,
+                            lineHeight: 1.2,
+                          }}
+                        >
+                          <span
+                            className="mr-2 text-white/50"
+                            style={{
+                              fontFamily: "var(--font-inter)",
+                              fontSize: "0.6875rem",
+                              fontWeight: 500,
+                              letterSpacing: "0.12em",
+                              textTransform: "uppercase",
+                            }}
+                          >
+                            {t.priceTotal}
+                          </span>
+                          {totalPriceLabel}
+                        </p>
+                      )}
                     </dd>
                   </div>
 

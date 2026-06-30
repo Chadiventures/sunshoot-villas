@@ -177,6 +177,10 @@ export type Translations = {
   bookGuestAdults: string;
   bookGuestChild: string;
   bookGuestChildren: string;
+  pricePerNight: string;
+  priceTotal: string;
+  priceSaveBadge: string;
+  bookSummaryPrice: string;
 };
 
 export const translations: Record<Language, Translations> = {
@@ -371,6 +375,10 @@ export const translations: Record<Language, Translations> = {
     bookGuestAdults: "adults",
     bookGuestChild: "child",
     bookGuestChildren: "children",
+    pricePerNight: "per night",
+    priceTotal: "Total",
+    priceSaveBadge: "Save {percent}%",
+    bookSummaryPrice: "Price",
   },
   id: {
     navOurVillas: "Vila Kami",
@@ -563,5 +571,9 @@ export const translations: Record<Language, Translations> = {
     bookGuestAdults: "dewasa",
     bookGuestChild: "anak",
     bookGuestChildren: "anak",
+    pricePerNight: "per malam",
+    priceTotal: "Total",
+    priceSaveBadge: "Hemat {percent}%",
+    bookSummaryPrice: "Harga",
   },
 };

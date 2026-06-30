@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Footer from "@/components/Footer";
+import BookingModal from "@/components/booking/BookingModal";
 import ScrollReveal from "@/components/ScrollReveal";
 import VillaPageGallery from "@/components/villas/VillaPageGallery";
 import VillaPageFacilities from "@/components/villas/VillaPageFacilities";
 import VillaHouseRules from "@/components/villas/VillaHouseRules";
 import VillaWhatsAppCta from "@/components/villas/VillaWhatsAppCta";
-import VillaTopBanner from "@/components/villas/VillaTopBanner";
 import VillaNightlyPrice from "@/components/pricing/VillaNightlyPrice";
 import VillaKeyInfo from "@/components/villas/VillaKeyInfo";
 import VillaReviewsCarousel from "@/components/villas/VillaReviewsCarousel";
@@ -40,6 +40,8 @@ export default function VillaPageContent({
 }: VillaPageContentProps) {
   const { t, getVillaDescription } = useLanguage();
   const description = getVillaDescription(slug);
+  const [bookingOpen, setBookingOpen] = useState(false);
+  const bookLabel = t.villaBookButton.replace("{villaName}", villaName);
 
   const heroRef = useRef<HTMLElement>(null);
   const parallaxRef = useRef<HTMLDivElement>(null);
@@ -64,8 +66,6 @@ export default function VillaPageContent({
 
   return (
     <>
-      <VillaTopBanner />
-
       {/* Hero */}
       <section
         ref={heroRef}
@@ -116,10 +116,20 @@ export default function VillaPageContent({
             {t.villaHeroSubtext}
           </p>
           <VillaNightlyPrice />
+          <button
+            type="button"
+            onClick={() => setBookingOpen(true)}
+            className="btn-primary btn-hover mt-5 hidden md:inline-flex"
+          >
+            {bookLabel}
+          </button>
         </div>
       </section>
 
-      <VillaHighlightsStrip />
+      <VillaHighlightsStrip
+        villaName={villaName}
+        onBookClick={() => setBookingOpen(true)}
+      />
 
       <VillaSectionDivider />
 
@@ -216,6 +226,13 @@ export default function VillaPageContent({
 
       {/* WhatsApp CTA */}
       <VillaWhatsAppCta villaName={villaName} />
+
+      <BookingModal
+        open={bookingOpen}
+        onClose={() => setBookingOpen(false)}
+        defaultVillaSlug={slug}
+        villaName={villaName}
+      />
 
       <Footer />
     </>

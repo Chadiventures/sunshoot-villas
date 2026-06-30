@@ -1,7 +1,6 @@
 "use client";
 
 import type { ReactNode } from "react";
-import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 
 function IconWrapper({
@@ -60,8 +59,17 @@ const HIGHLIGHTS = [
   },
 ];
 
-export default function VillaHighlightsStrip() {
+type VillaHighlightsStripProps = {
+  villaName: string;
+  onBookClick: () => void;
+};
+
+export default function VillaHighlightsStrip({
+  villaName,
+  onBookClick,
+}: VillaHighlightsStripProps) {
   const { t } = useLanguage();
+  const bookLabel = t.villaBookButton.replace("{villaName}", villaName);
 
   return (
     <div className="villa-highlights-strip bg-[var(--sand)]">
@@ -102,8 +110,9 @@ export default function VillaHighlightsStrip() {
         </div>
 
         <div className="border-t border-[var(--dark)]/10 py-2 text-center md:hidden">
-          <Link
-            href="/book"
+          <button
+            type="button"
+            onClick={onBookClick}
             className="inline-flex min-h-[36px] items-center justify-center rounded-sm border-2 border-[var(--dark)] px-5 py-1.5 text-[var(--dark)] transition-all duration-300 ease-in-out hover:bg-[var(--dark)] hover:text-white"
             style={{
               fontFamily: "var(--font-inter)",
@@ -113,8 +122,8 @@ export default function VillaHighlightsStrip() {
               textTransform: "uppercase",
             }}
           >
-            {t.navBookNow}
-          </Link>
+            {bookLabel}
+          </button>
         </div>
       </div>
     </div>

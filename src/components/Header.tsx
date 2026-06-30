@@ -6,18 +6,14 @@ import { usePathname } from "next/navigation";
 import LanguageSelector from "@/components/LanguageSelector";
 import { useLanguage } from "@/context/LanguageContext";
 
-const STORAGE_KEY = "villa-promo-dismissed";
-
 export default function Header() {
   const pathname = usePathname();
   const { t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [bannerActive, setBannerActive] = useState(false);
 
   const isAdmin = pathname.startsWith("/admin");
   const isHome = pathname === "/";
-  const isVillaDetail = /^\/villas\/[^/]+$/.test(pathname);
 
   useEffect(() => {
     if (isAdmin) return;
@@ -26,19 +22,6 @@ export default function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [isAdmin]);
-
-  useEffect(() => {
-    if (!isVillaDetail) {
-      setBannerActive(false);
-      return;
-    }
-    const check = () => {
-      setBannerActive(localStorage.getItem(STORAGE_KEY) !== "1");
-    };
-    check();
-    window.addEventListener("villa-banner-dismissed", check);
-    return () => window.removeEventListener("villa-banner-dismissed", check);
-  }, [isVillaDetail, pathname]);
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
@@ -50,11 +33,7 @@ export default function Header() {
   if (isAdmin) return null;
 
   const solid = scrolled || !isHome;
-  const headerTop = isAdmin
-    ? "0px"
-    : `calc(var(--top-banner-h, 32px) + ${
-        bannerActive && isVillaDetail ? "var(--villa-banner-h, 0px)" : "0px"
-      })`;
+  const headerTop = isAdmin ? "0px" : "var(--top-banner-h, 32px)";
 
   const navLinks = [
     { label: t.navOurVillas, href: "/villas", key: "villas" },

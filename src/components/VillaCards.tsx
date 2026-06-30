@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Fragment } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
 import { useLanguage } from "@/context/LanguageContext";
+import { formatNightlyPrice } from "@/lib/pricing";
 import { VILLAS } from "@/lib/villas";
 import { VILLA_IMAGES } from "@/lib/media";
 
@@ -15,7 +16,8 @@ export default function VillaCards({
   showHeader?: boolean;
   animateEntrance?: boolean;
 }) {
-  const { t, getVillaDescription } = useLanguage();
+  const { t, language, getVillaDescription } = useLanguage();
+  const nightlyPrice = formatNightlyPrice(language);
 
   return (
     <section className="bg-[var(--bg)] py-12 md:py-28">
@@ -104,6 +106,17 @@ export default function VillaCards({
                         ? `${description.slice(0, 140)}…`
                         : description}
                     </span>
+                  </p>
+                  <p
+                    className="mb-3 text-[var(--text-muted)] sm:mb-4"
+                    style={{
+                      fontFamily: "var(--font-inter)",
+                      fontSize: "0.625rem",
+                      fontWeight: 500,
+                      letterSpacing: "0.15em",
+                    }}
+                  >
+                    {t.priceFrom} {nightlyPrice} {t.pricePerNight}
                   </p>
                   <div className="pointer-events-auto relative z-[2] flex flex-wrap gap-2 sm:gap-3">
                     <Link

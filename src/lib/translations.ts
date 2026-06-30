@@ -178,9 +178,12 @@ export type Translations = {
   bookGuestChild: string;
   bookGuestChildren: string;
   pricePerNight: string;
+  priceFrom: string;
   priceTotal: string;
   priceSaveBadge: string;
   bookSummaryPrice: string;
+  villaBookButton: string;
+  bookModalClose: string;
 };
 
 export const translations: Record<Language, Translations> = {
@@ -376,9 +379,12 @@ export const translations: Record<Language, Translations> = {
     bookGuestChild: "child",
     bookGuestChildren: "children",
     pricePerNight: "per night",
+    priceFrom: "From",
     priceTotal: "Total",
     priceSaveBadge: "Save {percent}%",
     bookSummaryPrice: "Price",
+    villaBookButton: "Book {villaName}",
+    bookModalClose: "Close booking form",
   },
   id: {
     navOurVillas: "Vila Kami",
@@ -572,8 +578,11 @@ export const translations: Record<Language, Translations> = {
     bookGuestChild: "anak",
     bookGuestChildren: "anak",
     pricePerNight: "per malam",
+    priceFrom: "Mulai dari",
     priceTotal: "Total",
     priceSaveBadge: "Hemat {percent}%",
     bookSummaryPrice: "Harga",
+    villaBookButton: "Pesan {villaName}",
+    bookModalClose: "Tutup formulir pemesanan",
   },
 };

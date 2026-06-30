@@ -2,9 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-const bannerOffer =
-  "BOOK DIRECT · PRIVATE POOL VILLAS IN SEMINYAK · PERSONAL BALINESE HOSPITALITY";
+import { useLanguage } from "@/context/LanguageContext";
 
 const textStyle = {
   fontFamily: "var(--font-inter)",
@@ -14,13 +12,13 @@ const textStyle = {
   textTransform: "uppercase" as const,
 };
 
-function BannerSegment({ hidden }: { hidden?: boolean }) {
+function BannerSegment({ text, hidden }: { text: string; hidden?: boolean }) {
   return (
     <span
       className="top-banner-content inline-flex shrink-0 items-center text-white"
       aria-hidden={hidden}
     >
-      <span style={textStyle}>{bannerOffer}</span>
+      <span style={textStyle}>{text}</span>
       <span
         className="top-banner-separator text-white/70"
         style={textStyle}
@@ -33,6 +31,7 @@ function BannerSegment({ hidden }: { hidden?: boolean }) {
 }
 
 export default function TopBanner() {
+  const { t } = useLanguage();
   const pathname = usePathname();
 
   if (pathname.startsWith("/admin")) {
@@ -59,8 +58,8 @@ export default function TopBanner() {
         aria-label="Contact Sun Shoot Villas"
       >
         <div className="top-banner-track flex h-full items-center">
-          <BannerSegment />
-          <BannerSegment hidden />
+          <BannerSegment text={t.topBannerText} />
+          <BannerSegment text={t.topBannerText} hidden />
         </div>
       </Link>
     </div>

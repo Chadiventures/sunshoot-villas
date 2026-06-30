@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
 const WHATSAPP_URL = "https://wa.me/6281239701978";
 
@@ -26,6 +27,7 @@ function WhatsAppIcon({
 }
 
 export default function FloatingWhatsAppButton() {
+  const { t } = useLanguage();
   const [labelBounce, setLabelBounce] = useState(false);
 
   useEffect(() => {
@@ -58,7 +60,7 @@ export default function FloatingWhatsAppButton() {
             }}
             aria-hidden="true"
           >
-            Chat with us!
+            {t.whatsappChatBubble}
           </span>
 
           <div className="group relative">

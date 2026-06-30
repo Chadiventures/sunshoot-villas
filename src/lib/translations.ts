@@ -66,7 +66,9 @@ export type Translations = {
   bookPageTitle: string;
   bookPageSubtitle: string;
   whatsAppButton: string;
+  whatsappChatBubble: string;
   bannerText: string;
+  topBannerText: string;
   homeCtaTitle: string;
   homeCtaViewVillas: string;
   lifeAtTitle: string;
@@ -230,8 +232,11 @@ export const translations: Record<Language, Translations> = {
     bookPageSubtitle:
       "Fill in your details and we will confirm availability within 24 hours",
     whatsAppButton: "Send Inquiry on WhatsApp",
+    whatsappChatBubble: "Chat with us!",
     bannerText:
       "Limited availability for July 2026 - Enquire now to secure your villa!   |   4 private pool villas in the heart of Seminyak   |   Free airport pickup included   |   Personal service from host Warren   |   ",
+    topBannerText:
+      "BOOK DIRECT · PRIVATE POOL VILLAS IN SEMINYAK · PERSONAL BALINESE HOSPITALITY",
     homeCtaTitle: "Ready to Experience Seminyak?",
     homeCtaViewVillas: "View Our Villas",
     lifeAtTitle: "Life at Sun Shoot Villas",
@@ -419,8 +424,11 @@ export const translations: Record<Language, Translations> = {
     bookPageSubtitle:
       "Isi detail Anda dan kami akan mengkonfirmasi ketersediaan dalam 24 jam",
     whatsAppButton: "Kirim Pertanyaan via WhatsApp",
+    whatsappChatBubble: "Chat dengan kami!",
     bannerText:
       "Ketersediaan terbatas untuk Juli 2026 - Hubungi kami sekarang!   |   4 vila dengan kolam renang pribadi di Seminyak   |   Antar jemput bandara gratis   |   Pelayanan personal dari tuan rumah Warren   |   ",
+    topBannerText:
+      "PESAN LANGSUNG · VILA DENGAN KOLAM RENANG PRIBADI DI SEMINYAK · HOSPITALITY BALI YANG PERSONAL",
     homeCtaTitle: "Siap Merasakan Seminyak?",
     homeCtaViewVillas: "Lihat Vila Kami",
     lifeAtTitle: "Kehidupan di Sun Shoot Villas",

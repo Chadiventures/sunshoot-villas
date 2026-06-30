@@ -15,10 +15,12 @@ const textStyle = {
 function BannerSegment({ text, hidden }: { text: string; hidden?: boolean }) {
   return (
     <span
-      className="top-banner-content inline-flex shrink-0 items-center text-white"
-      aria-hidden={hidden}
+      className="top-banner-content inline-flex shrink-0 items-center whitespace-nowrap text-white"
+      aria-hidden={hidden || undefined}
     >
-      <span style={textStyle}>{text}</span>
+      <span className="whitespace-nowrap" style={textStyle}>
+        {text}
+      </span>
       <span
         className="top-banner-separator text-white/70"
         style={textStyle}
@@ -57,7 +59,7 @@ export default function TopBanner() {
         }}
         aria-label="Contact Sun Shoot Villas"
       >
-        <div className="top-banner-track flex h-full items-center">
+        <div className="top-banner-track flex h-full flex-nowrap items-center">
           <BannerSegment text={t.topBannerText} />
           <BannerSegment text={t.topBannerText} hidden />
         </div>

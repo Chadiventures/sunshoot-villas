@@ -271,6 +271,12 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .top-banner-track {
     animation: none;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .top-banner-track .top-banner-content[aria-hidden="true"] {
+    display: none;
   }
 }
 

@@ -69,7 +69,7 @@ export default function VillaPageContent({
       {/* Hero */}
       <section
         ref={heroRef}
-        className="relative h-[50vh] w-full overflow-hidden md:h-[60vh]"
+        className="relative h-[50vh] min-h-[22rem] w-full overflow-hidden md:h-[60vh] md:min-h-[26rem]"
       >
         <div ref={parallaxRef} className="villa-hero-parallax-image absolute inset-0">
           <Image
@@ -89,8 +89,8 @@ export default function VillaPageContent({
           }}
         />
         <div
-          className="hero-fade-in absolute inset-0 flex flex-col items-center justify-end px-4 pb-10 text-center sm:pb-14"
-          style={{ paddingTop: "var(--villa-chrome-h)" }}
+          className="hero-fade-in absolute right-0 bottom-0 left-0 flex flex-col items-center justify-end px-4 pb-10 text-center sm:pb-14"
+          style={{ top: "var(--site-chrome-h)" }}
         >
           <h1
             className="mb-3 max-w-3xl text-white"

@@ -65,9 +65,9 @@ export default function Header() {
   return (
     <>
       <header
-        className={`fixed right-0 left-0 z-50 transition-all duration-300 ease-in-out ${
+        className={`fixed right-0 left-0 transition-all duration-300 ease-in-out ${
           solid ? "bg-[var(--dark)] shadow-lg" : "bg-transparent"
-        }`}
+        } ${mobileOpen ? "z-[80]" : "z-50"}`}
         style={{ top: headerTop }}
       >
         <div className="container-site flex h-[72px] items-center justify-between md:h-20">

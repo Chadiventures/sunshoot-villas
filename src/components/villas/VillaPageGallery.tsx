@@ -120,7 +120,7 @@ export default function VillaPageGallery({
             type="button"
             onClick={goPrev}
             aria-label="Previous image"
-            className="btn-hover absolute top-1/2 left-3 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[var(--dark)] shadow-md transition-all duration-300 ease-in-out hover:bg-white md:flex"
+            className="btn-hover absolute top-1/2 left-3 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[var(--dark)] shadow-md transition-all duration-300 ease-in-out hover:bg-white"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
               <path d="M15 18l-6-6 6-6" />
@@ -130,7 +130,7 @@ export default function VillaPageGallery({
             type="button"
             onClick={goNext}
             aria-label="Next image"
-            className="btn-hover absolute top-1/2 right-3 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[var(--dark)] shadow-md transition-all duration-300 ease-in-out hover:bg-white md:flex"
+            className="btn-hover absolute top-1/2 right-3 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[var(--dark)] shadow-md transition-all duration-300 ease-in-out hover:bg-white"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
               <path d="M9 18l6-6-6-6" />

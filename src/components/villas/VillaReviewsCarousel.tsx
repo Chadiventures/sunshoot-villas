@@ -206,11 +206,11 @@ export default function VillaReviewsCarousel({ slug }: VillaReviewsCarouselProps
           <CarouselArrow
             direction="left"
             onClick={() => scroll("left")}
-            className="absolute top-1/2 left-0 z-10 hidden -translate-y-1/2 md:flex"
+            className="absolute top-1/2 left-0 z-10 -translate-y-1/2 flex"
           />
 
           <div
-            className="overflow-hidden px-0 md:px-12"
+            className="overflow-hidden px-10 md:px-12"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
             onTouchStart={onTouchStart}
@@ -230,13 +230,8 @@ export default function VillaReviewsCarousel({ slug }: VillaReviewsCarouselProps
           <CarouselArrow
             direction="right"
             onClick={() => scroll("right")}
-            className="absolute top-1/2 right-0 z-10 hidden -translate-y-1/2 md:flex"
+            className="absolute top-1/2 right-0 z-10 -translate-y-1/2 flex"
           />
-        </div>
-
-        <div className="mt-4 flex items-center justify-center gap-4 md:hidden">
-          <CarouselArrow direction="left" onClick={() => scroll("left")} />
-          <CarouselArrow direction="right" onClick={() => scroll("right")} />
         </div>
 
         <p className="mt-3 text-center text-[0.6875rem] text-[var(--text-muted)] md:hidden">

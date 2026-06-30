@@ -1,6 +1,7 @@
 "use client";
 
 import ScrollReveal from "@/components/ScrollReveal";
+import { useLanguage } from "@/context/LanguageContext";
 
 type RatingItem = {
   platform: string;
@@ -132,6 +133,7 @@ function DesktopRatingEntry({ item }: { item: RatingItem }) {
 }
 
 export default function RatingsTrustBar() {
+  const { t } = useLanguage();
   const topRow = RATINGS.slice(0, 3);
   const bottomRow = RATINGS.slice(3);
 
@@ -151,10 +153,10 @@ export default function RatingsTrustBar() {
             }}
           >
             <span className="md:hidden" style={{ fontSize: "9px" }}>
-              Trusted by guests worldwide
+              {t.ratingsTrustTitle}
             </span>
             <span className="hidden md:inline" style={{ fontSize: "10px" }}>
-              Trusted by guests worldwide
+              {t.ratingsTrustTitle}
             </span>
           </p>
 

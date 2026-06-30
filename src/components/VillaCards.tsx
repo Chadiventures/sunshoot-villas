@@ -22,8 +22,8 @@ export default function VillaCards({
       <div className="container-site">
         {showHeader && (
           <div className="mb-14 text-center">
-            <p className="section-eyebrow mb-3">Our Collection</p>
-            <h2 className="section-heading">Four Private Pool Villas</h2>
+            <p className="section-eyebrow mb-3">{t.villaCardsEyebrow}</p>
+            <h2 className="section-heading">{t.villaCardsTitle}</h2>
             <p
               className="mx-auto mt-4 max-w-2xl text-[var(--text-muted)]"
               style={{
@@ -33,8 +33,7 @@ export default function VillaCards({
                 lineHeight: 1.7,
               }}
             >
-              Each villa offers two bedrooms, a private pool, and the warmth of
-              personal Balinese hospitality in Seminyak&apos;s Bidadari area.
+              {t.villaCardsSubtitle}
             </p>
           </div>
         )}
@@ -46,7 +45,7 @@ export default function VillaCards({
                 <Link
                   href={`/villas/${villa.slug}`}
                   className="absolute inset-0 z-0"
-                  aria-label={`View ${villa.name}`}
+                  aria-label={`${t.villaCardViewAriaLabel} ${villa.name}`}
                 />
 
                 <div className="img-zoom-wrap pointer-events-none relative z-[1] h-[180px] overflow-hidden sm:h-64">
@@ -70,8 +69,8 @@ export default function VillaCards({
                       textTransform: "uppercase",
                     }}
                   >
-                    <span className="sm:hidden">2 BR | Pool</span>
-                    <span className="hidden sm:inline">2 Bedrooms | Private Pool</span>
+                    <span className="sm:hidden">{t.villaCardsMetaMobile}</span>
+                    <span className="hidden sm:inline">{t.villaCardsMetaDesktop}</span>
                   </p>
                   <h3
                     className="mb-2 text-[1.375rem] text-[var(--dark)] sm:mb-3 sm:text-[1.75rem]"

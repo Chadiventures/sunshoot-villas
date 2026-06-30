@@ -1,16 +1,11 @@
 "use client";
 
 import ScrollReveal from "@/components/ScrollReveal";
-
-const BENEFITS = [
-  "10% OFF all food and drinks",
-  "Free welcome drink (juice, soda, tea or coffee)",
-  "VIP priority seating, even on busy nights",
-  "Priority villa delivery for breakfast, lunch and dinner",
-  "English-speaking team and premium hospitality standards",
-];
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function SunshootersPartnerProgram() {
+  const { t } = useLanguage();
+
   return (
     <section className="bg-[var(--bg)] py-8 md:py-12">
       <div className="container-site">
@@ -18,7 +13,7 @@ export default function SunshootersPartnerProgram() {
           <div className="mx-auto max-w-3xl rounded-lg border-[2.5px] border-[var(--dark)] bg-white px-6 py-7 text-center md:px-10 md:py-9">
             <img
               src="/sunshooters-logo.png"
-              alt="Sunshooters Villa Partner Program"
+              alt={t.sunshootersPartnerLogoAlt}
               width={150}
               height={150}
               className="mx-auto mb-5 h-auto w-[130px] md:mb-6 md:w-[150px]"
@@ -34,7 +29,7 @@ export default function SunshootersPartnerProgram() {
                 textTransform: "uppercase",
               }}
             >
-              Official Partner Villas
+              {t.sunshootersPartnerLabel}
             </p>
             <h2
               className="mb-3 text-[var(--dark)]"
@@ -44,7 +39,7 @@ export default function SunshootersPartnerProgram() {
                 fontWeight: 300,
               }}
             >
-              Sunshooters Villa Partner Program
+              {t.sunshootersPartnerTitle}
             </h2>
             <p
               className="mx-auto mb-6 max-w-2xl text-[var(--dark)]"
@@ -55,13 +50,11 @@ export default function SunshootersPartnerProgram() {
                 lineHeight: 1.7,
               }}
             >
-              As an official partner of the Sunshooters Villa Partner Program, our
-              guests enjoy exclusive perks at Sunshooters Bar and Grill, located
-              just steps away.
+              {t.sunshootersPartnerDescription}
             </p>
 
             <ul className="mx-auto mb-5 w-fit max-w-xl space-y-2 text-left">
-              {BENEFITS.map((benefit) => (
+              {t.sunshootersPartnerBenefits.map((benefit) => (
                 <li
                   key={benefit}
                   className="flex items-start gap-3 text-[var(--dark)]"
@@ -90,7 +83,7 @@ export default function SunshootersPartnerProgram() {
                 lineHeight: 1.6,
               }}
             >
-              Simply mention your villa name when ordering or arriving.
+              {t.sunshootersPartnerNote}
             </p>
           </div>
         </ScrollReveal>

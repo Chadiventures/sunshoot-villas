@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import ScrollReveal from "@/components/ScrollReveal";
+import { useLanguage } from "@/context/LanguageContext";
 import { BOOKING_PHOTOS } from "@/lib/media";
 
 const CAROUSEL_IMAGES = [
@@ -29,6 +30,7 @@ function CarouselImage({ src, alt }: { src: string; alt: string }) {
 }
 
 export default function AboutImageGrid() {
+  const { t } = useLanguage();
   const images = CAROUSEL_IMAGES;
   const doubled = useMemo(() => [...images, ...images], [images]);
 
@@ -95,7 +97,7 @@ export default function AboutImageGrid() {
               fontWeight: 300,
             }}
           >
-            Life at Sun Shoot Villas
+            {t.lifeAtTitle}
           </h2>
         </ScrollReveal>
 
@@ -142,7 +144,7 @@ export default function AboutImageGrid() {
         </div>
 
         <p className="mt-4 text-center text-[0.6875rem] text-[var(--text-muted)] md:hidden">
-          Swipe to see more photos
+          {t.lifeAtSwipeHint}
         </p>
 
         <ScrollReveal className="mt-10 text-center md:mt-12">
@@ -154,7 +156,7 @@ export default function AboutImageGrid() {
               fontWeight: 300,
             }}
           >
-            Ready to Book Your Bali Escape?
+            {t.lifeAtCtaTitle}
           </h3>
           <p
             className="mx-auto mb-8 max-w-xl text-[var(--text-muted)]"
@@ -165,7 +167,7 @@ export default function AboutImageGrid() {
               lineHeight: 1.7,
             }}
           >
-            Secure your villa today and start planning the holiday you deserve.
+            {t.lifeAtCtaSubtext}
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
@@ -179,13 +181,13 @@ export default function AboutImageGrid() {
                 textTransform: "uppercase",
               }}
             >
-              Book Now
+              {t.navBookNow}
             </Link>
             <Link
               href="/villas"
               className="btn-outline-dark btn-hover min-w-[200px]"
             >
-              View Our Villas
+              {t.homeCtaViewVillas}
             </Link>
           </div>
         </ScrollReveal>

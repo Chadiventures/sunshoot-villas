@@ -27,6 +27,8 @@ type BookingFields = {
   fullName: string;
   email: string;
   phone: PhoneFieldValue;
+  airportPickup: boolean;
+  flightNumber: string;
   specialRequests: string;
 };
 
@@ -39,6 +41,8 @@ const initialFields: BookingFields = {
   fullName: "",
   email: "",
   phone: DEFAULT_PHONE_VALUE,
+  airportPickup: false,
+  flightNumber: "",
   specialRequests: "",
 };
 
@@ -97,6 +101,13 @@ function buildWhatsAppMessage(fields: BookingFields, nights: number | null): str
     `*Email:* ${fields.email}`,
     ...buildPhoneWhatsAppLines(fields.phone),
   ].filter(Boolean);
+
+  if (fields.airportPickup) {
+    lines.push("", "*Free Airport Pickup:* Yes");
+    if (fields.flightNumber.trim()) {
+      lines.push(`*Flight Number:* ${fields.flightNumber.trim()}`);
+    }
+  }
 
   if (fields.specialRequests.trim()) {
     lines.push("", "*Special Requests:*", fields.specialRequests.trim());
@@ -311,6 +322,15 @@ export default function BookPage() {
       return;
     }
     update("departureDate", value);
+  };
+
+  const handleAirportPickupChange = (checked: boolean) => {
+    setFields((prev) => ({
+      ...prev,
+      airportPickup: checked,
+      flightNumber: checked ? prev.flightNumber : "",
+    }));
+    if (submitted) setSubmitted(false);
   };
 
   return (
@@ -552,6 +572,69 @@ export default function BookPage() {
                     hasError={fieldError("phone")}
                     required
                   />
+
+                  <div>
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onClick={() =>
+                        handleAirportPickupChange(!fields.airportPickup)
+                      }
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          handleAirportPickupChange(!fields.airportPickup);
+                        }
+                      }}
+                      className="flex cursor-pointer items-center gap-3"
+                    >
+                      <div
+                        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-sm border-2 transition-all duration-300 ${
+                          fields.airportPickup
+                            ? "border-[#C9A96E] bg-[#C9A96E]"
+                            : "border-[var(--text)]/25 bg-white"
+                        }`}
+                        aria-hidden="true"
+                      >
+                        {fields.airportPickup && (
+                          <svg
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="white"
+                            strokeWidth="3"
+                            strokeLinecap="round"
+                          >
+                            <path d="M5 12l5 5L20 7" />
+                          </svg>
+                        )}
+                      </div>
+                      <span
+                        className="text-[var(--text)]"
+                        style={{ ...inputStyle, fontSize: "0.8125rem" }}
+                      >
+                        Add free airport pickup
+                      </span>
+                    </div>
+
+                    {fields.airportPickup && (
+                      <div className="mt-3">
+                        <label htmlFor="book-flight-number" className={labelClass}>
+                          Flight number
+                        </label>
+                        <input
+                          id="book-flight-number"
+                          type="text"
+                          placeholder="e.g. QF123"
+                          value={fields.flightNumber}
+                          onChange={(e) => update("flightNumber", e.target.value)}
+                          className={inputClass}
+                          style={inputStyle}
+                        />
+                      </div>
+                    )}
+                  </div>
 
                   <div>
                     <label htmlFor="book-requests" className={labelClass}>

@@ -12,16 +12,14 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const isAdmin = pathname.startsWith("/admin");
   const isHome = pathname === "/";
 
   useEffect(() => {
-    if (isAdmin) return;
     const onScroll = () => setScrolled(window.scrollY > 60);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [isAdmin]);
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
@@ -30,10 +28,8 @@ export default function Header() {
     };
   }, [mobileOpen]);
 
-  if (isAdmin) return null;
-
   const solid = scrolled || !isHome;
-  const headerTop = isAdmin ? "0px" : "var(--top-banner-h, 32px)";
+  const headerTop = "var(--top-banner-h, 32px)";
 
   const navLinks = [
     { label: t.navOurVillas, href: "/villas", key: "villas" },

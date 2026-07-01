@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
 
 const textStyle = {
@@ -34,11 +33,6 @@ function BannerSegment({ text, hidden }: { text: string; hidden?: boolean }) {
 
 export default function TopBanner() {
   const { t } = useLanguage();
-  const pathname = usePathname();
-
-  if (pathname.startsWith("/admin")) {
-    return null;
-  }
 
   return (
     <div

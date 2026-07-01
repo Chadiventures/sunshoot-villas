@@ -4,9 +4,13 @@ import PricingDiscountBadge from "@/components/pricing/PricingDiscountBadge";
 import { useLanguage } from "@/context/LanguageContext";
 import { formatNightlyPrice } from "@/lib/pricing";
 
-export default function VillaNightlyPrice() {
+type VillaNightlyPriceProps = {
+  slug: string;
+};
+
+export default function VillaNightlyPrice({ slug }: VillaNightlyPriceProps) {
   const { t, language } = useLanguage();
-  const nightlyPrice = formatNightlyPrice(language);
+  const nightlyPrice = formatNightlyPrice(language, slug);
 
   return (
     <div className="mt-4 flex flex-wrap items-center justify-center gap-2">

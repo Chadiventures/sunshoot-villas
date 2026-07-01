@@ -115,7 +115,7 @@ export default function VillaPageContent({
           >
             {t.villaHeroSubtext}
           </p>
-          <VillaNightlyPrice />
+          <VillaNightlyPrice slug={slug} />
           <button
             type="button"
             onClick={() => setBookingOpen(true)}

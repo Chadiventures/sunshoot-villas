@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Fragment } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
 import { useLanguage } from "@/context/LanguageContext";
-import { formatNightlyPrice } from "@/lib/pricing";
+import { formatCardNightlyPrice } from "@/lib/pricing";
 import { VILLAS } from "@/lib/villas";
 import { VILLA_IMAGES } from "@/lib/media";
 
@@ -17,7 +17,6 @@ export default function VillaCards({
   animateEntrance?: boolean;
 }) {
   const { t, language, getVillaDescription } = useLanguage();
-  const nightlyPrice = formatNightlyPrice(language);
 
   return (
     <section className="bg-[var(--bg)] py-12 md:py-28">
@@ -63,6 +62,17 @@ export default function VillaCards({
 
                 <div className="pointer-events-none relative z-[1] p-4 md:p-8">
                   <p
+                    className="absolute top-4 right-4 text-[var(--sand)] md:top-8 md:right-8"
+                    style={{
+                      fontFamily: "var(--font-inter)",
+                      fontSize: "0.8125rem",
+                      fontWeight: 600,
+                      letterSpacing: "0.02em",
+                    }}
+                  >
+                    {formatCardNightlyPrice(villa.slug, language)}
+                  </p>
+                  <p
                     className="mb-1.5 text-[var(--sand)] sm:mb-2"
                     style={{
                       fontFamily: "var(--font-inter)",
@@ -106,17 +116,6 @@ export default function VillaCards({
                         ? `${description.slice(0, 140)}…`
                         : description}
                     </span>
-                  </p>
-                  <p
-                    className="mb-3 text-[var(--text-muted)] sm:mb-4"
-                    style={{
-                      fontFamily: "var(--font-inter)",
-                      fontSize: "0.625rem",
-                      fontWeight: 500,
-                      letterSpacing: "0.15em",
-                    }}
-                  >
-                    {t.priceFrom} {nightlyPrice} {t.pricePerNight}
                   </p>
                   <div className="pointer-events-auto relative z-[2] flex flex-wrap gap-2 sm:gap-3">
                     <Link

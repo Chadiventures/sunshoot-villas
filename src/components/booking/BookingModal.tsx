@@ -2,7 +2,9 @@
 
 import { useEffect } from "react";
 import { BookingForm, useBookingForm } from "@/components/booking/BookingForm";
+import PricingDiscountBadge from "@/components/pricing/PricingDiscountBadge";
 import { useLanguage } from "@/context/LanguageContext";
+import { formatNightlyPrice } from "@/lib/pricing";
 
 type BookingModalProps = {
   open: boolean;
@@ -17,7 +19,8 @@ export default function BookingModal({
   defaultVillaSlug,
   villaName,
 }: BookingModalProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const nightlyPrice = formatNightlyPrice(language, defaultVillaSlug);
   const form = useBookingForm(defaultVillaSlug);
   const { reset } = form;
 
@@ -110,6 +113,28 @@ export default function BookingModal({
         </div>
 
         <div className="overflow-y-auto px-4 py-4 md:px-6 md:py-6">
+          <div className="mb-4 flex flex-wrap items-center gap-2 border-b border-[var(--text)]/10 pb-4">
+            <p
+              className="text-[var(--dark)]"
+              style={{
+                fontFamily: "var(--font-inter)",
+                fontSize: "0.9375rem",
+                fontWeight: 500,
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: "var(--font-cormorant)",
+                  fontSize: "1.25rem",
+                  fontWeight: 400,
+                }}
+              >
+                {nightlyPrice}
+              </span>{" "}
+              <span className="text-[var(--text-muted)]">{t.pricePerNight}</span>
+            </p>
+            <PricingDiscountBadge />
+          </div>
           <BookingForm
             form={form}
             idPrefix="modal-book"

@@ -1,12 +1,23 @@
+"use client";
+
 import Link from "next/link";
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
 
 type PageHeroProps = {
   title: string;
   subtitle?: string;
+  titleBlockKey?: string;
+  subtitleBlockKey?: string;
   breadcrumb?: { label: string; href?: string }[];
 };
 
-export default function PageHero({ title, subtitle, breadcrumb }: PageHeroProps) {
+export default function PageHero({
+  title,
+  subtitle,
+  titleBlockKey,
+  subtitleBlockKey,
+  breadcrumb,
+}: PageHeroProps) {
   return (
     <section
       className="bg-[var(--dark)] pb-16 md:pb-20"
@@ -49,9 +60,13 @@ export default function PageHero({ title, subtitle, breadcrumb }: PageHeroProps)
             fontWeight: 300,
           }}
         >
-          {title}
+          {titleBlockKey ? (
+            <AdminEditableText blockKey={titleBlockKey} fallback={title} as="span" />
+          ) : (
+            title
+          )}
         </h1>
-        {subtitle && (
+        {(subtitle || subtitleBlockKey) && (
           <p
             className="mx-auto max-w-2xl text-white/70"
             style={{
@@ -61,7 +76,11 @@ export default function PageHero({ title, subtitle, breadcrumb }: PageHeroProps)
               lineHeight: 1.7,
             }}
           >
-            {subtitle}
+            {subtitleBlockKey ? (
+              <AdminEditableText blockKey={subtitleBlockKey} fallback={subtitle ?? ""} as="span" />
+            ) : (
+              subtitle
+            )}
           </p>
         )}
       </div>

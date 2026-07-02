@@ -18,6 +18,16 @@
   --villa-chrome-h: calc(
     var(--top-banner-h) + var(--villa-banner-h, 0px) + var(--header-h)
   );
+  --admin-toolbar-h: 0px;
+}
+
+html[data-admin-mode] {
+  --top-banner-h: 0px;
+  --admin-toolbar-h: 44px;
+  --site-chrome-h: calc(var(--admin-toolbar-h) + var(--header-h));
+  --villa-chrome-h: calc(
+    var(--admin-toolbar-h) + var(--villa-banner-h, 0px) + var(--header-h)
+  );
 }
 
 @theme inline {
@@ -25,6 +35,11 @@
   --color-dark: var(--dark);
   --color-bg: var(--bg);
   --color-text: var(--text);
+  --color-gold: #c9a96e;
+  --color-gold-light: #d4b87f;
+  --color-pearl: #f5f0e8;
+  --color-navy: #0f1f44;
+  --color-charcoal: #2c2c2c;
   --font-heading: var(--font-cormorant);
   --font-body: var(--font-inter);
 }

@@ -15,33 +15,26 @@ import VillaReviewsCarousel from "@/components/villas/VillaReviewsCarousel";
 import VillaHighlightsStrip from "@/components/villas/VillaHighlightsStrip";
 import VillaSectionDivider from "@/components/villas/VillaSectionDivider";
 import VillaVideoStrip from "@/components/villas/VillaVideoStrip";
-import { useLanguage } from "@/context/LanguageContext";
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
+import { AdminEditableImage } from "@/components/admin/AdminEditableImage";
+import { useAdminContent } from "@/hooks/useAdminContent";
+import { getPageContentDefaults } from "@/lib/contentDefaults";
 import type { VillaFacilities } from "@/lib/villas";
-
-const DISTANCE_NOTE =
-  "Our villas are just a few hundred metres from Sunset Road. Seminyak Square and Eat Street are about a 10 minute walk away, and the beaches at Kuta, Legian and Seminyak are approximately 15 minutes by taxi or scooter.";
 
 type VillaPageContentProps = {
   slug: string;
-  villaName: string;
-  villaDescription: string;
   facilities: VillaFacilities;
-  heroImage: string;
-  galleryImages: string[];
 };
 
-export default function VillaPageContent({
-  slug,
-  villaName,
-  villaDescription: _villaDescription,
-  facilities,
-  heroImage,
-  galleryImages,
-}: VillaPageContentProps) {
-  const { t, getVillaDescription } = useLanguage();
-  const description = getVillaDescription(slug);
+export default function VillaPageContent({ slug, facilities }: VillaPageContentProps) {
+  const { getText, pageSlug } = useAdminContent();
+  const VILLA_DEFAULTS = getPageContentDefaults(pageSlug);
+  const villaName = getText("villa.name") || VILLA_DEFAULTS["villa.name"] || "";
+  const bookLabel = (getText("hero.book_button") || VILLA_DEFAULTS["hero.book_button"] || "Book {villaName}").replace(
+    "{villaName}",
+    villaName,
+  );
   const [bookingOpen, setBookingOpen] = useState(false);
-  const bookLabel = t.villaBookButton.replace("{villaName}", villaName);
 
   const heroRef = useRef<HTMLElement>(null);
   const parallaxRef = useRef<HTMLDivElement>(null);
@@ -72,13 +65,21 @@ export default function VillaPageContent({
         className="relative h-[50vh] min-h-[22rem] w-full overflow-hidden md:h-[60vh] md:min-h-[26rem]"
       >
         <div ref={parallaxRef} className="villa-hero-parallax-image absolute inset-0">
-          <Image
-            src={heroImage}
-            alt={villaName}
-            fill
-            priority
+          <AdminEditableImage
+            imageBlockKey="villa.hero_image"
+            altBlockKey="villa.hero_image.alt"
             className="object-cover object-center"
-            sizes="100vw"
+            renderStaticImage={({ src, alt, className, style }) => (
+              <Image
+                src={src}
+                alt={alt}
+                fill
+                priority
+                className={className}
+                style={style}
+                sizes="100vw"
+              />
+            )}
           />
         </div>
         <div
@@ -101,7 +102,7 @@ export default function VillaPageContent({
               lineHeight: 1.15,
             }}
           >
-            {villaName}
+            <AdminEditableText blockKey="villa.name" fallback={VILLA_DEFAULTS["villa.name"]} as="span" />
           </h1>
           <p
             className="text-white/85"
@@ -113,7 +114,7 @@ export default function VillaPageContent({
               textTransform: "uppercase",
             }}
           >
-            {t.villaHeroSubtext}
+            <AdminEditableText blockKey="hero.subtext" fallback={VILLA_DEFAULTS["hero.subtext"]} as="span" />
           </p>
           <VillaNightlyPrice slug={slug} />
           <button
@@ -126,10 +127,7 @@ export default function VillaPageContent({
         </div>
       </section>
 
-      <VillaHighlightsStrip
-        villaName={villaName}
-        onBookClick={() => setBookingOpen(true)}
-      />
+      <VillaHighlightsStrip onBookClick={() => setBookingOpen(true)} />
 
       <VillaSectionDivider />
 
@@ -148,7 +146,7 @@ export default function VillaPageContent({
                   textTransform: "uppercase",
                 }}
               >
-                Welcome
+                <AdminEditableText blockKey="intro.welcome" fallback={VILLA_DEFAULTS["intro.welcome"]} as="span" />
               </p>
               <p
                 className="mb-5 text-[var(--text)]"
@@ -159,7 +157,7 @@ export default function VillaPageContent({
                   lineHeight: 1.85,
                 }}
               >
-                {description}
+                <AdminEditableText blockKey="villa.description" fallback={VILLA_DEFAULTS["villa.description"]} allowLineBreaks as="span" />
               </p>
               <p
                 className="text-[var(--text-muted)]"
@@ -171,12 +169,12 @@ export default function VillaPageContent({
                   fontStyle: "italic",
                 }}
               >
-                {DISTANCE_NOTE}
+                <AdminEditableText blockKey="intro.location_note" fallback={VILLA_DEFAULTS["intro.location_note"]} allowLineBreaks as="span" />
               </p>
             </ScrollReveal>
 
             <ScrollReveal direction="right" delay={100} className="lg:w-1/2">
-              <VillaKeyInfo slug={slug} />
+              <VillaKeyInfo />
             </ScrollReveal>
           </div>
         </div>
@@ -198,11 +196,11 @@ export default function VillaPageContent({
                 fontWeight: 300,
               }}
             >
-              Villa Gallery
+              <AdminEditableText blockKey="gallery.title" fallback={VILLA_DEFAULTS["gallery.title"]} as="span" />
             </h2>
           </ScrollReveal>
           <ScrollReveal delay={120}>
-            <VillaPageGallery images={galleryImages} villaName={villaName} />
+            <VillaPageGallery />
           </ScrollReveal>
         </div>
       </section>
@@ -211,7 +209,7 @@ export default function VillaPageContent({
 
       {/* Reviews */}
       <ScrollReveal>
-        <VillaReviewsCarousel slug={slug} />
+        <VillaReviewsCarousel />
       </ScrollReveal>
 
       <VillaSectionDivider />
@@ -225,13 +223,13 @@ export default function VillaPageContent({
       <VillaHouseRules />
 
       {/* WhatsApp CTA */}
-      <VillaWhatsAppCta villaName={villaName} />
+      <VillaWhatsAppCta />
 
       <BookingModal
         open={bookingOpen}
         onClose={() => setBookingOpen(false)}
         defaultVillaSlug={slug}
-        villaName={villaName}
+        villaName={getText("villa.name")}
       />
 
       <Footer />

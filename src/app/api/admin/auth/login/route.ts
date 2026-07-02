@@ -1,6 +1,6 @@
 import { compareSync } from 'bcryptjs'
-import { neon } from '@neondatabase/serverless'
 import { Resend } from 'resend'
+import { getSql, logDatabaseUrl } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
 import {
   getClientIp,
@@ -10,10 +10,14 @@ import {
   siteNameFromRequest,
   swedishDateTimeString,
 } from '@/lib/adminLoginRateLimit'
-import { ensureAdminTables } from '@/lib/adminUserDb'
+import {
+  ensureAdminTables,
+  storeAdminSession,
+} from '@/lib/adminUserDb'
 import {
   ADMIN_SESSION_COOKIE_NAME,
   adminSessionCookieOptions,
+  sessionExpiresAt,
   signAdminSessionToken,
 } from '@/lib/adminSession'
 
@@ -32,11 +36,11 @@ async function sendLoginSecurityAlert(req: NextRequest, ip: string): Promise<voi
     return
   }
 
-  const siteName = siteNameFromRequest(req)
-  const from = process.env.RESEND_FROM?.trim() ?? 'Stuveribaren <noreply@stuveribaren.se>'
+  const brand = siteNameFromRequest(req)
+  const from =
+    process.env.RESEND_FROM?.trim() ?? 'Sun Shoot Villas <noreply@sunshootvillasseminyak.com>'
   const body = [
-    'Någon har försökt logga in på din admin-panel 3 gånger utan',
-    'att lyckas.',
+    'Någon har försökt logga in på din admin-panel 3 gånger utan att lyckas.',
     '',
     `Tidpunkt: ${swedishDateTimeString()}`,
     `IP-adress: ${ip}`,
@@ -44,14 +48,14 @@ async function sendLoginSecurityAlert(req: NextRequest, ip: string): Promise<voi
     'Om det är du som försökte logga in, vänta 15 minuter och försök igen,',
     'eller använd Glömt lösenord.',
     '',
-    'Om det INTE är du, kontakta oss omgående på hej@shorelinetechstudio.se',
+    'Om det INTE är du, kontakta oss omgående.',
   ].join('\n')
 
   const resend = new Resend(apiKey)
   const { error } = await resend.emails.send({
     from,
     to: adminEmail,
-    subject: `Varning: Misslyckade inloggningsförsök på ${siteName}`,
+    subject: `Varning: Misslyckade inloggningsförsök på ${brand}`,
     text: body,
   })
 
@@ -71,8 +75,9 @@ export async function POST(req: NextRequest) {
     return rateLimitResponse()
   }
 
-  const dbUrl = process.env.DATABASE_URL
-  if (!dbUrl) {
+  logDatabaseUrl('admin/auth/login')
+  const sql = getSql()
+  if (!sql) {
     return NextResponse.json({ error: 'Databas är inte konfigurerad' }, { status: 500 })
   }
 
@@ -88,9 +93,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Ogiltig begäran' }, { status: 400 })
   }
 
-  const passwordRaw = typeof rec.password === 'string' ? rec.password : ''
-  const password = passwordRaw
-
+  const password = typeof rec.password === 'string' ? rec.password : ''
   const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase()
   if (!adminEmail) {
     return NextResponse.json({ error: 'Admin är inte konfigurerad' }, { status: 500 })
@@ -101,7 +104,6 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const sql = neon(dbUrl)
     await ensureAdminTables(sql)
 
     const rows = await sql`
@@ -128,6 +130,8 @@ export async function POST(req: NextRequest) {
     if (!token) {
       return NextResponse.json({ error: 'Admin är inte konfigurerad' }, { status: 500 })
     }
+
+    await storeAdminSession(sql, token, sessionExpiresAt())
 
     const res = NextResponse.json({ ok: true })
     res.cookies.set(ADMIN_SESSION_COOKIE_NAME, token, adminSessionCookieOptions())

@@ -1,13 +1,18 @@
 "use client";
 
+import { useContext } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
-import { useLanguage } from "@/context/LanguageContext";
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
+import { AdminCoreContext, useAdminContent } from "@/hooks/useAdminContent";
+import { getPageContentDefaults } from "@/lib/contentDefaults";
 
-const ARTICLE_URL =
-  "https://thebaliguideline.com/stay/seminyak/sun-shoot-villas-private-pool-villa-anggrek";
+const ABOUT_DEFAULTS = getPageContentDefaults("about");
 
 export default function AboutFeaturedIn() {
-  const { t } = useLanguage();
+  const core = useContext(AdminCoreContext);
+  const { getText } = useAdminContent();
+  void core?.contentRevision;
+  const articleUrl = getText("featured.article_url") || ABOUT_DEFAULTS["featured.article_url"] || "";
 
   return (
     <section className="bg-[var(--dark)] py-4 md:max-h-[80px] md:py-0">
@@ -21,7 +26,7 @@ export default function AboutFeaturedIn() {
               fontWeight: 400,
             }}
           >
-            {t.aboutFeaturedTitle}
+            <AdminEditableText blockKey="featured.title" fallback={ABOUT_DEFAULTS["featured.title"]} as="span" />
           </p>
 
           <p
@@ -32,13 +37,13 @@ export default function AboutFeaturedIn() {
               fontWeight: 700,
             }}
           >
-            8.7 / 10
+            <AdminEditableText blockKey="featured.score" fallback={ABOUT_DEFAULTS["featured.score"]} as="span" />
           </p>
 
           <a
-            href={ARTICLE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={articleUrl}
+            target={articleUrl ? "_blank" : undefined}
+            rel={articleUrl ? "noopener noreferrer" : undefined}
             className="inline-flex min-h-[40px] items-center justify-center rounded-sm border-2 border-white px-5 py-2 text-white transition-all duration-300 ease-in-out hover:bg-white/10"
             style={{
               fontFamily: "var(--font-inter)",
@@ -48,7 +53,7 @@ export default function AboutFeaturedIn() {
               textTransform: "uppercase",
             }}
           >
-            {t.aboutFeaturedReadArticle}
+            <AdminEditableText blockKey="featured.cta" fallback={ABOUT_DEFAULTS["featured.cta"]} as="span" />
           </a>
         </div>
       </ScrollReveal>

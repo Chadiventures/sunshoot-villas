@@ -3,7 +3,10 @@ import { Cormorant_Garamond, Inter } from "next/font/google";
 import Header from "@/components/Header";
 import TopBanner from "@/components/TopBanner";
 import FloatingWhatsAppButton from "@/components/FloatingWhatsAppButton";
+import AdminWrapperRoot from "@/components/admin/AdminWrapperRoot";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { getPageCmsContentBlocks } from "@/lib/pageCms";
+import { getRequestLocale } from "@/lib/requestLocale";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
@@ -26,19 +29,24 @@ export const metadata: Metadata = {
     "Four private pool villas in the heart of Seminyak, Bali. Your private sanctuary on Jl. Bidadari II E.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getRequestLocale();
+  const globalCms = await getPageCmsContentBlocks("global", locale);
+
   return (
     <html lang="en" className={`${cormorant.variable} ${inter.variable}`}>
       <body className="antialiased">
         <LanguageProvider>
-          <TopBanner />
-          <Header />
-          <main>{children}</main>
-          <FloatingWhatsAppButton />
+          <AdminWrapperRoot layoutServerContent={globalCms}>
+            <TopBanner />
+            <Header />
+            <main>{children}</main>
+            <FloatingWhatsAppButton />
+          </AdminWrapperRoot>
         </LanguageProvider>
       </body>
     </html>

@@ -2,12 +2,18 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment } from "react";
+import { Fragment, useContext, useMemo } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
+import { AdminEditableImage } from "@/components/admin/AdminEditableImage";
+import { AdminCoreContext, useAdminContent } from "@/hooks/useAdminContent";
 import { useLanguage } from "@/context/LanguageContext";
-import { formatCardNightlyPrice } from "@/lib/pricing";
+import { getPageContentDefaults } from "@/lib/contentDefaults";
+import { formatCardNightlyPrice, formatNightlyPrice } from "@/lib/pricing";
 import { VILLAS } from "@/lib/villas";
 import { VILLA_IMAGES } from "@/lib/media";
+
+const HOME_CARD_DEFAULTS = getPageContentDefaults("home");
 
 export default function VillaCards({
   showHeader = true,
@@ -17,14 +23,42 @@ export default function VillaCards({
   animateEntrance?: boolean;
 }) {
   const { t, language, getVillaDescription } = useLanguage();
+  const core = useContext(AdminCoreContext);
+  const { getText } = useAdminContent();
+  void core?.contentRevision;
+
+  const getCardsText = (key: string) =>
+    getText(`cards.${key}`) || getText(`villas.${key}`);
+  const viewAriaLabel = getCardsText("view_aria") || t.villaCardViewAriaLabel;
+  const viewButtonLabel = getCardsText("view_button") || t.villaCardViewVilla;
+  const bookButtonLabel = getCardsText("book_button") || t.villaCardBookNow;
+  const metaMobileLabel = getCardsText("meta_mobile") || t.villaCardsMetaMobile;
+  const metaDesktopLabel = getCardsText("meta_desktop") || t.villaCardsMetaDesktop;
+
+  const cardDefaultsBySlug = useMemo(() => {
+    const map: Record<string, { title: string; description: string; price: string }> = {};
+    for (const villa of VILLAS) {
+      map[villa.slug] = {
+        title: HOME_CARD_DEFAULTS[`cards.${villa.slug}.title`] || villa.name,
+        description:
+          HOME_CARD_DEFAULTS[`cards.${villa.slug}.description`] || villa.description,
+        price: HOME_CARD_DEFAULTS[`cards.${villa.slug}.price`] || "",
+      };
+    }
+    return map;
+  }, []);
 
   return (
     <section className="bg-[var(--bg)] py-12 md:py-28">
       <div className="container-site">
         {showHeader && (
           <div className="mb-14 text-center">
-            <p className="section-eyebrow mb-3">{t.villaCardsEyebrow}</p>
-            <h2 className="section-heading">{t.villaCardsTitle}</h2>
+            <p className="section-eyebrow mb-3">
+              <AdminEditableText blockKey="villas.eyebrow" as="span" />
+            </p>
+            <h2 className="section-heading">
+              <AdminEditableText blockKey="villas.title" as="span" />
+            </h2>
             <p
               className="mx-auto mt-4 max-w-2xl text-[var(--text-muted)]"
               style={{
@@ -34,29 +68,49 @@ export default function VillaCards({
                 lineHeight: 1.7,
               }}
             >
-              {t.villaCardsSubtitle}
+              <AdminEditableText blockKey="villas.subtitle" as="span" />
             </p>
           </div>
         )}
 
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-8">
           {VILLAS.map((villa, index) => {
-            const description = getVillaDescription(villa.slug);
+            const defaults = cardDefaultsBySlug[villa.slug];
+            const title =
+              getText(`cards.${villa.slug}.title`) || defaults.title || villa.name;
+            const description =
+              getText(`cards.${villa.slug}.description`) ||
+              defaults.description ||
+              getVillaDescription(villa.slug);
+            const priceIdr = Number.parseInt(getText(`cards.${villa.slug}.price`), 10);
+            const priceLabel =
+              priceIdr > 0
+                ? formatNightlyPrice(language, villa.slug, priceIdr)
+                : formatCardNightlyPrice(villa.slug, language);
             const card = (
               <article className="card-lift group relative cursor-pointer overflow-hidden rounded-sm bg-white shadow-sm">
                 <Link
                   href={`/villas/${villa.slug}`}
                   className="absolute inset-0 z-0"
-                  aria-label={`${t.villaCardViewAriaLabel} ${villa.name}`}
+                  aria-label={`${viewAriaLabel} ${title}`}
                 />
 
                 <div className="img-zoom-wrap pointer-events-none relative z-[1] h-[180px] overflow-hidden sm:h-64">
-                  <Image
-                    src={VILLA_IMAGES[villa.slug]}
-                    alt={villa.name}
-                    fill
+                  <AdminEditableImage
+                    imageBlockKey={`cards.${villa.slug}.image`}
+                    altBlockKey={`cards.${villa.slug}.image.alt`}
+                    fallbackSrc={VILLA_IMAGES[villa.slug]}
                     className="zoom-target object-cover"
-                    sizes="(max-width: 640px) 100vw, 50vw"
+                    renderStaticImage={({ src, alt, className, style }) => (
+                      <Image
+                        src={src || VILLA_IMAGES[villa.slug]}
+                        alt={alt || title}
+                        fill
+                        className={className}
+                        style={style}
+                        sizes="(max-width: 640px) 100vw, 50vw"
+                      />
+                    )}
                   />
                 </div>
 
@@ -70,7 +124,7 @@ export default function VillaCards({
                       letterSpacing: "0.02em",
                     }}
                   >
-                    {formatCardNightlyPrice(villa.slug, language)}
+                    {priceLabel}
                   </p>
                   <p
                     className="mb-1.5 text-[var(--sand)] sm:mb-2"
@@ -82,8 +136,8 @@ export default function VillaCards({
                       textTransform: "uppercase",
                     }}
                   >
-                    <span className="sm:hidden">{t.villaCardsMetaMobile}</span>
-                    <span className="hidden sm:inline">{t.villaCardsMetaDesktop}</span>
+                    <span className="sm:hidden">{metaMobileLabel}</span>
+                    <span className="hidden sm:inline">{metaDesktopLabel}</span>
                   </p>
                   <h3
                     className="mb-2 text-[1.375rem] text-[var(--dark)] sm:mb-3 sm:text-[1.75rem]"
@@ -92,7 +146,7 @@ export default function VillaCards({
                       fontWeight: 400,
                     }}
                   >
-                    {villa.name}
+                    {title}
                   </h3>
                   <p
                     className="mb-4 text-[var(--text-muted)] sm:mb-6"
@@ -122,14 +176,14 @@ export default function VillaCards({
                       href={`/villas/${villa.slug}`}
                       className="btn-outline-dark btn-hover !px-4 !py-2 !text-[9px] sm:!px-6 sm:!py-2.5 sm:!text-[10px]"
                     >
-                      {t.villaCardViewVilla}
+                      {viewButtonLabel}
                     </Link>
                     <Link
                       href="/book"
                       className="btn-primary btn-hover !px-4 !py-2 !text-[9px] sm:!px-6 sm:!py-2.5 sm:!text-[10px]"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      {t.villaCardBookNow}
+                      {bookButtonLabel}
                     </Link>
                   </div>
                 </div>

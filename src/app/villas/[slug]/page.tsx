@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import VillaPageContent from "@/components/villas/VillaPageContent";
+import ServerPageContent from "@/components/admin/ServerPageContent";
+import { AdminBlockPage } from "@/components/admin/AdminProvider";
 import { getVillaBySlug, getVillaSlugs } from "@/lib/villas";
-import { VILLA_IMAGES, getVillaGalleryImages } from "@/lib/media";
-import { SITE } from "@/lib/site";
+import { getVillaCmsContentBlocks } from "@/lib/villaCms";
+import { getRequestLocale } from "@/lib/requestLocale";
+import { isVillaPageSlug, type PageSlug } from "@/lib/contentBlockTypes";
+import { buildPageMetadata } from "@/lib/pageMetadata";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -15,30 +19,27 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const villa = getVillaBySlug(slug);
-  if (!villa) return { title: "Villa Not Found" };
-  return {
-    title: `${villa.name} | ${SITE.name}`,
-    description: villa.description.slice(0, 160),
-  };
+  if (!isVillaPageSlug(slug)) return { title: "Villa Not Found" };
+  return buildPageMetadata(slug as PageSlug);
 }
 
 export default async function VillaDetailPage({ params }: Props) {
   const { slug } = await params;
   const villa = getVillaBySlug(slug);
   if (!villa) notFound();
+  if (!isVillaPageSlug(slug)) notFound();
 
-  const heroImage = VILLA_IMAGES[slug] ?? VILLA_IMAGES.mawar;
-  const galleryImages = getVillaGalleryImages(slug);
+  const locale = await getRequestLocale();
+  const cmsBlocks = await getVillaCmsContentBlocks(slug, locale);
 
   return (
-    <VillaPageContent
-      slug={slug}
-      villaName={villa.name}
-      villaDescription={villa.description}
-      facilities={villa.facilities}
-      heroImage={heroImage}
-      galleryImages={galleryImages}
-    />
+    <ServerPageContent content={cmsBlocks}>
+      <AdminBlockPage pageSlug={slug}>
+        <VillaPageContent
+          slug={slug}
+          facilities={villa.facilities}
+        />
+      </AdminBlockPage>
+    </ServerPageContent>
   );
 }

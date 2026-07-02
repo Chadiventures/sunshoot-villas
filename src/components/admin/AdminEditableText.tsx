@@ -3,11 +3,15 @@
 import {
   useCallback,
   useContext,
+  useMemo,
   type CSSProperties,
   type ElementType,
   type MouseEvent,
 } from 'react'
 import { AdminCoreContext, useAdminContent } from '@/hooks/useAdminContent'
+import { getPageContentDefaults } from '@/lib/contentDefaults'
+import { useLanguage } from '@/context/LanguageContext'
+import { isSharedCmsBlockKey } from '@/lib/cmsKeys'
 
 function mergeDisplayClass(className: string, allowLineBreaks: boolean): string | undefined {
   if (!allowLineBreaks) return className || undefined
@@ -23,7 +27,9 @@ export type AdminEditableTextProps = {
   className?: string
   as?: ElementType
   isolateLink?: boolean
-  /** Om sant: radbrytningar i texten visas. */
+  /** Shown when CMS value is missing or empty. */
+  fallback?: string
+  /** When true, line breaks in the text are preserved. */
   allowLineBreaks?: boolean
 }
 
@@ -31,12 +37,24 @@ export function AdminEditableText({
   blockKey,
   className = '',
   as: Comp = 'span',
+  isolateLink = false,
+  fallback = '',
   allowLineBreaks = false,
 }: AdminEditableTextProps) {
   const core = useContext(AdminCoreContext)
   const { pageSlug, getText } = useAdminContent()
+  const { language } = useLanguage()
   void core?.contentRevision
-  const text = getText(blockKey)
+  const pageDefaults = useMemo(() => getPageContentDefaults(pageSlug, language), [pageSlug, language])
+  const resolvedFallback = fallback || pageDefaults[blockKey] || ''
+  const cmsValue = getText(blockKey)
+  const hasStoredValue =
+    core?.hasDraftKey(
+      pageSlug,
+      blockKey,
+      isSharedCmsBlockKey(blockKey) ? 'en' : language,
+    ) ?? false
+  const text = hasStoredValue ? cmsValue : cmsValue || resolvedFallback
   const blockLayout = isBlockElement(Comp)
   const isFocused =
     Boolean(core?.adminMode) &&
@@ -46,16 +64,49 @@ export function AdminEditableText({
     ? { outline: '2px solid #c9a84c', outlineOffset: '2px' }
     : undefined
 
-  const handleDoubleClick = useCallback(
+  const adminEditing = Boolean(core?.adminMode && core?.authenticated)
+
+  const blockDataAttrs = {
+    'data-page-slug': pageSlug,
+    'data-block-key': blockKey,
+  }
+
+  const stopLinkNavigation = useCallback(
     (e: MouseEvent<HTMLElement>) => {
-      if (!core?.adminMode || !core.authenticated) return
+      if (!adminEditing) return
       e.preventDefault()
       e.stopPropagation()
       e.nativeEvent.stopImmediatePropagation()
-      core.focusPanelField(pageSlug, blockKey)
     },
-    [blockKey, core, pageSlug],
+    [adminEditing],
   )
+
+  const handleMouseDown = useCallback(
+    (e: MouseEvent<HTMLElement>) => {
+      if (!adminEditing || !isolateLink) return
+      if (e.detail > 1) {
+        e.preventDefault()
+        e.stopPropagation()
+        e.nativeEvent.stopImmediatePropagation()
+      }
+    },
+    [adminEditing, isolateLink],
+  )
+
+  const handleDoubleClick = useCallback(
+    (e: MouseEvent<HTMLElement>) => {
+      if (!adminEditing) return
+      stopLinkNavigation(e)
+      core?.focusPanelField(pageSlug, blockKey)
+    },
+    [adminEditing, blockKey, core, pageSlug, stopLinkNavigation],
+  )
+
+  const interactionProps = {
+    ...blockDataAttrs,
+    onMouseDown: handleMouseDown,
+    onDoubleClick: handleDoubleClick,
+  }
 
   const displayClass = [
     mergeDisplayClass(className, allowLineBreaks),
@@ -68,7 +119,7 @@ export function AdminEditableText({
     if (!allowLineBreaks) {
       return (
         <span
-          onDoubleClick={handleDoubleClick}
+          {...interactionProps}
           className={displayClass || undefined}
           style={focusOutline}
         >
@@ -78,7 +129,7 @@ export function AdminEditableText({
     }
     return (
       <span
-        onDoubleClick={handleDoubleClick}
+        {...interactionProps}
         className={displayClass || 'whitespace-pre-line'}
         style={focusOutline}
       >
@@ -90,7 +141,7 @@ export function AdminEditableText({
   return (
     <Comp
       className={displayClass || undefined}
-      onDoubleClick={handleDoubleClick}
+      {...interactionProps}
       style={focusOutline}
     >
       {text}

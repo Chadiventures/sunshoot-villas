@@ -13,10 +13,20 @@ import AboutMeetHost from "@/components/about/AboutMeetHost";
 import AboutValues from "@/components/about/AboutValues";
 import AboutCta from "@/components/about/AboutCta";
 
-export default function AboutPageContent() {
+type AboutPageContentProps = {
+  heroTitle: string;
+  heroSubtitle: string;
+  heroVideoSrc?: string;
+};
+
+export default function AboutPageContent({
+  heroTitle,
+  heroSubtitle,
+  heroVideoSrc,
+}: AboutPageContentProps) {
   return (
     <>
-      <AboutHero />
+      <AboutHero title={heroTitle} subtitle={heroSubtitle} videoSrc={heroVideoSrc} />
       <AboutIntro />
       <AboutFeaturedIn />
       <AboutImageGrid />

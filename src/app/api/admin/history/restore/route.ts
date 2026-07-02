@@ -1,15 +1,45 @@
-import { neon } from '@neondatabase/serverless'
+import { getSql } from '@/lib/db'
 import { revalidatePath } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
-import type { ContentBlockType } from '@/lib/contentBlockTypes'
-import {
-  ensureContentBlockHistoryTable,
-  type ContentBlockHistoryRow,
-} from '@/lib/contentBlockHistoryDb'
+import { isVillaPageSlug } from '@/lib/contentBlockTypes'
+import { readHistory, restoreHistoryEntry } from '@/lib/contentBlockHistoryDb'
 import { verifyAdminSessionFromRequest } from '@/lib/verifyAdminSession'
 
-function isContentBlockType(v: string): v is ContentBlockType {
-  return v === 'text' || v === 'image'
+const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
+
+function normalizePageSlug(raw: string | null): string | 'all' | null {
+  if (raw == null) return null
+  const s = raw.trim().toLowerCase()
+  if (s === 'all') return 'all'
+  if (!s || s.length > 120 || !slugPattern.test(s)) return null
+  return s
+}
+
+export async function GET(req: NextRequest) {
+  const userId = verifyAdminSessionFromRequest(req)
+  if (!userId) {
+    return NextResponse.json({ error: 'Ej inloggad' }, { status: 401 })
+  }
+
+  const url = new URL(req.url)
+  const pageSlug = normalizePageSlug(url.searchParams.get('pageSlug'))
+  if (!pageSlug) {
+    return NextResponse.json({ error: 'Ogiltig eller saknad pageSlug' }, { status: 400 })
+  }
+
+  const sql = getSql()
+  if (!sql) {
+    return NextResponse.json({ changes: [] })
+  }
+
+  try {
+    const limit = pageSlug === 'all' ? 20 : 50
+    const changes = await readHistory(sql, pageSlug, limit)
+    return NextResponse.json({ changes })
+  } catch (err) {
+    console.error('[admin/history GET] error', err)
+    return NextResponse.json({ error: 'Kunde inte läsa historik' }, { status: 500 })
+  }
 }
 
 export async function POST(req: NextRequest) {
@@ -18,8 +48,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Ej inloggad' }, { status: 401 })
   }
 
-  const dbUrl = process.env.DATABASE_URL
-  if (!dbUrl) {
+  const sql = getSql()
+  if (!sql) {
     return NextResponse.json({ error: 'Databas är inte konfigurerad' }, { status: 500 })
   }
 
@@ -30,54 +60,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Ogiltigt id' }, { status: 400 })
     }
 
-    const sql = neon(dbUrl)
-    await ensureContentBlockHistoryTable(sql)
-
-    const historyRows = await sql`
-      SELECT id, page_slug, block_key, value, previous_value, saved_at
-      FROM content_block_history
-      WHERE id = ${id}
-      LIMIT 1
-    `
-    const history = historyRows[0] as ContentBlockHistoryRow | undefined
-    if (!history) {
+    const result = await restoreHistoryEntry(sql, id)
+    if (!result) {
       return NextResponse.json({ error: 'Historikpost hittades inte' }, { status: 404 })
     }
 
-    const existing = await sql`
-      SELECT type, value FROM content_block
-      WHERE page_slug = ${history.page_slug} AND block_key = ${history.block_key}
-      LIMIT 1
-    `
-    const typeRaw = (existing[0] as { type?: string } | undefined)?.type ?? 'text'
-    const type: ContentBlockType = isContentBlockType(typeRaw) ? typeRaw : 'text'
-    const currentPrevious =
-      typeof (existing[0] as { value?: string } | undefined)?.value === 'string'
-        ? (existing[0] as { value: string }).value
-        : ''
-
-    const restoreTo = history.previous_value ?? ''
-
-    await sql`
-      INSERT INTO content_block (page_slug, block_key, type, value, updated_at)
-      VALUES (${history.page_slug}, ${history.block_key}, ${type}, ${restoreTo}, now())
-      ON CONFLICT (page_slug, block_key) DO UPDATE SET
-        type = EXCLUDED.type,
-        value = EXCLUDED.value,
-        updated_at = now()
-    `
-
-    if (restoreTo !== currentPrevious) {
-      await sql`
-        INSERT INTO content_block_history (page_slug, block_key, value, previous_value)
-        VALUES (${history.page_slug}, ${history.block_key}, ${restoreTo}, ${currentPrevious})
-      `
+    revalidatePath('/')
+    if (isVillaPageSlug(result.pageSlug)) {
+      revalidatePath(`/villas/${result.pageSlug}`)
+    } else if (result.pageSlug === 'home') {
+      revalidatePath('/')
+    } else {
+      revalidatePath(`/${result.pageSlug}`)
     }
 
-    revalidatePath('/')
-    revalidatePath(`/${history.page_slug}`)
-
-    console.log('[admin/history restore] ok', { userId, id, pageSlug: history.page_slug })
     return NextResponse.json({ ok: true })
   } catch (err) {
     console.error('[admin/history restore] error', err)

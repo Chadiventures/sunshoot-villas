@@ -1,124 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { SITE } from "@/lib/site";
-
-const FAQ_ITEMS = [
-  {
-    id: "guests",
-    question: "How many guests can stay in each villa?",
-    answer:
-      "All four villas have 2 bedrooms and can comfortably accommodate 4 guests. Baby cribs are available free of charge on request, and extra beds can be arranged for Rp 150,000 per person per night.",
-  },
-  {
-    id: "airport",
-    question: "Is airport transfer included?",
-    answer:
-      "Yes! We offer free airport transfer for all guests. Our friendly driver will be waiting for you when you land so you can start your Bali holiday stress free.",
-  },
-  {
-    id: "pools",
-    question: "Do the villas have private pools?",
-    answer:
-      "Yes, every villa has its own private pool. Your pool is exclusively for your group during your stay.",
-  },
-  {
-    id: "checkin",
-    question: "What time is check-in and check-out?",
-    answer:
-      "Check-in is from 14:00. Check-out is by 11:00. If you need a different arrangement please contact Warren in advance and we will do our best to accommodate you.",
-  },
-  {
-    id: "wifi",
-    question: "Is WiFi available?",
-    answer:
-      "Yes, all villas have free high speed WiFi. Villa Anggrek has ultrafast 20Mbps fiber optic broadband, ideal for remote work or streaming.",
-  },
-  {
-    id: "payment",
-    question: "What payment methods do you accept?",
-    answer: "We accept Visa, Mastercard and cash.",
-  },
-  {
-    id: "pets",
-    question: "Are pets allowed?",
-    answer: "Unfortunately we do not allow pets at our villas.",
-  },
-  {
-    id: "cleaning",
-    question: "Is daily cleaning included?",
-    answer:
-      "Yes, our team provides daily cleaning for all villas at no extra charge.",
-  },
-  {
-    id: "pool-privacy",
-    question: "Are the pools private? Can neighbours see in?",
-    answer:
-      "Every villa has its own completely private pool. The pool areas are fully enclosed and no one can see in from outside. You can relax in and around your pool without any concerns.",
-  },
-  {
-    id: "connect-villas",
-    question: "Can Villa Mawar and Villa Anggrek be connected?",
-    answer:
-      "Yes! Villa Mawar and Villa Anggrek are located side by side and can be connected by opening a shared door between the pool areas. This makes them perfect for larger groups or families travelling together who want separate spaces but easy access to each other.",
-  },
-  {
-    id: "pool-cleaning",
-    question: "How often are the pools cleaned?",
-    answer:
-      "The pools are cleaned twice a week and always freshly cleaned before new guests check in.",
-  },
-  {
-    id: "ac",
-    question: "Do all bedrooms have air conditioning?",
-    answer:
-      "Yes, every bedroom in all four villas has its own air conditioning unit.",
-  },
-  {
-    id: "beach-walk",
-    question: "Is the beach within walking distance?",
-    answer:
-      "The beach is approximately a 20 minute walk from the villas. Restaurants and cafes are within easy walking distance, and there are 3 breakfast spots within 500 metres.",
-  },
-  {
-    id: "sandat-guests",
-    question: "How many guests can stay in Villa Sandat?",
-    answer:
-      "Villa Sandat can comfortably accommodate up to 5 guests. It is our largest villa at 190 m2 and is ideal for families or groups of 4 to 5 people.",
-  },
-  {
-    id: "two-floors",
-    question: "Do all villas have two floors?",
-    answer:
-      "Yes, the villas have two floors with one bedroom upstairs and one bedroom downstairs, giving guests extra privacy.",
-  },
-  {
-    id: "multiple-villas",
-    question: "Can two villas be booked for a larger group?",
-    answer:
-      "Yes, we can accommodate larger groups by booking multiple villas. Villa Mawar and Villa Anggrek can be connected for groups of up to 10 guests. Contact Warren on WhatsApp to arrange this.",
-  },
-  {
-    id: "breakfast",
-    question: "Is breakfast included?",
-    answer:
-      "Breakfast is not included but there are excellent breakfast spots within a short walk of the villas. Warren is happy to recommend his favourites.",
-  },
-  {
-    id: "contact",
-    question: "How do I contact Warren?",
-    answer: `The easiest way is via WhatsApp at ${SITE.phone}. Warren and Lianah are always available, even outside regular hours.`,
-  },
-];
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
+import { FAQ_ITEM_IDS } from "@/lib/cmsDefaults";
 
 function FaqItem({
-  question,
-  answer,
+  id,
   isOpen,
   onToggle,
 }: {
-  question: string;
-  answer: string;
+  id: string;
   isOpen: boolean;
   onToggle: () => void;
 }) {
@@ -139,7 +30,7 @@ function FaqItem({
             lineHeight: 1.5,
           }}
         >
-          {question}
+          <AdminEditableText blockKey={`faq.${id}.question`} as="span" />
         </span>
         <span
           className="shrink-0 text-[#C9A96E] transition-transform duration-300 ease-in-out"
@@ -171,7 +62,7 @@ function FaqItem({
               lineHeight: 1.75,
             }}
           >
-            {answer}
+            <AdminEditableText blockKey={`faq.${id}.answer`} as="span" />
           </p>
         </div>
       )}
@@ -193,19 +84,16 @@ export default function FooterFaq() {
             fontWeight: 300,
           }}
         >
-          Frequently Asked Questions
+          <AdminEditableText blockKey="section.title" as="span" />
         </h2>
 
         <div className="mx-auto w-full max-w-3xl">
-          {FAQ_ITEMS.map((item) => (
+          {FAQ_ITEM_IDS.map((id) => (
             <FaqItem
-              key={item.id}
-              question={item.question}
-              answer={item.answer}
-              isOpen={openId === item.id}
-              onToggle={() =>
-                setOpenId(openId === item.id ? null : item.id)
-              }
+              key={id}
+              id={id}
+              isOpen={openId === id}
+              onToggle={() => setOpenId(openId === id ? null : id)}
             />
           ))}
         </div>

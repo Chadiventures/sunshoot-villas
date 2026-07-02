@@ -16,7 +16,7 @@ import {
   imagePosKey,
   imageZoomKey,
 } from '@/lib/imageBlockMeta'
-import { IMAGE_UPLOAD_PLACEHOLDER } from '@/lib/resolveImageDisplayUrl'
+import { IMAGE_UPLOAD_PLACEHOLDER, resolveImageDisplayUrl } from '@/lib/resolveImageDisplayUrl'
 
 export type StaticImageProps = {
   src: string
@@ -29,6 +29,8 @@ type AdminEditableImageProps = {
   imageBlockKey: string
   altBlockKey: string
   className: string
+  /** Used when CMS image URL is missing or empty. */
+  fallbackSrc?: string
   renderStaticImage?: (props: StaticImageProps) => ReactNode
 }
 
@@ -38,14 +40,17 @@ export type AdminEditableImageHandle = {
 
 export const AdminEditableImage = forwardRef<AdminEditableImageHandle, AdminEditableImageProps>(
   function AdminEditableImage(
-    { imageBlockKey, altBlockKey, className, renderStaticImage },
+    { imageBlockKey, altBlockKey, className, fallbackSrc, renderStaticImage },
     _ref,
   ) {
     const core = useContext(AdminCoreContext)
-    const { pageSlug, getImageSrc, getText } = useAdminContent()
+    const { pageSlug, getText, getImageSrc } = useAdminContent()
     void core?.contentRevision
     const alt = getText(altBlockKey)
-    const liveSrc = getImageSrc(imageBlockKey) || IMAGE_UPLOAD_PLACEHOLDER
+    const draftSrc = getImageSrc(imageBlockKey)
+    const liveSrc = draftSrc.trim()
+      ? resolveImageDisplayUrl(draftSrc)
+      : fallbackSrc?.trim() || IMAGE_UPLOAD_PLACEHOLDER
     const objectPosition = getText(imagePosKey(imageBlockKey)) || DEFAULT_IMAGE_OBJECT_POSITION
     const zoomRaw = getText(imageZoomKey(imageBlockKey)) || DEFAULT_IMAGE_ZOOM
     const imageStyle = buildImageInlineStyle(objectPosition, zoomRaw)
@@ -84,7 +89,10 @@ export const AdminEditableImage = forwardRef<AdminEditableImageHandle, AdminEdit
 
     return (
       <div
-        className="h-full w-full"
+        className="relative h-full w-full"
+        data-page-slug={pageSlug}
+        data-block-key={imageBlockKey}
+        data-alt-block-key={altBlockKey}
         onDoubleClick={handleDoubleClick}
         style={focusOutline}
       >

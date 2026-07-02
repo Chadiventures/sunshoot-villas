@@ -1,12 +1,15 @@
 "use client";
 
 import Image from "next/image";
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
 
 type VideoPageHeroProps = {
   videoSrc?: string;
   imageSrc?: string;
   title: string;
   subtitle: string;
+  titleBlockKey?: string;
+  subtitleBlockKey?: string;
 };
 
 export default function VideoPageHero({
@@ -14,6 +17,8 @@ export default function VideoPageHero({
   imageSrc,
   title,
   subtitle,
+  titleBlockKey = "hero.title",
+  subtitleBlockKey = "hero.subtitle",
 }: VideoPageHeroProps) {
   return (
     <section
@@ -61,7 +66,7 @@ export default function VideoPageHero({
             letterSpacing: "0.02em",
           }}
         >
-          {title}
+          <AdminEditableText blockKey={titleBlockKey} fallback={title} as="span" />
         </h1>
         <p
           className="mx-auto max-w-2xl text-white/90"
@@ -72,7 +77,7 @@ export default function VideoPageHero({
             lineHeight: 1.7,
           }}
         >
-          {subtitle}
+          <AdminEditableText blockKey={subtitleBlockKey} fallback={subtitle} as="span" />
         </p>
       </div>
     </section>

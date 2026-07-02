@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Footer from "@/components/Footer";
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
+import ServerPageContent from "@/components/admin/ServerPageContent";
+import { AdminBlockPage } from "@/components/admin/AdminProvider";
+import { getPageCmsContentBlocks } from "@/lib/pageCms";
+import { getRequestLocale } from "@/lib/requestLocale";
+import { buildPageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
-  title: "Published Rates | Sahana Villas",
-  description:
-    "Transparent published villa rates for Sahana Villas in Seminyak, Bali. Low, high and peak season pricing in USD and IDR.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return buildPageMetadata("rates");
+}
 
 const eyebrowStyle = {
   fontFamily: "var(--font-inter)",
@@ -175,9 +179,13 @@ const pleaseNote = [
   "Unused airport services are not refundable or re-routable",
 ];
 
-export default function RatesPage() {
+export default async function RatesPage() {
+  const locale = await getRequestLocale();
+  const cms = await getPageCmsContentBlocks("rates", locale);
   return (
-    <>
+    <ServerPageContent content={cms}>
+      <AdminBlockPage pageSlug="rates">
+        <>
       <section
         className="relative flex flex-col items-center justify-center px-6 text-center"
         style={{
@@ -191,7 +199,7 @@ export default function RatesPage() {
       >
         <div className="relative z-10 max-w-3xl">
           <p className="mb-3 text-[#67bc6a]" style={eyebrowStyle}>
-            Transparency First
+            <AdminEditableText blockKey="hero.eyebrow" as="span" />
           </p>
           <h1
             className="mb-4 text-[#1A1A1A]"
@@ -202,7 +210,7 @@ export default function RatesPage() {
               lineHeight: 1.15,
             }}
           >
-            Published Rates
+            <AdminEditableText blockKey="hero.title" as="span" />
           </h1>
           <p
             className="mb-6 text-[#6B6B6B]"
@@ -213,7 +221,7 @@ export default function RatesPage() {
               lineHeight: 1.7,
             }}
           >
-            All rates include government taxes and charges
+            <AdminEditableText blockKey="hero.subtitle" as="span" />
           </p>
           <nav
             aria-label="Breadcrumb"
@@ -225,10 +233,12 @@ export default function RatesPage() {
             }}
           >
             <Link href="/" className="transition-colors hover:text-[#67bc6a]">
-              Home
+              <AdminEditableText blockKey="breadcrumb.home" as="span" />
             </Link>
             <span className="mx-2">/</span>
-            <span className="text-[#1A1A1A]/65">Rates</span>
+            <span className="text-[#1A1A1A]/65">
+              <AdminEditableText blockKey="breadcrumb.current" as="span" />
+            </span>
           </nav>
         </div>
       </section>
@@ -236,7 +246,7 @@ export default function RatesPage() {
       <section className="bg-[#F7F3EE] py-12 md:py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
-            {seasons.map((season) => (
+            {seasons.map((season, index) => (
               <div
                 key={season.name}
                 className="card-alive border border-[#c1bab2] bg-white p-8 text-center transition-shadow duration-300"
@@ -250,7 +260,7 @@ export default function RatesPage() {
                     lineHeight: 1.2,
                   }}
                 >
-                  {season.name}
+                  <AdminEditableText blockKey={`seasons.${index + 1}.name`} as="span" />
                 </h3>
                 <p
                   className="mb-2 text-[#1A1A1A]"
@@ -261,7 +271,7 @@ export default function RatesPage() {
                     lineHeight: 1.1,
                   }}
                 >
-                  {season.usd}
+                  <AdminEditableText blockKey={`seasons.${index + 1}.usd`} as="span" />
                   <span
                     className="text-[#6B6B6B]"
                     style={{
@@ -282,7 +292,7 @@ export default function RatesPage() {
                     fontWeight: 500,
                   }}
                 >
-                  {season.idr} per night
+                  <AdminEditableText blockKey={`seasons.${index + 1}.idr`} as="span" />
                 </p>
                 <p
                   className="text-[#6B6B6B]"
@@ -292,7 +302,7 @@ export default function RatesPage() {
                     fontWeight: 300,
                   }}
                 >
-                  {season.nights}
+                  <AdminEditableText blockKey={`seasons.${index + 1}.nights`} as="span" />
                 </p>
               </div>
             ))}
@@ -306,8 +316,7 @@ export default function RatesPage() {
               lineHeight: 1.7,
             }}
           >
-            Since USD is generally the global industry standard, we have displayed
-            it on the website. Transaction prices are always in IDR.
+            <AdminEditableText blockKey="pricing.note" as="span" />
           </p>
         </div>
       </section>
@@ -323,7 +332,7 @@ export default function RatesPage() {
               lineHeight: 1.25,
             }}
           >
-            Season Dates
+            <AdminEditableText blockKey="season_dates.title" as="span" />
           </h2>
           <div className="space-y-0 overflow-hidden rounded-sm border border-[#1A1A1A]/10 bg-[#f5f2ef]">
             {seasonDates.map((row, index) => (
@@ -345,7 +354,7 @@ export default function RatesPage() {
                     textTransform: "uppercase",
                   }}
                 >
-                  {row.label}
+                  <AdminEditableText blockKey={`season_dates.${index + 1}.label`} as="span" />
                 </p>
                 <p
                   className="text-[#6B6B6B]"
@@ -356,7 +365,7 @@ export default function RatesPage() {
                     lineHeight: 1.7,
                   }}
                 >
-                  {row.detail}
+                  <AdminEditableText blockKey={`season_dates.${index + 1}.detail`} as="span" />
                 </p>
               </div>
             ))}
@@ -367,7 +376,7 @@ export default function RatesPage() {
       <section className="bg-[#F7F3EE] py-12 md:py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <p className="mb-3 text-center text-[#67bc6a]" style={eyebrowStyle}>
-            Every Stay Includes
+            <AdminEditableText blockKey="included.eyebrow" as="span" />
           </p>
           <h2
             className="mb-12 text-center text-[#1A1A1A]"
@@ -378,10 +387,10 @@ export default function RatesPage() {
               lineHeight: 1.25,
             }}
           >
-            What is Included?
+            <AdminEditableText blockKey="included.title" as="span" />
           </h2>
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {includedItems.map((item) => (
+            {includedItems.map((item, index) => (
               <div key={item.label} className="flex items-start gap-4">
                 <div className="shrink-0">{item.icon}</div>
                 <p
@@ -393,7 +402,7 @@ export default function RatesPage() {
                     lineHeight: 1.6,
                   }}
                 >
-                  {item.label}
+                  <AdminEditableText blockKey={`included.item_${index + 1}.label`} as="span" />
                 </p>
               </div>
             ))}
@@ -412,10 +421,10 @@ export default function RatesPage() {
               lineHeight: 1.25,
             }}
           >
-            Please Note
+            <AdminEditableText blockKey="notes.title" as="span" />
           </h2>
           <ul className="space-y-5">
-            {pleaseNote.map((note) => (
+            {pleaseNote.map((note, index) => (
               <li
                 key={note}
                 className="flex items-start gap-3 text-[#6B6B6B]"
@@ -430,7 +439,7 @@ export default function RatesPage() {
                   className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#67bc6a]"
                   aria-hidden="true"
                 />
-                {note}
+                <AdminEditableText blockKey={`notes.item_${index + 1}`} as="span" />
               </li>
             ))}
           </ul>
@@ -446,7 +455,7 @@ export default function RatesPage() {
                 fontWeight: 400,
               }}
             >
-              View our full Terms and Conditions
+              <AdminEditableText blockKey="notes.terms_link" as="span" />
             </a>
           </p>
         </div>
@@ -465,7 +474,7 @@ export default function RatesPage() {
               textTransform: "uppercase",
             }}
           >
-            Send a Booking Enquiry
+            <AdminEditableText blockKey="cta.button" as="span" />
           </Link>
           <p
             className="mt-6 text-[#6B6B6B]"
@@ -475,20 +484,22 @@ export default function RatesPage() {
               fontWeight: 300,
             }}
           >
-            Or WhatsApp us directly on{" "}
+            <AdminEditableText blockKey="cta.note" as="span" />{" "}
             <a
               href="https://wa.me/628113882070"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#1A1A1A] transition-colors hover:text-[#67bc6a]"
             >
-              +62 811 388 2070
+              <AdminEditableText blockKey="cta.whatsapp" as="span" />
             </a>
           </p>
         </div>
       </section>
 
       <Footer />
-    </>
+        </>
+      </AdminBlockPage>
+    </ServerPageContent>
   );
 }

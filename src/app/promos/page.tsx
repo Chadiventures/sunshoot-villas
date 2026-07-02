@@ -2,6 +2,16 @@ import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import Footer from "@/components/Footer";
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
+import ServerPageContent from "@/components/admin/ServerPageContent";
+import { AdminBlockPage } from "@/components/admin/AdminProvider";
+import { getPageCmsContentBlocks } from "@/lib/pageCms";
+import { getRequestLocale } from "@/lib/requestLocale";
+import { buildPageMetadata } from "@/lib/pageMetadata";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return buildPageMetadata("promos");
+}
 
 const PromosHeroVideo = dynamic(
   () => import("@/components/promos/PromosHeroVideo"),
@@ -14,12 +24,6 @@ const PromosHeroVideo = dynamic(
     ),
   },
 );
-
-export const metadata: Metadata = {
-  title: "Special Promotions 2026 | Sahana Villas",
-  description:
-    "Exclusive Bali villa promotions for 2026. USD, AUD, SGD and IDR deals when you book direct with Sahana Villas in Seminyak.",
-};
 
 const eyebrowStyle = {
   fontFamily: "var(--font-inter)",
@@ -38,11 +42,11 @@ const buttonStyle = {
 };
 
 function PromoVisual({
-  title,
-  subtitle,
+  titleBlockKey,
+  subtitleBlockKey,
 }: {
-  title: string;
-  subtitle: string;
+  titleBlockKey: string;
+  subtitleBlockKey: string;
 }) {
   return (
     <div
@@ -62,7 +66,7 @@ function PromoVisual({
           lineHeight: 1.6,
         }}
       >
-        {title}
+        <AdminEditableText blockKey={titleBlockKey} as="span" />
       </p>
       <p
         className="mb-4 text-[#67bc6a]"
@@ -73,7 +77,7 @@ function PromoVisual({
           letterSpacing: "0.15em",
         }}
       >
-        {subtitle}
+        <AdminEditableText blockKey={subtitleBlockKey} as="span" />
       </p>
       <p className="text-[#67bc6a]" style={{ fontSize: "18px" }} aria-hidden="true">
         ★★★★★
@@ -84,26 +88,25 @@ function PromoVisual({
 
 interface PromoSectionProps {
   imageFirst: boolean;
-  visualTitle: string;
-  visualSubtitle: string;
-  heading: string;
-  description?: string;
-  bullets: string[];
+  keyPrefix: string;
+  bulletCount: number;
+  hasDescription?: boolean;
   bgClass: string;
 }
 
 function PromoSection({
   imageFirst,
-  visualTitle,
-  visualSubtitle,
-  heading,
-  description,
-  bullets,
+  keyPrefix,
+  bulletCount,
+  hasDescription = false,
   bgClass,
 }: PromoSectionProps) {
   const visual = (
     <div className="card-alive overflow-hidden">
-      <PromoVisual title={visualTitle} subtitle={visualSubtitle} />
+      <PromoVisual
+        titleBlockKey={`${keyPrefix}.visual_title`}
+        subtitleBlockKey={`${keyPrefix}.visual_subtitle`}
+      />
     </div>
   );
 
@@ -118,9 +121,9 @@ function PromoSection({
           lineHeight: 1.25,
         }}
       >
-        {heading}
+        <AdminEditableText blockKey={`${keyPrefix}.heading`} as="span" />
       </h2>
-      {description && (
+      {hasDescription && (
         <p
           className="mb-6 text-[#6B6B6B]"
           style={{
@@ -130,13 +133,13 @@ function PromoSection({
             lineHeight: 1.8,
           }}
         >
-          {description}
+          <AdminEditableText blockKey={`${keyPrefix}.description`} as="span" />
         </p>
       )}
       <ul className="mb-8 space-y-3">
-        {bullets.map((bullet) => (
+        {Array.from({ length: bulletCount }, (_, i) => (
           <li
-            key={bullet}
+            key={`${keyPrefix}.bullet_${i + 1}`}
             className="flex items-start gap-3 text-[#6B6B6B]"
             style={{
               fontFamily: "var(--font-inter)",
@@ -149,7 +152,7 @@ function PromoSection({
               className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#67bc6a]"
               aria-hidden="true"
             />
-            {bullet}
+            <AdminEditableText blockKey={`${keyPrefix}.bullet_${i + 1}`} as="span" />
           </li>
         ))}
       </ul>
@@ -158,7 +161,7 @@ function PromoSection({
         className="btn-alive inline-block w-fit border border-[#67bc6a] bg-[#67bc6a] px-8 py-3 text-white transition-all duration-300 hover:bg-[#5aaa5d]"
         style={buttonStyle}
       >
-        Book Now
+        <AdminEditableText blockKey={`${keyPrefix}.button`} as="span" />
       </Link>
     </div>
   );
@@ -180,9 +183,13 @@ function PromoSection({
   );
 }
 
-export default function PromosPage() {
+export default async function PromosPage() {
+  const locale = await getRequestLocale();
+  const cms = await getPageCmsContentBlocks("promos", locale);
   return (
-    <>
+    <ServerPageContent content={cms}>
+      <AdminBlockPage pageSlug="promos">
+        <>
       <section
         className="relative flex flex-col items-center justify-center overflow-hidden px-6 text-center"
         style={{
@@ -201,7 +208,7 @@ export default function PromosPage() {
 
         <div className="relative z-10 max-w-3xl">
           <p className="mb-3 text-[#67bc6a]" style={eyebrowStyle}>
-            Exclusive Deals
+            <AdminEditableText blockKey="hero.eyebrow" as="span" />
           </p>
           <h1
             className="mb-4 text-white"
@@ -213,7 +220,7 @@ export default function PromosPage() {
               lineHeight: 1.15,
             }}
           >
-            Special Promotions 2026
+            <AdminEditableText blockKey="hero.title" as="span" />
           </h1>
           <p
             className="mb-6 text-white/75"
@@ -224,7 +231,7 @@ export default function PromosPage() {
               lineHeight: 1.7,
             }}
           >
-            Book direct and save. All promotions valid throughout 2026.
+            <AdminEditableText blockKey="hero.subtitle" as="span" />
           </p>
           <nav
             aria-label="Breadcrumb"
@@ -236,10 +243,12 @@ export default function PromosPage() {
             }}
           >
             <Link href="/" className="transition-colors hover:text-[#67bc6a]">
-              Home
+              <AdminEditableText blockKey="breadcrumb.home" as="span" />
             </Link>
             <span className="mx-2">/</span>
-            <span className="text-white/80">Promotions</span>
+            <span className="text-white/80">
+              <AdminEditableText blockKey="breadcrumb.current" as="span" />
+            </span>
           </nav>
         </div>
       </section>
@@ -255,15 +264,7 @@ export default function PromosPage() {
               lineHeight: 1.85,
             }}
           >
-            At Sahana Villas we offer a curated selection of affordable Bali villa
-            packages designed to make your dream vacation both luxurious and
-            budget-friendly. Our promotions cater to every type of traveler,
-            whether you are planning a family holiday, a group retreat, a ladies
-            trip or a hens week. Each stay is backed by the warm hospitality and
-            service that defines the Sahana Experience. All promotions listed below
-            are valid for stays throughout 2026. All payments are processed in
-            Indonesian Rupiah. Rates are displayed in foreign currency for your
-            convenience.
+            <AdminEditableText blockKey="intro.body" allowLineBreaks as="span" />
           </p>
         </div>
       </section>
@@ -271,53 +272,30 @@ export default function PromosPage() {
       <section>
         <PromoSection
           imageFirst
-          visualTitle="SAHANA EXPERIENCE VIP LEVEL"
-          visualSubtitle="(USD DEAL)"
-          heading="Sahana Experience VIP Level (USD Deal)"
-          bullets={[
-            "Low Season: USD 350 per night (regular USD 500)",
-            "High Season: USD 410 per night (regular USD 550)",
-            "Book directly from your USD account with no exchange rate loss",
-          ]}
+          keyPrefix="promo.usd"
+          bulletCount={3}
           bgClass="bg-[#F7F3EE]"
         />
 
         <PromoSection
           imageFirst={false}
-          visualTitle="SAHANA SPECIAL LIMITED-TIME OFFER"
-          visualSubtitle="(AUD PROMO)"
-          heading="Special Limited-Time Offer (AUD Promo)"
-          description="Take advantage of our seasonal AUD Promotion making your premium Bali escape even more rewarding. All rates include taxes and government charges."
-          bullets={[
-            "Low Season: AUD 498 per night (regular USD 500)",
-            "High Season: AUD 585 per night (regular USD 550)",
-          ]}
+          keyPrefix="promo.aud"
+          hasDescription
+          bulletCount={2}
           bgClass="bg-[#c1bab2]"
         />
 
         <PromoSection
           imageFirst
-          visualTitle="SAHANA EXPERIENCE VIP LEVEL"
-          visualSubtitle="(SGD DEAL)"
-          heading="Sahana Experience VIP Level (SGD Deal)"
-          bullets={[
-            "Low Season: SGD 460 per night (regular SGD 680)",
-            "High Season: SGD 530 per night (regular SGD 750)",
-            "Book directly from your SGD account without exchange rate loss",
-          ]}
+          keyPrefix="promo.sgd"
+          bulletCount={3}
           bgClass="bg-[#F7F3EE]"
         />
 
         <PromoSection
           imageFirst={false}
-          visualTitle="SAHANA EXPERIENCE VIP LEVEL"
-          visualSubtitle="(IDR DEAL)"
-          heading="Sahana Experience VIP Level (IDR Deal)"
-          bullets={[
-            "IDR 6,250,000 per night for Low Season",
-            "IDR 6,990,000 per night for High Season",
-            "Book directly from your IDR account without exchange rate loss",
-          ]}
+          keyPrefix="promo.idr"
+          bulletCount={3}
           bgClass="bg-[#c1bab2]"
         />
       </section>
@@ -333,14 +311,14 @@ export default function PromosPage() {
               lineHeight: 1.25,
             }}
           >
-            Ready to Claim Your Deal?
+            <AdminEditableText blockKey="cta.title" as="span" />
           </h2>
           <Link
             href="/contact"
             className="btn-alive inline-block border border-[#67bc6a] bg-[#67bc6a] px-10 py-3.5 text-white transition-all duration-300 hover:bg-[#5aaa5d]"
             style={buttonStyle}
           >
-            Send a Booking Enquiry
+            <AdminEditableText blockKey="cta.button" as="span" />
           </Link>
           <p
             className="mt-6 text-[#6B6B6B]"
@@ -350,20 +328,22 @@ export default function PromosPage() {
               fontWeight: 300,
             }}
           >
-            Or WhatsApp us directly on{" "}
+            <AdminEditableText blockKey="cta.note" as="span" />{" "}
             <a
               href="https://wa.me/628113882070"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#1A1A1A] transition-colors hover:text-[#67bc6a]"
             >
-              +62 811 388 2070
+              <AdminEditableText blockKey="cta.whatsapp" as="span" />
             </a>
           </p>
         </div>
       </section>
 
       <Footer />
-    </>
+        </>
+      </AdminBlockPage>
+    </ServerPageContent>
   );
 }

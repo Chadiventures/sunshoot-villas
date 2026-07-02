@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import FamilyFeaturesAccordion from "@/components/families/FamilyFeaturesAccordion";
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
 
 const ContactHeroVideo = dynamic(
   () => import("@/components/contact/ContactHeroVideo"),
@@ -37,8 +38,7 @@ export default function FamilyMergedSection() {
               lineHeight: 1.5,
             }}
           >
-            We designed every corner of Sahana with your children in mind.
-            Because the best family holidays leave everyone smiling.
+            <AdminEditableText blockKey="merged.quote" as="span" />
           </blockquote>
 
           <div>
@@ -52,10 +52,7 @@ export default function FamilyMergedSection() {
                 color: "rgba(255,255,255,0.75)",
               }}
             >
-              We have designed the villas to be enjoyed just as much by the
-              children as by the adults. Our central Seminyak location makes
-              getting around easy, whether it is a trip to the beach or popping
-              out for an ice cream.
+              <AdminEditableText blockKey="merged.body_1" as="span" />
             </p>
             <p
               style={{
@@ -66,9 +63,7 @@ export default function FamilyMergedSection() {
                 color: "rgba(255,255,255,0.75)",
               }}
             >
-              We know that travelling with young children requires extra thought
-              and care, and our team is ready to help with everything from pool
-              fencing to bedtime stories.
+              <AdminEditableText blockKey="merged.body_2" as="span" />
             </p>
           </div>
         </div>

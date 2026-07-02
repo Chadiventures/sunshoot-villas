@@ -1,24 +1,23 @@
-import FooterFaq from "@/components/FooterFaq";
+import type { Metadata } from "next";
+import ServerPageContent from "@/components/admin/ServerPageContent";
+import { AdminBlockPage } from "@/components/admin/AdminProvider";
+import { getPageCmsContentBlocks } from "@/lib/pageCms";
+import { getRequestLocale } from "@/lib/requestLocale";
+import { buildPageMetadata } from "@/lib/pageMetadata";
+import FaqPageContent from "./FaqPageContent";
 
-export default function FaqPage() {
+export async function generateMetadata(): Promise<Metadata> {
+  return buildPageMetadata("faq");
+}
+
+export default async function FaqPage() {
+  const locale = await getRequestLocale();
+  const cms = await getPageCmsContentBlocks("faq", locale);
   return (
-    <div
-      className="min-h-screen bg-[#1A2E1A]"
-      style={{ paddingTop: "calc(var(--site-chrome-h) + 3rem)" }}
-    >
-      <div className="container-site pb-16">
-        <h1
-          className="mb-8 text-center text-white"
-          style={{
-            fontFamily: "var(--font-cormorant)",
-            fontSize: "clamp(2rem, 5vw, 3rem)",
-            fontWeight: 300,
-          }}
-        >
-          FAQ
-        </h1>
-        <FooterFaq />
-      </div>
-    </div>
+    <ServerPageContent content={cms}>
+      <AdminBlockPage pageSlug="faq">
+        <FaqPageContent />
+      </AdminBlockPage>
+    </ServerPageContent>
   );
 }

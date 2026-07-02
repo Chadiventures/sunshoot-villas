@@ -29,14 +29,68 @@ import {
   socialUrlBlockKey,
 } from '@/lib/adminSocialAccounts'
 import type { PageSlug } from '@/lib/contentBlockTypes'
-import { AdminCoreContext, pathnameToPageSlug } from '@/hooks/useAdminContent'
+import type { CmsLocale } from '@/lib/cmsLocale'
+import { AdminCoreContext, pathnameToPageSlug, type AdminCoreContextValue } from '@/hooks/useAdminContent'
+import { ADMIN_TOOLBAR_HEIGHT_PX } from '@/lib/adminToolbar'
 import { getPageSeoDefaults } from '@/lib/pageSeoDefaults'
 import { useAdminImageEditor } from '@/lib/adminImageEditorContext'
 import { isValidImageUploadFile } from '@/lib/isValidImageUploadFile'
-import { IMAGE_UPLOAD_PLACEHOLDER } from '@/lib/resolveImageDisplayUrl'
+import { IMAGE_UPLOAD_PLACEHOLDER, resolveImageDisplayUrl } from '@/lib/resolveImageDisplayUrl'
+import { scrollPageToCmsBlock, scrollPanelToField } from '@/lib/adminScrollSync'
+import { useLanguage } from '@/context/LanguageContext'
+
+export const ADMIN_PANEL_WIDTH_PX = 320
+
+function focusPanelFieldAndScrollPage(
+  core: AdminCoreContextValue,
+  pageSlug: PageSlug,
+  blockKey: string,
+) {
+  scrollPageToCmsBlock(pageSlug, blockKey)
+  core.focusPanelField(pageSlug, blockKey)
+}
 
 function fieldBlockKey(field: AdminPanelField): string {
   return field.kind === 'text' ? field.blockKey : field.imageBlockKey
+}
+
+function PanelLanguageToggle() {
+  const core = useContext(AdminCoreContext)
+  if (!core) return null
+  const { language, setLanguage } = useLanguage()
+  const { setAdminLocale } = core
+  const tabClass = (locale: CmsLocale) =>
+    [
+      'flex-1 py-2 font-sans text-[10px] uppercase tracking-widest transition-colors',
+      language === locale
+        ? 'border border-[#c9a84c] bg-[#c9a84c]/20 text-[#c9a84c]'
+        : 'border border-white/20 text-pearl/70 hover:border-white/40 hover:text-pearl',
+    ].join(' ')
+
+  return (
+    <div className="flex gap-2">
+      <button
+        type="button"
+        className={tabClass('en')}
+        onClick={() => {
+          setLanguage('en')
+          setAdminLocale('en')
+        }}
+      >
+        EN
+      </button>
+      <button
+        type="button"
+        className={tabClass('id')}
+        onClick={() => {
+          setLanguage('id')
+          setAdminLocale('id')
+        }}
+      >
+        ID
+      </button>
+    </div>
+  )
 }
 
 function PanelTextField({
@@ -56,15 +110,20 @@ function PanelTextField({
 }) {
   const core = useContext(AdminCoreContext)
   void core?.contentRevision
-  const value = core?.getDraft(pageSlug, blockKey) ?? ''
-  const handleChange = (newValue: string) => core?.updateText(pageSlug, blockKey, newValue)
-  const handleFocus = () => core?.focusPanelField(pageSlug, blockKey)
+  const { language } = useLanguage()
+  const locale = language as CmsLocale
+  const value = core?.getDraft(pageSlug, blockKey, locale) ?? ''
+  const handleChange = (newValue: string) => core?.updateText(pageSlug, blockKey, newValue, locale)
+  const handleFocus = () => {
+    if (!core) return
+    focusPanelFieldAndScrollPage(core, pageSlug, blockKey)
+  }
 
   const common = [
     'w-full rounded border bg-white/5 px-3 py-2 font-sans text-sm text-pearl placeholder:text-pearl/35 focus:border-gold focus:outline-none',
     highlighted
-      ? 'border-gold ring-2 ring-gold/60 ring-offset-2 ring-offset-[#0f1f44]'
-      : 'border-white/15',
+      ? 'border-[#c9a84c] ring-2 ring-[#c9a84c]/60 ring-offset-2 ring-offset-[#1a2e1a]'
+      : 'border-white/20',
   ].join(' ')
 
   const charCount = value.length
@@ -76,7 +135,7 @@ function PanelTextField({
           overLimit ? 'text-red-300' : 'text-pearl/45'
         }`}
       >
-        {charCount}/{charLimit} tecken
+        {charCount}/{charLimit} characters
       </p>
     ) : null
 
@@ -122,18 +181,20 @@ function PanelImageField({
 }) {
   const core = useContext(AdminCoreContext)
   const revision = core?.contentRevision ?? 0
+  const { language } = useLanguage()
+  const locale = language as CmsLocale
   const { openImageEditor } = useAdminImageEditor()
   const fileRef = useRef<HTMLInputElement>(null)
   const [dragOver, setDragOver] = useState(false)
 
   const src = core?.getDisplayUrl(pageSlug, field.imageBlockKey) ?? ''
-  const altText = core?.getDraft(pageSlug, field.altBlockKey) ?? ''
+  const altText = core?.getDraft(pageSlug, field.altBlockKey, locale) ?? ''
   void revision
   const preview = src || IMAGE_UPLOAD_PLACEHOLDER
   const companions = field.companionFields ?? []
 
   const highlightWrap = highlighted
-    ? 'rounded ring-2 ring-gold/60 ring-offset-2 ring-offset-[#0f1f44]'
+    ? 'rounded ring-2 ring-[#c9a84c]/60 ring-offset-2 ring-offset-[#1a2e1a]'
     : ''
 
   const uploadFile = (file: File) => {
@@ -169,24 +230,28 @@ function PanelImageField({
 
   const altInputClass = [
     'w-full rounded border bg-white/5 px-3 py-2 font-sans text-sm text-pearl focus:border-gold focus:outline-none',
-    highlighted ? 'border-gold' : 'border-white/15',
+    highlighted ? 'border-gold' : 'border-white/20',
   ].join(' ')
 
   return (
     <div className={`space-y-2 ${highlightWrap}`}>
       <div
         className={`relative aspect-video w-full overflow-hidden rounded border bg-black/20 transition-colors ${
-          dragOver ? 'border-gold ring-2 ring-gold/50' : 'border-white/15'
+          dragOver ? 'border-gold ring-2 ring-gold/50' : 'border-white/20'
         }`}
+        onClick={() => {
+          if (!core) return
+          focusPanelFieldAndScrollPage(core, pageSlug, field.imageBlockKey)
+        }}
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
       >
         <img src={preview} alt={altText} className="h-full w-full object-cover" />
         {dragOver && (
-          <div className="absolute inset-0 flex items-center justify-center bg-navy/60">
+          <div className="absolute inset-0 flex items-center justify-center bg-[#1a2e1a]/60">
             <span className="font-sans text-xs uppercase tracking-wider text-gold">
-              Släpp bilden här
+              Drop image here
             </span>
           </div>
         )}
@@ -204,7 +269,7 @@ function PanelImageField({
           onClick={() => fileRef.current?.click()}
           className="rounded border border-gold/60 px-3 py-1.5 font-sans text-[10px] uppercase tracking-wider text-gold transition-colors hover:bg-gold/10"
         >
-          Ladda upp bild
+          Upload image
         </button>
         <button
           type="button"
@@ -215,7 +280,7 @@ function PanelImageField({
           }
           className="rounded border border-white/20 px-3 py-1.5 font-sans text-[10px] uppercase tracking-wider text-pearl/90 transition-colors hover:border-gold hover:text-gold"
         >
-          Justera utsnitt
+          Adjust crop
         </button>
       </div>
       <label
@@ -228,9 +293,12 @@ function PanelImageField({
         id={`panel-alt-${pageSlug}-${field.altBlockKey}`}
         type="text"
         readOnly={false}
-        value={core?.getDraft(pageSlug, field.altBlockKey) ?? ''}
-        onChange={(e) => core?.updateText(pageSlug, field.altBlockKey, e.target.value)}
-        onFocus={() => core?.focusPanelField(pageSlug, field.altBlockKey)}
+        value={core?.getDraft(pageSlug, field.altBlockKey, locale) ?? ''}
+        onChange={(e) => core?.updateText(pageSlug, field.altBlockKey, e.target.value, locale)}
+        onFocus={() => {
+          if (!core) return
+          focusPanelFieldAndScrollPage(core, pageSlug, field.altBlockKey)
+        }}
         className={altInputClass}
       />
       {companions.map((companion) => (
@@ -258,10 +326,12 @@ function PanelImageField({
 function PanelFooterSocialAccounts() {
   const core = useContext(AdminCoreContext)
   const revision = core?.contentRevision ?? 0
+  const { language } = useLanguage()
+  const locale = language as CmsLocale
   const pageSlug = FOOTER_SOCIAL_PAGE_SLUG
   const [extraIndices, setExtraIndices] = useState<number[]>([])
 
-  const getValue = (blockKey: string) => core?.getDraft(pageSlug, blockKey) ?? ''
+  const getValue = (blockKey: string) => core?.getDraft(pageSlug, blockKey, locale) ?? ''
   void revision
 
   const indices = [
@@ -273,20 +343,20 @@ function PanelFooterSocialAccounts() {
     if (next >= FOOTER_SOCIAL_MAX_ACCOUNTS) return
     setExtraIndices((prev) => [...new Set([...prev, next])])
     if (!getValue(socialPlatformBlockKey(next)).trim()) {
-      core?.updateText(pageSlug, socialPlatformBlockKey(next), SOCIAL_PLATFORMS[0])
+      core?.updateText(pageSlug, socialPlatformBlockKey(next), SOCIAL_PLATFORMS[0], locale)
     }
   }
 
   const removeAccount = (index: number) => {
-    core?.updateText(pageSlug, socialPlatformBlockKey(index), '')
-    core?.updateText(pageSlug, socialUrlBlockKey(index), '')
+    core?.updateText(pageSlug, socialPlatformBlockKey(index), '', locale)
+    core?.updateText(pageSlug, socialUrlBlockKey(index), '', locale)
     setExtraIndices((prev) => prev.filter((i) => i !== index))
   }
 
   return (
     <div className="space-y-3 border-t border-white/10 pt-4">
       <p className="font-sans text-[10px] uppercase tracking-wider text-pearl/55">
-        Sociala medier
+        Social media
       </p>
       {indices.map((index) => (
         <div
@@ -295,7 +365,7 @@ function PanelFooterSocialAccounts() {
         >
           <div className="flex items-center justify-between gap-2">
             <span className="font-sans text-[10px] uppercase tracking-wider text-pearl/45">
-              Konto {index + 1}
+              Account {index + 1}
             </span>
             {indices.length > 1 && (
               <button
@@ -303,7 +373,7 @@ function PanelFooterSocialAccounts() {
                 onClick={() => removeAccount(index)}
                 className="font-sans text-[10px] uppercase tracking-wider text-red-300/90 hover:text-red-200"
               >
-                Ta bort
+                Remove
               </button>
             )}
           </div>
@@ -311,16 +381,19 @@ function PanelFooterSocialAccounts() {
             htmlFor={`panel-social-platform-${index}`}
             className="mb-1 block font-sans text-[10px] uppercase tracking-wider text-pearl/55"
           >
-            Plattform
+            Platform
           </label>
           <select
             id={`panel-social-platform-${index}`}
             value={getValue(socialPlatformBlockKey(index))}
             onChange={(e) =>
-              core?.updateText(pageSlug, socialPlatformBlockKey(index), e.target.value)
+              core?.updateText(pageSlug, socialPlatformBlockKey(index), e.target.value, locale)
             }
-            onFocus={() => core?.focusPanelField(pageSlug, socialPlatformBlockKey(index))}
-            className="w-full rounded border border-white/15 bg-white/5 px-3 py-2 font-sans text-sm text-gray-900 focus:border-gold focus:outline-none"
+            onFocus={() => {
+              if (!core) return
+              focusPanelFieldAndScrollPage(core, pageSlug, socialPlatformBlockKey(index))
+            }}
+            className="w-full rounded border border-white/20 bg-white/5 px-3 py-2 font-sans text-sm text-gray-900 focus:border-gold focus:outline-none"
           >
             {SOCIAL_PLATFORMS.map((platform) => (
               <option key={platform} value={platform} className="text-gray-900">
@@ -339,10 +412,13 @@ function PanelFooterSocialAccounts() {
             type="url"
             readOnly={false}
             value={getValue(socialUrlBlockKey(index))}
-            onChange={(e) => core?.updateText(pageSlug, socialUrlBlockKey(index), e.target.value)}
-            onFocus={() => core?.focusPanelField(pageSlug, socialUrlBlockKey(index))}
+            onChange={(e) => core?.updateText(pageSlug, socialUrlBlockKey(index), e.target.value, locale)}
+            onFocus={() => {
+              if (!core) return
+              focusPanelFieldAndScrollPage(core, pageSlug, socialUrlBlockKey(index))
+            }}
             placeholder="https://"
-            className="w-full rounded border border-white/15 bg-white/5 px-3 py-2 font-sans text-sm text-pearl placeholder:text-pearl/35 focus:border-gold focus:outline-none"
+            className="w-full rounded border border-white/20 bg-white/5 px-3 py-2 font-sans text-sm text-pearl placeholder:text-pearl/35 focus:border-gold focus:outline-none"
           />
         </div>
       ))}
@@ -352,7 +428,7 @@ function PanelFooterSocialAccounts() {
           onClick={addAccount}
           className="w-full rounded border border-dashed border-white/20 px-3 py-2 font-sans text-[10px] uppercase tracking-wider text-pearl/70 transition-colors hover:border-gold hover:text-gold"
         >
-          Lägg till konto
+          Add account
         </button>
       )}
     </div>
@@ -424,11 +500,13 @@ function groupContainsFocusedField(
 function PanelSeoGooglePreview({ pageSlug }: { pageSlug: PageSlug }) {
   const core = useContext(AdminCoreContext)
   const revision = core?.contentRevision ?? 0
+  const { language } = useLanguage()
+  const locale = language as CmsLocale
   void revision
 
-  const defaults = getPageSeoDefaults(pageSlug)
-  const titleDraft = core?.getDraft(pageSlug, 'seo.title') ?? ''
-  const descriptionDraft = core?.getDraft(pageSlug, 'seo.description') ?? ''
+  const defaults = getPageSeoDefaults(pageSlug, locale)
+  const titleDraft = core?.getDraft(pageSlug, 'seo.title', locale) ?? ''
+  const descriptionDraft = core?.getDraft(pageSlug, 'seo.description', locale) ?? ''
 
   const displayTitle = titleDraft.trim() || defaults.title
   const displayDescription = descriptionDraft.trim() || defaults.description
@@ -438,13 +516,13 @@ function PanelSeoGooglePreview({ pageSlug }: { pageSlug: PageSlug }) {
   return (
     <div className="mt-2 rounded border border-white/10 bg-white p-3">
       <p className="mb-2 font-sans text-[10px] uppercase tracking-wider text-pearl/55">
-        Förhandsvisning i Google
+        Google preview
       </p>
       <div className="font-sans text-left">
-        <p className="text-sm leading-snug text-[#681da8]">stuveribaren.se</p>
+        <p className="text-sm leading-snug text-[#681da8]">sunshootvillasseminyak.com</p>
         <p
           className={`mt-0.5 text-lg leading-snug ${
-            titleOver ? 'text-red-600' : 'text-[#1a7f37]'
+            titleOver ? 'text-red-600' : 'text-[#1a0dab]'
           }`}
         >
           {displayTitle}
@@ -550,13 +628,13 @@ function PanelHistoryView({
         error?: string
       }
       if (!res.ok) {
-        setError(typeof data.error === 'string' ? data.error : 'Kunde inte läsa historik')
+        setError(typeof data.error === 'string' ? data.error : 'Could not load history')
         setChanges([])
         return
       }
       setChanges(Array.isArray(data.changes) ? data.changes : [])
     } catch {
-      setError('Kunde inte läsa historik')
+      setError('Could not load history')
       setChanges([])
     } finally {
       setLoading(false)
@@ -584,16 +662,16 @@ function PanelHistoryView({
       })
       const data = (await res.json().catch(() => ({}))) as { error?: string }
       if (!res.ok) {
-        setError(typeof data.error === 'string' ? data.error : 'Kunde inte återställa')
+        setError(typeof data.error === 'string' ? data.error : 'Could not restore')
         return
       }
       core?.updateText(restorePageSlug, item.blockKey, restoredValue)
       router.refresh()
-      setConfirmMessage('Återställt!')
+      setConfirmMessage('Restored!')
       window.setTimeout(() => setConfirmMessage(null), 2500)
       await loadHistory()
     } catch {
-      setError('Kunde inte återställa')
+      setError('Could not restore')
     } finally {
       setRestoringId(null)
     }
@@ -606,7 +684,7 @@ function PanelHistoryView({
         onClick={onBack}
         className="w-full rounded border border-white/20 py-2 font-sans text-[10px] uppercase tracking-widest text-pearl transition-colors hover:border-gold hover:text-gold"
       >
-        Tillbaka till redigering
+        Back to editing
       </button>
 
       {confirmMessage && (
@@ -614,14 +692,14 @@ function PanelHistoryView({
           {confirmMessage}
         </p>
       )}
-      {loading && <p className="font-sans text-xs text-pearl/50">Laddar historik...</p>}
+      {loading && <p className="font-sans text-xs text-pearl/50">Loading history...</p>}
       {error && (
         <p className="font-sans text-xs text-red-300" role="alert">
           {error}
         </p>
       )}
       {!loading && !error && changes.length === 0 && (
-        <p className="font-sans text-xs text-pearl/50">Ingen sparad historik för den här sidan ännu.</p>
+        <p className="font-sans text-xs text-pearl/50">No saved history for this page yet.</p>
       )}
       <ul className="space-y-2">
         {changes.map((item) => (
@@ -642,7 +720,7 @@ function PanelHistoryView({
               onClick={() => void handleRestore(item)}
               className="mt-2 rounded border border-pearl/25 px-2 py-1 font-sans text-[10px] uppercase tracking-wider text-pearl transition-colors hover:border-gold hover:text-gold disabled:opacity-45"
             >
-              {restoringId === item.id ? 'Återställer...' : 'Återställ'}
+              {restoringId === item.id ? 'Restoring...' : 'Restore'}
             </button>
           </li>
         ))}
@@ -653,78 +731,74 @@ function PanelHistoryView({
 
 export default function AdminSidePanel() {
   const core = useContext(AdminCoreContext)
+  const { language } = useLanguage()
   const pathname = usePathname()
   const scrollRef = useRef<HTMLDivElement>(null)
+  const [panelView, setPanelView] = useState<'edit' | 'history'>('edit')
 
-  const routePageSlug = pathnameToPageSlug(pathname)
+  const routePageSlug = core?.routePageSlug ?? pathnameToPageSlug(pathname)
   const section = getAdminPanelSectionForRoute(routePageSlug)
 
   const focused = core?.focusedField ?? null
 
   useEffect(() => {
     if (!focused || !section || !core?.panelOpen) return
-    const domId = panelFieldDomId(focused.pageSlug, focused.blockKey)
-    const run = () => {
-      const el = document.getElementById(domId)
-      if (!el) {
-        window.setTimeout(() => {
-          const el2 = document.getElementById(domId)
-          if (!el2) return
-          el2.scrollIntoView({ behavior: 'smooth', block: 'center' })
-          const input = el2.querySelector<HTMLInputElement | HTMLTextAreaElement>(
-            'input:not([type="file"]), textarea, select',
-          )
-          input?.focus({ preventScroll: true })
-        }, 300)
-        return
-      }
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      const input = el.querySelector<HTMLInputElement | HTMLTextAreaElement>(
-        'input:not([type="file"]), textarea, select',
-      )
-      input?.focus({ preventScroll: true })
-    }
-    const t = window.setTimeout(run, 500)
+    const t = window.setTimeout(() => {
+      scrollPanelToField(focused.pageSlug, focused.blockKey)
+    }, 100)
     return () => window.clearTimeout(t)
   }, [focused, section, core?.panelOpen])
+
+  useEffect(() => {
+    setPanelView('edit')
+  }, [routePageSlug])
+
+  useEffect(() => {
+    core?.setAdminLocale(language)
+  }, [language, core])
 
   if (!core?.adminMode || !core.authenticated) return null
 
   const { panelOpen, setPanelOpen, isSaving, loaded, loadError } = core
   const saving = isSaving
-  const [panelView, setPanelView] = useState<'edit' | 'history'>('edit')
-
-  useEffect(() => {
-    setPanelView('edit')
-  }, [routePageSlug])
 
   return (
     <>
       <button
         type="button"
         onClick={() => setPanelOpen(!panelOpen)}
-        className="fixed left-0 z-[10000] flex h-12 w-8 items-center justify-center rounded-r-md bg-gold font-sans text-lg text-navy shadow-lg transition-[transform] duration-300 ease-out"
+        className="fixed left-0 z-[10000] flex h-12 w-8 items-center justify-center rounded-r-md bg-[#c9a84c] font-sans text-lg text-[#1a2e1a] shadow-lg transition-[transform] duration-300 ease-out"
         style={{
           top: '50%',
-          transform: `translateY(-50%) translateX(${panelOpen ? '320px' : '0'})`,
+          transform: `translateY(-50%) translateX(${panelOpen ? `${ADMIN_PANEL_WIDTH_PX}px` : '0'})`,
         }}
-        aria-label={panelOpen ? 'Stäng redigeringspanel' : 'Öppna redigeringspanel'}
+        aria-label={panelOpen ? 'Close edit panel' : 'Open edit panel'}
         aria-expanded={panelOpen}
       >
         ✎
       </button>
 
       <aside
-        className="fixed left-0 top-0 z-[9999] flex h-full w-[320px] flex-col bg-[#0f1f44] shadow-2xl transition-transform duration-300 ease-out"
-        style={{ transform: panelOpen ? 'translateX(0)' : 'translateX(-100%)' }}
-        aria-label="Innehållsredigering"
+        className="fixed left-0 z-[9999] flex flex-col bg-[#1a2e1a] shadow-2xl transition-transform duration-300 ease-out"
+        style={{
+          top: ADMIN_TOOLBAR_HEIGHT_PX,
+          width: ADMIN_PANEL_WIDTH_PX,
+          height: `calc(100% - ${ADMIN_TOOLBAR_HEIGHT_PX}px)`,
+          transform: panelOpen ? 'translateX(0)' : 'translateX(-100%)',
+        }}
+        aria-label="Content editing"
       >
-        <div className="shrink-0 border-b border-white/10 px-4 py-4">
-          <h2 className="font-serif text-lg font-light text-pearl">
-            {section?.title ?? 'Redigera innehåll'}
-          </h2>
+        <div className="shrink-0 border-b border-white/20 px-4 py-4">
+          <div className="flex items-start justify-between gap-3">
+            <h2 className="font-serif text-lg font-light text-pearl">
+              {section?.title ?? 'Edit content'}
+            </h2>
+          </div>
+          <div className="mt-3">
+            <PanelLanguageToggle />
+          </div>
           {!loaded && !loadError && (
-            <p className="mt-1 font-sans text-xs text-pearl/50">Laddar...</p>
+            <p className="mt-1 font-sans text-xs text-pearl/50">Loading...</p>
           )}
           {loadError && (
             <p className="mt-1 font-sans text-xs text-red-300" role="alert">
@@ -736,9 +810,9 @@ export default function AdminSidePanel() {
         <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4">
           {section ? (
             <div key={section.id} className="space-y-3">
-              {panelView === 'history' ? (
+              {panelView === 'history' && routePageSlug ? (
                 <PanelHistoryView pageSlug={routePageSlug} onBack={() => setPanelView('edit')} />
-              ) : (
+              ) : panelView === 'history' ? null : (
                 <>
                   {section.fieldGroups.map((group, index) => (
                     <PanelFieldGroupAccordion
@@ -754,7 +828,7 @@ export default function AdminSidePanel() {
                       onClick={() => setPanelView('history')}
                       className="flex-1 rounded border border-white/20 py-2.5 font-sans text-[10px] uppercase tracking-widest text-pearl transition-colors hover:border-gold hover:text-gold"
                     >
-                      Historik
+                      History
                     </button>
                     <button
                       type="button"
@@ -762,7 +836,7 @@ export default function AdminSidePanel() {
                       onClick={() => void core.saveSection(sectionPageSlugs(section))}
                       className="flex-1 rounded border border-gold bg-gold py-2.5 font-sans text-[10px] uppercase tracking-widest text-white transition-colors hover:bg-gold-light disabled:opacity-50"
                     >
-                      {saving ? 'Sparar...' : 'Spara'}
+                      {saving ? 'Saving...' : 'Save'}
                     </button>
                   </div>
                 </>
@@ -770,7 +844,9 @@ export default function AdminSidePanel() {
             </div>
           ) : (
             <p className="font-sans text-sm text-pearl/60">
-              Den här sidan har inga redigerbara fält i panelen.
+              {routePageSlug === 'villas'
+                ? 'Open an individual villa page (e.g. /villas/mawar) to edit content.'
+                : 'This page has no editable fields in the panel.'}
             </p>
           )}
         </div>

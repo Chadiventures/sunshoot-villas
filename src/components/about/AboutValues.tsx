@@ -1,8 +1,11 @@
 "use client";
 
 import ScrollReveal from "@/components/ScrollReveal";
-import { useLanguage } from "@/context/LanguageContext";
 import { useMemo, type ReactNode } from "react";
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
+import { getPageContentDefaults } from "@/lib/contentDefaults";
+
+const VALUES_DEFAULTS = getPageContentDefaults("about");
 
 function ValueIcon({ children }: { children: ReactNode }) {
   return (
@@ -40,30 +43,22 @@ const VALUE_ICONS = [
 ];
 
 export default function AboutValues() {
-  const { t } = useLanguage();
-
   const values = useMemo(
     () => [
       {
-        key: "personal",
-        title: t.aboutValuePersonalTitle,
-        description: t.aboutValuePersonalDescription,
+        key: "1",
         icon: VALUE_ICONS[0],
       },
       {
-        key: "home",
-        title: t.aboutValueHomeTitle,
-        description: t.aboutValueHomeDescription,
+        key: "2",
         icon: VALUE_ICONS[1],
       },
       {
-        key: "honest",
-        title: t.aboutValueHonestTitle,
-        description: t.aboutValueHonestDescription,
+        key: "3",
         icon: VALUE_ICONS[2],
       },
     ],
-    [t],
+    [],
   );
 
   return (
@@ -78,7 +73,11 @@ export default function AboutValues() {
               fontWeight: 300,
             }}
           >
-            {t.aboutValuesTitle}
+            <AdminEditableText
+              blockKey="values.title"
+              fallback={VALUES_DEFAULTS["values.title"]}
+              as="span"
+            />
           </h2>
         </ScrollReveal>
 
@@ -94,7 +93,11 @@ export default function AboutValues() {
                     fontWeight: 400,
                   }}
                 >
-                  {value.title}
+                  <AdminEditableText
+                    blockKey={`values.${value.key}.title`}
+                    fallback={VALUES_DEFAULTS[`values.${value.key}.title`]}
+                    as="span"
+                  />
                 </h3>
                 <p
                   className="text-[11px] text-white/75 md:text-[0.9375rem]"
@@ -105,10 +108,18 @@ export default function AboutValues() {
                   }}
                 >
                   <span className="md:hidden" style={{ lineHeight: 1.5 }}>
-                    {value.description}
+                    <AdminEditableText
+                      blockKey={`values.${value.key}.description`}
+                      fallback={VALUES_DEFAULTS[`values.${value.key}.description`]}
+                      as="span"
+                    />
                   </span>
                   <span className="hidden md:inline" style={{ lineHeight: 1.75 }}>
-                    {value.description}
+                    <AdminEditableText
+                      blockKey={`values.${value.key}.description`}
+                      fallback={VALUES_DEFAULTS[`values.${value.key}.description`]}
+                      as="span"
+                    />
                   </span>
                 </p>
               </article>

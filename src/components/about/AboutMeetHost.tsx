@@ -1,11 +1,12 @@
 "use client";
 
 import ScrollReveal from "@/components/ScrollReveal";
-import { useLanguage } from "@/context/LanguageContext";
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
+import { getPageContentDefaults } from "@/lib/contentDefaults";
+
+const ABOUT_DEFAULTS = getPageContentDefaults("about");
 
 export default function AboutMeetHost() {
-  const { t } = useLanguage();
-
   return (
     <section className="bg-[var(--bg)] py-12 md:py-16">
       <div className="container-site">
@@ -28,9 +29,11 @@ export default function AboutMeetHost() {
                   color: "#C9A96E",
                 }}
               >
-                <span className="lg:hidden">{t.aboutMeetHostPhotoShort}</span>
+                <span className="lg:hidden">
+                  <AdminEditableText blockKey="host.photo.placeholder_short" fallback={ABOUT_DEFAULTS["host.photo.placeholder_short"]} as="span" />
+                </span>
                 <span className="hidden lg:inline" style={{ fontSize: "1rem" }}>
-                  {t.aboutMeetHostPhotoLong}
+                  <AdminEditableText blockKey="host.photo.placeholder_long" fallback={ABOUT_DEFAULTS["host.photo.placeholder_long"]} as="span" />
                 </span>
               </p>
             </div>
@@ -46,7 +49,7 @@ export default function AboutMeetHost() {
                   fontWeight: 300,
                 }}
               >
-                {t.aboutMeetHostTitle}
+                <AdminEditableText blockKey="host.title" fallback={ABOUT_DEFAULTS["host.title"]} as="span" />
               </h2>
               <p
                 className="text-[var(--text)]"
@@ -57,9 +60,11 @@ export default function AboutMeetHost() {
                   lineHeight: 1.7,
                 }}
               >
-                <span className="lg:hidden">{t.aboutMeetHostBody}</span>
+                <span className="lg:hidden">
+                  <AdminEditableText blockKey="host.body" fallback={ABOUT_DEFAULTS["host.body"]} as="span" />
+                </span>
                 <span className="hidden lg:inline" style={{ fontSize: "1rem", lineHeight: 1.85 }}>
-                  {t.aboutMeetHostBody}
+                  <AdminEditableText blockKey="host.body" fallback={ABOUT_DEFAULTS["host.body"]} as="span" />
                 </span>
               </p>
             </div>

@@ -2,14 +2,10 @@
 
 import Image from "next/image";
 import ScrollReveal from "@/components/ScrollReveal";
-import { useLanguage } from "@/context/LanguageContext";
-
-const STORY_IMAGE =
-  "https://cf.bstatic.com/xdata/images/hotel/max1280x900/185354554.jpg?k=5541438d3715f06575d9cf5298bbf73db085483cebce43802645af39a6bdeb0f&o=&hp=1";
+import { AdminEditableImage } from "@/components/admin/AdminEditableImage";
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
 
 export default function AboutIntro() {
-  const { t } = useLanguage();
-
   return (
     <section className="bg-[var(--bg)] py-12 md:py-16">
       <div className="container-site">
@@ -23,7 +19,7 @@ export default function AboutIntro() {
                 fontWeight: 300,
               }}
             >
-              {t.aboutStoryTitle}
+              <AdminEditableText blockKey="story.title" as="span" />
             </h2>
             <p
               className="text-[var(--text)]"
@@ -34,17 +30,25 @@ export default function AboutIntro() {
                 lineHeight: 1.85,
               }}
             >
-              {t.aboutStoryBody}
+              <AdminEditableText blockKey="story.body" allowLineBreaks as="span" />
             </p>
           </ScrollReveal>
 
           <div className="relative min-h-[260px] w-full overflow-hidden rounded-sm lg:min-h-0 lg:h-full">
-            <Image
-              src={STORY_IMAGE}
-              alt={t.aboutStoryImageAlt}
-              fill
+            <AdminEditableImage
+              imageBlockKey="story.image"
+              altBlockKey="story.image.alt"
               className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 50vw"
+              renderStaticImage={({ src, alt, className, style }) => (
+                <Image
+                  src={src}
+                  alt={alt}
+                  fill
+                  className={className}
+                  style={style}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              )}
             />
           </div>
         </div>

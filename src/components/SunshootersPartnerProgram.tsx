@@ -1,23 +1,48 @@
 "use client";
 
+import Image from "next/image";
+import { useContext } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
+import { AdminEditableImage } from "@/components/admin/AdminEditableImage";
+import { AdminCoreContext, useAdminContent } from "@/hooks/useAdminContent";
 import { useLanguage } from "@/context/LanguageContext";
+import { getPageContentDefaults } from "@/lib/contentDefaults";
+
+const HOME_DEFAULTS = getPageContentDefaults("home");
 
 export default function SunshootersPartnerProgram() {
   const { t } = useLanguage();
+  const core = useContext(AdminCoreContext);
+  const { getText } = useAdminContent();
+  void core?.contentRevision;
+
+  const benefits = t.sunshootersPartnerBenefits.map((benefit, index) => (
+    getText(`partner.benefit.${index + 1}`) || HOME_DEFAULTS[`partner.benefit.${index + 1}`] || benefit
+  ));
 
   return (
     <section className="bg-[var(--bg)] py-8 md:py-12">
       <div className="container-site">
         <ScrollReveal>
           <div className="mx-auto max-w-3xl rounded-lg border-[2.5px] border-[var(--dark)] bg-white px-6 py-7 text-center md:px-10 md:py-9">
-            <img
-              src="/sunshooters-logo.png"
-              alt={t.sunshootersPartnerLogoAlt}
-              width={150}
-              height={150}
-              className="mx-auto mb-5 h-auto w-[130px] md:mb-6 md:w-[150px]"
-            />
+            <div className="mx-auto mb-5 h-auto w-[130px] md:mb-6 md:w-[150px]">
+              <AdminEditableImage
+                imageBlockKey="partner.logo"
+                altBlockKey="partner.logo.alt"
+                className="h-auto w-full"
+                renderStaticImage={({ src, alt, className, style }) => (
+                  <Image
+                    src={src}
+                    alt={alt}
+                    width={150}
+                    height={150}
+                    className={className}
+                    style={style}
+                  />
+                )}
+              />
+            </div>
 
             <p
               className="mb-2 text-[var(--sand)]"
@@ -29,7 +54,7 @@ export default function SunshootersPartnerProgram() {
                 textTransform: "uppercase",
               }}
             >
-              {t.sunshootersPartnerLabel}
+              <AdminEditableText blockKey="partner.label" fallback={HOME_DEFAULTS["partner.label"]} as="span" />
             </p>
             <h2
               className="mb-3 text-[var(--dark)]"
@@ -39,7 +64,7 @@ export default function SunshootersPartnerProgram() {
                 fontWeight: 300,
               }}
             >
-              {t.sunshootersPartnerTitle}
+              <AdminEditableText blockKey="partner.title" fallback={HOME_DEFAULTS["partner.title"]} as="span" />
             </h2>
             <p
               className="mx-auto mb-6 max-w-2xl text-[var(--dark)]"
@@ -50,13 +75,13 @@ export default function SunshootersPartnerProgram() {
                 lineHeight: 1.7,
               }}
             >
-              {t.sunshootersPartnerDescription}
+              <AdminEditableText blockKey="partner.description" fallback={HOME_DEFAULTS["partner.description"]} as="span" />
             </p>
 
             <ul className="mx-auto mb-5 w-fit max-w-xl space-y-2 text-left">
-              {t.sunshootersPartnerBenefits.map((benefit) => (
+              {benefits.map((benefit, index) => (
                 <li
-                  key={benefit}
+                  key={`${benefit}-${index}`}
                   className="flex items-start gap-3 text-[var(--dark)]"
                   style={{
                     fontFamily: "var(--font-inter)",
@@ -83,7 +108,7 @@ export default function SunshootersPartnerProgram() {
                 lineHeight: 1.6,
               }}
             >
-              {t.sunshootersPartnerNote}
+              <AdminEditableText blockKey="partner.note" fallback={HOME_DEFAULTS["partner.note"]} as="span" />
             </p>
           </div>
         </ScrollReveal>

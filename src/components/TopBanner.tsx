@@ -1,7 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useContext } from "react";
+import { usePathname } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
+import { AdminCoreContext } from "@/hooks/useAdminContent";
+import { adminPathSegment } from "@/lib/adminPath";
 
 const textStyle = {
   fontFamily: "var(--font-inter)",
@@ -33,6 +37,12 @@ function BannerSegment({ text, hidden }: { text: string; hidden?: boolean }) {
 
 export default function TopBanner() {
   const { t } = useLanguage();
+  const pathname = usePathname();
+  const core = useContext(AdminCoreContext);
+
+  if (pathname.startsWith(`/${adminPathSegment()}`) || core?.adminMode) {
+    return null;
+  }
 
   return (
     <div

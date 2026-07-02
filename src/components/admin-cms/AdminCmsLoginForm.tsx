@@ -7,9 +7,12 @@ import { useAdminSession } from '@/components/admin/AdminProvider'
 import { AdminCoreContext } from '@/hooks/useAdminContent'
 import { adminPublicPath } from '@/lib/adminPath'
 
+const panelClass =
+  'rounded-lg border border-[#c9a84c]/35 bg-[#1a2e1a] px-6 py-10 shadow-lg sm:px-8 sm:py-12'
+
 const sessionLoadingUi = (
-  <div className="rounded-lg border border-gold/35 bg-navy px-6 py-10 shadow-lg sm:px-8 sm:py-12">
-    <p className="text-center font-sans text-sm text-pearl/70">Kontrollerar session...</p>
+  <div className={panelClass}>
+    <p className="text-center font-sans text-sm text-pearl/70">Checking session...</p>
   </div>
 )
 
@@ -60,20 +63,20 @@ export default function AdminCmsLoginForm() {
           if (result.status === 401) {
             setFailedAttempts((prev) => {
               const next = prev + 1
-              setError(`Ogiltiga inloggningsuppgifter (försök ${next}/3)`)
+              setError(`Invalid credentials (attempt ${next}/3)`)
               return next
             })
           } else if (result.status === 429) {
-            setError(result.error ?? 'För många inloggningsförsök. Kolla din mejl.')
+            setError(result.error ?? 'Too many login attempts. Check your email.')
           } else {
-            setError(result.error ?? 'Ogiltiga inloggningsuppgifter')
+            setError(result.error ?? 'Invalid credentials')
           }
           return
         }
         setFailedAttempts(0)
         setPassword('')
       } catch {
-        setError('Något gick fel. Försök igen.')
+        setError('Something went wrong. Please try again.')
       } finally {
         setLoading(false)
       }
@@ -97,9 +100,9 @@ export default function AdminCmsLoginForm() {
   }
 
   return (
-    <div className="rounded-lg border border-gold/35 bg-navy px-6 py-10 shadow-lg sm:px-8 sm:py-12">
-      <h1 className="mb-2 font-sans text-xl font-light tracking-wide text-pearl sm:text-2xl">CMS-inloggning</h1>
-      <p className="mb-8 font-sans text-sm text-pearl/60">Logga in för att redigera innehåll på sajten.</p>
+    <div className={panelClass}>
+      <h1 className="mb-2 font-sans text-xl font-light tracking-wide text-pearl sm:text-2xl">CMS login</h1>
+      <p className="mb-8 font-sans text-sm text-pearl/60">Log in to edit content on the site.</p>
 
       <form
         onSubmit={(e) => void onSubmit(e)}
@@ -119,7 +122,7 @@ export default function AdminCmsLoginForm() {
             htmlFor="admin-cms-password"
             className="mb-1.5 block font-sans text-[10px] uppercase tracking-[0.25em] text-pearl/55"
           >
-            Lösenord
+            Password
           </label>
           <div className="relative">
             <input
@@ -130,12 +133,12 @@ export default function AdminCmsLoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full border border-white/15 bg-pearl/10 py-2.5 pl-3 pr-11 font-sans text-sm text-pearl placeholder:text-pearl/35 focus:border-gold focus:outline-none"
+              className="w-full border border-white/15 bg-pearl/10 py-2.5 pl-3 pr-11 font-sans text-sm text-pearl placeholder:text-pearl/35 focus:border-[#c9a84c] focus:outline-none"
             />
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
-              aria-label="Visa/dölj lösenord"
+              aria-label="Show or hide password"
               className="absolute right-3 top-1/2 -translate-y-1/2 text-pearl/55 transition-colors hover:text-pearl"
             >
               {showPassword ? (
@@ -184,18 +187,18 @@ export default function AdminCmsLoginForm() {
         <button
           type="submit"
           disabled={loading || !password}
-          className={`${btnBase} border border-gold bg-gold text-white hover:bg-gold-light disabled:opacity-50`}
+          className={`${btnBase} border border-[#c9a84c] bg-[#c9a84c] text-white hover:bg-[#d4b87f] disabled:opacity-50`}
         >
-          {loading ? 'Loggar in...' : 'Logga in'}
+          {loading ? 'Logging in...' : 'Log in'}
         </button>
       </form>
 
       <p className="mt-6 text-center font-sans text-sm">
         <Link
           href={adminPublicPath('/aterstall')}
-          className="text-gold underline decoration-gold/40 underline-offset-4 hover:text-gold-light"
+          className="text-[#c9a84c] underline decoration-[#c9a84c]/40 underline-offset-4 hover:text-[#d4b87f]"
         >
-          Glömt lösenord
+          Forgot password
         </Link>
       </p>
     </div>

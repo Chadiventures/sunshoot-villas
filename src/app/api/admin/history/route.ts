@@ -1,10 +1,6 @@
-import { neon } from '@neondatabase/serverless'
+import { getSql } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
-import {
-  ensureContentBlockHistoryTable,
-  historyRowToPayload,
-  type ContentBlockHistoryRow,
-} from '@/lib/contentBlockHistoryDb'
+import { readHistory } from '@/lib/contentBlockHistoryDb'
 import { verifyAdminSessionFromRequest } from '@/lib/verifyAdminSession'
 
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
@@ -29,31 +25,14 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Ogiltig eller saknad pageSlug' }, { status: 400 })
   }
 
-  const dbUrl = process.env.DATABASE_URL
-  if (!dbUrl) {
+  const sql = getSql()
+  if (!sql) {
     return NextResponse.json({ changes: [] })
   }
 
   try {
-    const sql = neon(dbUrl)
-    await ensureContentBlockHistoryTable(sql)
     const limit = pageSlug === 'all' ? 20 : 50
-    const rows =
-      pageSlug === 'all'
-        ? await sql`
-            SELECT id, page_slug, block_key, value, previous_value, saved_at
-            FROM content_block_history
-            ORDER BY saved_at DESC
-            LIMIT ${limit}
-          `
-        : await sql`
-            SELECT id, page_slug, block_key, value, previous_value, saved_at
-            FROM content_block_history
-            WHERE page_slug = ${pageSlug}
-            ORDER BY saved_at DESC
-            LIMIT ${limit}
-          `
-    const changes = (rows as ContentBlockHistoryRow[]).map(historyRowToPayload)
+    const changes = await readHistory(sql, pageSlug, limit)
     return NextResponse.json({ changes })
   } catch (err) {
     console.error('[admin/history GET] error', err)

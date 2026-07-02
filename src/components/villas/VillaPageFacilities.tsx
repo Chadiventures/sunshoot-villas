@@ -1,8 +1,8 @@
 "use client";
 
 import type { VillaFacilities as VillaFacilitiesType } from "@/lib/villas";
-import { FACILITY_LABELS } from "@/lib/villas";
 import ScrollReveal from "@/components/ScrollReveal";
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
 import type { ReactNode } from "react";
 
 type VillaPageFacilitiesProps = {
@@ -190,11 +190,9 @@ const FACILITY_ICONS: Record<keyof VillaFacilitiesType, ReactNode> = {
 
 function FacilityPill({
   facilityKey,
-  label,
   index,
 }: {
   facilityKey: keyof VillaFacilitiesType;
-  label: string;
   index: number;
 }) {
   return (
@@ -208,18 +206,16 @@ function FacilityPill({
         }}
       >
         <span className="text-[#2d8a4e]">{FACILITY_ICONS[facilityKey]}</span>
-        {label}
+        <AdminEditableText blockKey={`amenities.${facilityKey}`} as="span" />
       </span>
     </ScrollReveal>
   );
 }
 
-export default function VillaPageFacilities({
-  facilities,
-}: VillaPageFacilitiesProps) {
-  const included = (
-    Object.entries(FACILITY_LABELS) as [keyof VillaFacilitiesType, string][]
-  ).filter(([key]) => !HIDDEN_FACILITIES.includes(key) && facilities[key]);
+export default function VillaPageFacilities({ facilities }: VillaPageFacilitiesProps) {
+  const included = (Object.keys(facilities) as (keyof VillaFacilitiesType)[]).filter(
+    (key) => !HIDDEN_FACILITIES.includes(key) && facilities[key],
+  );
 
   return (
     <section className="bg-[var(--bg)] py-14 md:py-20">
@@ -233,7 +229,7 @@ export default function VillaPageFacilities({
               fontWeight: 300,
             }}
           >
-            Villa Facilities
+            <AdminEditableText blockKey="amenities.title" as="span" />
           </h2>
         </ScrollReveal>
 
@@ -248,16 +244,11 @@ export default function VillaPageFacilities({
               textTransform: "uppercase",
             }}
           >
-            What is included
+            <AdminEditableText blockKey="amenities.subtitle" as="span" />
           </h3>
           <div className="flex flex-wrap gap-2">
-            {included.map(([key, label], index) => (
-              <FacilityPill
-                key={key}
-                facilityKey={key}
-                label={label}
-                index={index}
-              />
+            {included.map((key, index) => (
+              <FacilityPill key={key} facilityKey={key} index={index} />
             ))}
           </div>
         </div>

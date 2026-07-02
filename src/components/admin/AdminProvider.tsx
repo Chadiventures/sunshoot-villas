@@ -47,6 +47,18 @@ export const PageServerContentContext = createContext<
   ((content: Record<string, string>) => void) | null
 >(null)
 
+type RegisterPageSlug = (pageSlug: PageSlug | null) => void
+
+const RegisterPageSlugContext = createContext<RegisterPageSlug | null>(null)
+
+function useRegisterAdminPageSlug(pageSlug: PageSlug) {
+  const register = useContext(RegisterPageSlugContext)
+  useEffect(() => {
+    register?.(pageSlug)
+    return () => register?.(null)
+  }, [pageSlug, register])
+}
+
 type AdminProviderProps = {
   children: ReactNode
   /** Global blocks from root layout (header, footer, …). */
@@ -61,7 +73,17 @@ export function useAdminSession(): AdminSessionContextValue {
   return ctx
 }
 
-export function AdminBlockPage({ pageSlug, children }: { pageSlug: PageSlug; children: ReactNode }) {
+export function AdminBlockPage({
+  pageSlug,
+  children,
+  register = true,
+}: {
+  pageSlug: PageSlug
+  children: ReactNode
+  /** When false, only sets block context (e.g. header/footer on global slug). */
+  register?: boolean
+}) {
+  if (register) useRegisterAdminPageSlug(pageSlug)
   return <AdminBlockPageContext.Provider value={pageSlug}>{children}</AdminBlockPageContext.Provider>
 }
 
@@ -80,8 +102,17 @@ export default function AdminProvider({
   layoutServerContent = {},
 }: AdminProviderProps) {
   const pathname = usePathname()
-  const routePageSlug = useMemo(() => pathnameToPageSlug(pathname), [pathname])
+  const pathnamePageSlug = useMemo(() => pathnameToPageSlug(pathname), [pathname])
+  const [registeredPageSlug, setRegisteredPageSlug] = useState<PageSlug | null>(null)
+  const registerPageSlug = useCallback<RegisterPageSlug>((pageSlug) => {
+    setRegisteredPageSlug(pageSlug)
+  }, [])
+  const routePageSlug = registeredPageSlug ?? pathnamePageSlug
   const [pageServerContent, setPageServerContent] = useState<Record<string, string>>({})
+
+  useEffect(() => {
+    setRegisteredPageSlug(null)
+  }, [pathname])
 
   const mergedServerContent = useMemo(
     () => ({ ...layoutServerContent, ...pageServerContent }),
@@ -103,6 +134,7 @@ export default function AdminProvider({
     if (readPersistedAdminSession()) {
       setAuthenticated(true)
       setAdminModeState(true)
+      setPanelOpenState(true)
     }
   }, [pathname])
 
@@ -116,15 +148,18 @@ export default function AdminProvider({
 
   const clearClientSession = useCallback(() => {
     writePersistedAdminSession(false)
+    writePersistedPanelOpen(false)
     setAuthenticated(false)
     setAdminModeState(false)
+    setPanelOpenState(false)
   }, [])
 
   const applySessionOk = useCallback(() => {
     writePersistedAdminSession(true)
     setAuthenticated(true)
     setAdminModeState(true)
-  }, [])
+    setPanelOpen(true)
+  }, [setPanelOpen])
 
   const applySessionOkRef = useRef(applySessionOk)
   const clearClientSessionRef = useRef(clearClientSession)
@@ -274,10 +309,12 @@ export default function AdminProvider({
       <AdminImageEditorProvider>
         <AdminSessionContext.Provider value={sessionValue}>
           <PageServerContentContext.Provider value={setPageServerContent}>
-            <AdminBlockPageContext.Provider value={null}>
-              {children}
-              <AdminImageEditorModal />
-            </AdminBlockPageContext.Provider>
+            <RegisterPageSlugContext.Provider value={registerPageSlug}>
+              <AdminBlockPageContext.Provider value={null}>
+                {children}
+                <AdminImageEditorModal />
+              </AdminBlockPageContext.Provider>
+            </RegisterPageSlugContext.Provider>
           </PageServerContentContext.Provider>
         </AdminSessionContext.Provider>
       </AdminImageEditorProvider>

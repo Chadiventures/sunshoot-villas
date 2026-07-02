@@ -4,34 +4,44 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import ScrollReveal from "@/components/ScrollReveal";
-import { useLanguage } from "@/context/LanguageContext";
-import { BOOKING_PHOTOS } from "@/lib/media";
+import { AdminEditableImage } from "@/components/admin/AdminEditableImage";
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
+import { getPageContentDefaults } from "@/lib/contentDefaults";
 
-const CAROUSEL_IMAGES = [
-  { src: BOOKING_PHOTOS[0], alt: "Sun Shoot Villas private pool" },
-  { src: BOOKING_PHOTOS[1], alt: "Villa living area at Sun Shoot Villas" },
-  { src: BOOKING_PHOTOS[2], alt: "Bedroom at Sun Shoot Villas Seminyak" },
-  { src: BOOKING_PHOTOS[3], alt: "Pool area at Sun Shoot Villas" },
-  { src: BOOKING_PHOTOS[4], alt: "Sun Shoot Villas garden villa" },
-];
+const HOME_DEFAULTS = getPageContentDefaults("home");
 
-function CarouselImage({ src, alt }: { src: string; alt: string }) {
+function CarouselImage({
+  imageBlockKey,
+  altBlockKey,
+}: {
+  imageBlockKey: string;
+  altBlockKey: string;
+}) {
   return (
     <div className="relative h-56 w-[280px] shrink-0 overflow-hidden rounded-sm sm:h-64 sm:w-[320px]">
-      <Image
-        src={src}
-        alt={alt}
-        fill
+      <AdminEditableImage
+        imageBlockKey={imageBlockKey}
+        altBlockKey={altBlockKey}
         className="object-cover"
-        sizes="320px"
+        renderStaticImage={({ src, alt, className, style }) => (
+          <Image src={src} alt={alt} fill className={className} style={style} sizes="320px" />
+        )}
       />
     </div>
   );
 }
 
 export default function AboutImageGrid() {
-  const { t } = useLanguage();
-  const images = CAROUSEL_IMAGES;
+  const images = useMemo(
+    () => [
+      { key: "1", imageBlockKey: "life_at.gallery.1", altBlockKey: "life_at.gallery.1.alt" },
+      { key: "2", imageBlockKey: "life_at.gallery.2", altBlockKey: "life_at.gallery.2.alt" },
+      { key: "3", imageBlockKey: "life_at.gallery.3", altBlockKey: "life_at.gallery.3.alt" },
+      { key: "4", imageBlockKey: "life_at.gallery.4", altBlockKey: "life_at.gallery.4.alt" },
+      { key: "5", imageBlockKey: "life_at.gallery.5", altBlockKey: "life_at.gallery.5.alt" },
+    ],
+    [],
+  );
   const doubled = useMemo(() => [...images, ...images], [images]);
 
   const trackRef = useRef<HTMLDivElement>(null);
@@ -97,7 +107,7 @@ export default function AboutImageGrid() {
               fontWeight: 300,
             }}
           >
-            {t.lifeAtTitle}
+            <AdminEditableText blockKey="life_at.title" fallback={HOME_DEFAULTS["life_at.title"]} as="span" />
           </h2>
         </ScrollReveal>
 
@@ -126,7 +136,11 @@ export default function AboutImageGrid() {
               style={{ width: "max-content" }}
             >
               {doubled.map((image, i) => (
-                <CarouselImage key={`${image.src}-${i}`} src={image.src} alt={image.alt} />
+                <CarouselImage
+                  key={`${image.key}-${i}`}
+                  imageBlockKey={image.imageBlockKey}
+                  altBlockKey={image.altBlockKey}
+                />
               ))}
             </div>
           </div>
@@ -144,7 +158,7 @@ export default function AboutImageGrid() {
         </div>
 
         <p className="mt-4 text-center text-[0.6875rem] text-[var(--text-muted)] md:hidden">
-          {t.lifeAtSwipeHint}
+          <AdminEditableText blockKey="life_at.swipe_hint" fallback={HOME_DEFAULTS["life_at.swipe_hint"]} as="span" />
         </p>
 
         <ScrollReveal className="mt-10 text-center md:mt-12">
@@ -155,7 +169,7 @@ export default function AboutImageGrid() {
               fontWeight: 300,
             }}
           >
-            {t.lifeAtCtaTitle}
+            <AdminEditableText blockKey="life_at.cta_title" fallback={HOME_DEFAULTS["life_at.cta_title"]} as="span" />
           </h3>
           <p
             className="mx-auto mb-8 max-w-xl text-[var(--text-muted)]"
@@ -166,7 +180,7 @@ export default function AboutImageGrid() {
               lineHeight: 1.7,
             }}
           >
-            {t.lifeAtCtaSubtext}
+            <AdminEditableText blockKey="life_at.cta_subtext" fallback={HOME_DEFAULTS["life_at.cta_subtext"]} as="span" />
           </p>
           <div className="flex flex-row items-center justify-center gap-2 sm:gap-4">
             <Link
@@ -180,13 +194,13 @@ export default function AboutImageGrid() {
                 textTransform: "uppercase",
               }}
             >
-              {t.navBookNow}
+              <AdminEditableText blockKey="life_at.cta_book" fallback={HOME_DEFAULTS["life_at.cta_book"]} as="span" />
             </Link>
             <Link
               href="/villas"
               className="btn-outline-dark btn-hover min-w-[200px] max-sm:min-w-0 max-sm:flex-1 max-sm:px-3"
             >
-              {t.homeCtaViewVillas}
+              <AdminEditableText blockKey="life_at.cta_view_villas" fallback={HOME_DEFAULTS["life_at.cta_view_villas"]} as="span" />
             </Link>
           </div>
         </ScrollReveal>

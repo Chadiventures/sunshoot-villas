@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import PhoneNumberField, {
   DEFAULT_PHONE_VALUE,
   buildPhoneWhatsAppLines,
@@ -10,6 +10,7 @@ import PhoneNumberField, {
 import { VILLAS } from "@/lib/villas";
 import { SITE } from "@/lib/site";
 import { useLanguage } from "@/context/LanguageContext";
+import { AdminCoreContext, useAdminContent } from "@/hooks/useAdminContent";
 
 type FormFields = {
   name: string;
@@ -151,6 +152,9 @@ export default function InquiryForm({
   contactMode = false,
 }: InquiryFormProps) {
   const { t } = useLanguage();
+  const core = useContext(AdminCoreContext);
+  const { getText } = useAdminContent();
+  void core?.contentRevision;
   const [form, setForm] = useState<FormFields>({
     ...initialForm,
     villa: defaultVilla,
@@ -268,6 +272,9 @@ export default function InquiryForm({
         : "border-[var(--text)]/15 focus:border-[var(--sand)]"
     }`;
 
+  const cmsForm = (key: string, fallback: string) =>
+    getText(`form.${key}`) || fallback;
+
   return (
     <div className="space-y-5">
       {showHeading && (
@@ -280,7 +287,7 @@ export default function InquiryForm({
               fontWeight: 300,
             }}
           >
-            {t.formInquiryTitle}
+            {cmsForm("title", t.formInquiryTitle)}
           </h3>
           <p
             className="text-[var(--text-muted)]"
@@ -291,7 +298,7 @@ export default function InquiryForm({
               lineHeight: 1.7,
             }}
           >
-            {t.formInquirySubtitle}
+            {cmsForm("subtitle", t.formInquirySubtitle)}
           </p>
         </div>
       )}
@@ -301,7 +308,7 @@ export default function InquiryForm({
           htmlFor="name"
           className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
         >
-          {t.formLabelName}
+          {cmsForm("label.name", t.formLabelName)}
           <RequiredMark />
         </label>
         <input
@@ -322,7 +329,7 @@ export default function InquiryForm({
           htmlFor="email"
           className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
         >
-          {t.formLabelEmail}
+          {cmsForm("label.email", t.formLabelEmail)}
           <RequiredMark />
         </label>
         <input
@@ -341,7 +348,7 @@ export default function InquiryForm({
       <PhoneNumberField
         idPrefix="inquiry"
         fieldId="inquiry-phone-field"
-        label={t.formLabelPhone}
+        label={cmsForm("label.phone", t.formLabelPhone)}
         value={form.phone}
         onChange={(phone) => updateField("phone", phone)}
         hasError={fieldError("phone")}
@@ -354,7 +361,7 @@ export default function InquiryForm({
             htmlFor="villa"
             className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
           >
-            {t.formLabelVilla}
+            {cmsForm("label.villa", t.formLabelVilla)}
             {!contactMode && <RequiredMark />}
           </label>
           <select
@@ -385,7 +392,7 @@ export default function InquiryForm({
             htmlFor="arrivalDate"
             className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
           >
-            {t.formLabelArrivalDate}
+            {cmsForm("label.arrival", t.formLabelArrivalDate)}
             {!contactMode && <RequiredMark />}
           </label>
           <input
@@ -406,7 +413,7 @@ export default function InquiryForm({
             htmlFor="departureDate"
             className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
           >
-            {t.formLabelDepartureDate}
+            {cmsForm("label.departure", t.formLabelDepartureDate)}
             {!contactMode && <RequiredMark />}
           </label>
           <input
@@ -430,7 +437,7 @@ export default function InquiryForm({
             htmlFor="adults"
             className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
           >
-            {t.formLabelAdults}
+            {cmsForm("label.adults", t.formLabelAdults)}
             {!contactMode && <RequiredMark />}
           </label>
           <select
@@ -458,7 +465,7 @@ export default function InquiryForm({
             htmlFor="children"
             className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
           >
-            {t.formLabelChildren}
+            {cmsForm("label.children", t.formLabelChildren)}
           </label>
           <select
             id="children"
@@ -481,13 +488,13 @@ export default function InquiryForm({
           htmlFor="message"
           className="mb-1.5 block text-[0.6875rem] font-medium tracking-[0.15em] text-[var(--dark)] uppercase"
         >
-          {t.formLabelMessage}
+          {cmsForm("label.message", t.formLabelMessage)}
           {contactMode && <RequiredMark />}
         </label>
         <textarea
           id="message"
           rows={4}
-          placeholder={t.formPlaceholderMessage}
+          placeholder={cmsForm("placeholder.message", t.formPlaceholderMessage)}
           value={form.message}
           onChange={(e) => updateField("message", e.target.value)}
           className={`${inputClass(fieldError("message"))} resize-none`}
@@ -510,7 +517,7 @@ export default function InquiryForm({
         }}
         className="btn-primary w-full cursor-pointer text-center"
       >
-        {t.formSubmitWhatsApp}
+        {cmsForm("submit", t.formSubmitWhatsApp)}
       </div>
     </div>
   );

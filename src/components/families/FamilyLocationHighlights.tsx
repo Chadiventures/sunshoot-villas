@@ -1,21 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
 
-const locationHighlights = [
-  {
-    emoji: "🏖️",
-    text: "15 min walk to Seminyak Beach and KuDeTa, perfect for building sandcastles and watching the sunset",
-  },
-  {
-    emoji: "🍦",
-    text: "Surrounded by cafes and restaurants with kids menus, ice cream and fresh juice bars",
-  },
-  {
-    emoji: "🎭",
-    text: "Easy access to family-friendly activities, from water parks to cultural experiences",
-  },
-];
+const locationEmojis = ["🏖️", "🍦", "🎭"];
 
 const columnDelays = [0, 200, 400];
 
@@ -61,18 +49,18 @@ export default function FamilyLocationHighlights() {
             lineHeight: 1.2,
           }}
         >
-          The Perfect Family Base in Seminyak
+          <AdminEditableText blockKey="location.title" as="span" />
         </h2>
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-          {locationHighlights.map((item, index) => (
+          {locationEmojis.map((emoji, index) => (
             <div
-              key={item.text}
+              key={`location.item_${index + 1}.text`}
               className="text-center"
               style={columnStyle(isVisible, columnDelays[index])}
             >
               <span className="mb-4 block text-3xl" aria-hidden="true">
-                {item.emoji}
+                {emoji}
               </span>
               <p
                 className="text-[#6B6B6B]"
@@ -83,7 +71,7 @@ export default function FamilyLocationHighlights() {
                   lineHeight: 1.7,
                 }}
               >
-                {item.text}
+                <AdminEditableText blockKey={`location.item_${index + 1}.text`} as="span" />
               </p>
             </div>
           ))}

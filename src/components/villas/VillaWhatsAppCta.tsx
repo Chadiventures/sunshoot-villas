@@ -1,11 +1,8 @@
 "use client";
 
 import ScrollReveal from "@/components/ScrollReveal";
-import { useLanguage } from "@/context/LanguageContext";
-
-type VillaWhatsAppCtaProps = {
-  villaName: string;
-};
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
+import { useAdminContent } from "@/hooks/useAdminContent";
 
 const WHATSAPP = "6281239701978";
 
@@ -23,9 +20,9 @@ function WhatsAppLogo() {
   );
 }
 
-export default function VillaWhatsAppCta({ villaName }: VillaWhatsAppCtaProps) {
-  const { t } = useLanguage();
-  const message = `Hi! I am interested in ${villaName}. Could you please send me more information about availability and pricing?`;
+export default function VillaWhatsAppCta() {
+  const { getText } = useAdminContent();
+  const message = getText("whatsapp.message");
 
   const handleClick = () => {
     window.open(
@@ -50,7 +47,7 @@ export default function VillaWhatsAppCta({ villaName }: VillaWhatsAppCtaProps) {
               fontWeight: 400,
             }}
           >
-            Interested in {villaName}?
+            <AdminEditableText blockKey="whatsapp.title" as="span" />
           </h2>
           <p
             className="mb-8 text-[var(--text-muted)]"
@@ -61,8 +58,7 @@ export default function VillaWhatsAppCta({ villaName }: VillaWhatsAppCtaProps) {
               lineHeight: 1.7,
             }}
           >
-            Send us a message on WhatsApp and we will get back to you within a
-            few hours.
+            <AdminEditableText blockKey="whatsapp.body" allowLineBreaks as="span" />
           </p>
           <button
             type="button"
@@ -76,7 +72,7 @@ export default function VillaWhatsAppCta({ villaName }: VillaWhatsAppCtaProps) {
               textTransform: "uppercase",
             }}
           >
-            {t.whatsAppButton}
+            <AdminEditableText blockKey="whatsapp.button" as="span" />
           </button>
         </ScrollReveal>
       </div>

@@ -1,5 +1,5 @@
 import { hashSync } from 'bcryptjs'
-import { neon } from '@neondatabase/serverless'
+import { getSql } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminResetToken } from '@/lib/adminResetToken'
 import { ensureAdminTables } from '@/lib/adminUserDb'
@@ -7,8 +7,8 @@ import { ensureAdminTables } from '@/lib/adminUserDb'
 type UpdateRow = { id: string }
 
 export async function POST(req: NextRequest) {
-  const dbUrl = process.env.DATABASE_URL
-  if (!dbUrl) {
+  const sql = getSql()
+  if (!sql) {
     return NextResponse.json({ error: 'Databas är inte konfigurerad' }, { status: 500 })
   }
 
@@ -39,7 +39,6 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const sql = neon(dbUrl)
     await ensureAdminTables(sql)
 
     const passwordHash = hashSync(password, 10)

@@ -2,12 +2,23 @@
 
 import Link from "next/link";
 import { HERO_VIDEO } from "@/lib/media";
-import { SITE } from "@/lib/site";
-import { useLanguage } from "@/context/LanguageContext";
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
 
-export default function Hero() {
-  const { t } = useLanguage();
+type HeroProps = {
+  headline: string;
+  subheadline: string;
+  videoUrl: string;
+  ctaVillas: string;
+  ctaBook: string;
+};
 
+export default function Hero({
+  headline,
+  subheadline,
+  videoUrl,
+  ctaVillas,
+  ctaBook,
+}: HeroProps) {
   return (
     <section
       className="relative flex min-h-screen items-center justify-center overflow-hidden"
@@ -21,7 +32,7 @@ export default function Hero() {
         preload="auto"
         className="absolute inset-0 h-full w-full object-cover"
       >
-        <source src={HERO_VIDEO} type="video/mp4" />
+        <source src={videoUrl || HERO_VIDEO} type="video/mp4" />
       </video>
 
       <div
@@ -42,7 +53,7 @@ export default function Hero() {
             letterSpacing: "0.02em",
           }}
         >
-          {t.heroHeadline}
+          <AdminEditableText blockKey="hero.headline" fallback={headline} as="span" />
         </h1>
 
         <p
@@ -54,7 +65,7 @@ export default function Hero() {
             lineHeight: 1.7,
           }}
         >
-          {t.heroSubheadline}
+          <AdminEditableText blockKey="hero.subheadline" fallback={subheadline} as="span" />
         </p>
 
         <div className="flex flex-row items-center justify-center gap-2 sm:gap-4">
@@ -62,13 +73,13 @@ export default function Hero() {
             href="/villas"
             className="btn-primary min-w-[200px] max-sm:min-w-0 max-sm:flex-1 max-sm:px-3"
           >
-            {t.navOurVillas}
+            <AdminEditableText blockKey="hero.cta_villas" fallback={ctaVillas} as="span" />
           </Link>
           <Link
             href="/book"
             className="btn-outline min-w-[200px] max-sm:min-w-0 max-sm:flex-1 max-sm:px-3"
           >
-            {t.navBookNow}
+            <AdminEditableText blockKey="hero.cta_book" fallback={ctaBook} as="span" />
           </Link>
         </div>
       </div>

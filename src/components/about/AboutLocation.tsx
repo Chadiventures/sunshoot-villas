@@ -1,11 +1,16 @@
 "use client";
 
+import { useContext } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
-import { useLanguage } from "@/context/LanguageContext";
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
+import { AdminCoreContext, useAdminContent } from "@/hooks/useAdminContent";
 import { HERO_VIDEO } from "@/lib/media";
 
 export default function AboutLocation() {
-  const { t } = useLanguage();
+  const core = useContext(AdminCoreContext);
+  const { getText } = useAdminContent();
+  void core?.contentRevision;
+  const videoUrl = getText("location.video_url") || HERO_VIDEO;
 
   return (
     <section className="relative overflow-hidden py-12 md:py-16">
@@ -18,7 +23,7 @@ export default function AboutLocation() {
         className="absolute inset-0 h-full w-full object-cover"
         aria-hidden="true"
       >
-        <source src={HERO_VIDEO} type="video/mp4" />
+        <source src={videoUrl} type="video/mp4" />
       </video>
 
       <div
@@ -37,7 +42,7 @@ export default function AboutLocation() {
               fontWeight: 300,
             }}
           >
-            {t.aboutLocationTitle}
+            <AdminEditableText blockKey="location.title" as="span" />
           </h2>
           <p
             className="text-white"
@@ -48,7 +53,7 @@ export default function AboutLocation() {
               lineHeight: 1.85,
             }}
           >
-            {t.aboutLocationBody}
+            <AdminEditableText blockKey="location.body" allowLineBreaks as="span" />
           </p>
         </ScrollReveal>
       </div>

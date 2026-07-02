@@ -1,18 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import LanguageSelector from "@/components/LanguageSelector";
-import { useLanguage } from "@/context/LanguageContext";
+import { AdminBlockPage } from "@/components/admin/AdminProvider";
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
+import { AdminCoreContext } from "@/hooks/useAdminContent";
+import { ADMIN_TOOLBAR_HEIGHT_PX } from "@/lib/adminToolbar";
+import { adminPathSegment } from "@/lib/adminPath";
+import { getPageContentDefaults } from "@/lib/contentDefaults";
+
+const HEADER_DEFAULTS = getPageContentDefaults("global");
 
 export default function Header() {
   const pathname = usePathname();
-  const { t } = useLanguage();
+  const core = useContext(AdminCoreContext);
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const isAdmin = pathname.startsWith(`/${adminPathSegment()}`);
   const isHome = pathname === "/";
+  const adminEditing = Boolean(core?.adminMode);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -28,17 +37,21 @@ export default function Header() {
     };
   }, [mobileOpen]);
 
+  if (isAdmin) return null;
+
   const solid = scrolled || !isHome;
-  const headerTop = "var(--top-banner-h, 32px)";
+  const headerTop = adminEditing
+    ? `${ADMIN_TOOLBAR_HEIGHT_PX}px`
+    : "var(--top-banner-h, 32px)";
 
   const navLinks = [
-    { label: t.navOurVillas, href: "/villas", key: "villas" },
-    { label: t.navAboutUs, href: "/about", key: "about" },
-    { label: t.navContactUs, href: "/contact", key: "contact" },
+    { href: "/villas", key: "villas", blockKey: "header.nav.villas" },
+    { href: "/about", key: "about", blockKey: "header.nav.about" },
+    { href: "/contact", key: "contact", blockKey: "header.nav.contact" },
   ];
 
   return (
-    <>
+    <AdminBlockPage pageSlug="global" register={false}>
       <header
         className={`fixed right-0 left-0 transition-all duration-300 ease-in-out ${
           solid ? "bg-[var(--dark)] shadow-lg" : "bg-transparent"
@@ -50,7 +63,12 @@ export default function Header() {
             href="/"
             className="font-[family-name:var(--font-cormorant)] text-xl font-light tracking-wide text-white transition-all duration-300 ease-in-out md:text-2xl"
           >
-            Sun Shoot Villas
+            <AdminEditableText
+              blockKey="header.brand_name"
+              fallback={HEADER_DEFAULTS["header.brand_name"]}
+              isolateLink
+              as="span"
+            />
           </Link>
 
           <nav className="hidden items-center gap-6 lg:gap-8 md:flex">
@@ -60,11 +78,21 @@ export default function Header() {
                 href={link.href}
                 className="text-[11px] font-medium tracking-[0.15em] text-white/85 uppercase transition-all duration-300 ease-in-out hover:scale-105 hover:text-[var(--sand)]"
               >
-                {link.label}
+                <AdminEditableText
+                  blockKey={link.blockKey}
+                  fallback={HEADER_DEFAULTS[link.blockKey]}
+                  isolateLink
+                  as="span"
+                />
               </Link>
             ))}
             <Link href="/book" className="btn-primary btn-hover !py-2.5 !text-[10px]">
-              {t.navBookNow}
+              <AdminEditableText
+                blockKey="header.book_button"
+                fallback={HEADER_DEFAULTS["header.book_button"]}
+                isolateLink
+                as="span"
+              />
             </Link>
             <LanguageSelector />
           </nav>
@@ -108,7 +136,12 @@ export default function Header() {
                 onClick={() => setMobileOpen(false)}
                 className="border-b border-white/10 py-5 font-[family-name:var(--font-cormorant)] text-2xl font-light text-white transition-colors hover:text-[var(--sand)]"
               >
-                {link.label}
+                <AdminEditableText
+                  blockKey={link.blockKey}
+                  fallback={HEADER_DEFAULTS[link.blockKey]}
+                  isolateLink
+                  as="span"
+                />
               </Link>
             ))}
             <Link
@@ -116,11 +149,16 @@ export default function Header() {
               onClick={() => setMobileOpen(false)}
               className="btn-primary btn-hover mt-8 w-full text-center"
             >
-              {t.navBookNow}
+              <AdminEditableText
+                blockKey="header.book_button"
+                fallback={HEADER_DEFAULTS["header.book_button"]}
+                isolateLink
+                as="span"
+              />
             </Link>
           </nav>
         </div>
       )}
-    </>
+    </AdminBlockPage>
   );
 }

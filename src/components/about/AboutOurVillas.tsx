@@ -1,11 +1,9 @@
 "use client";
 
 import ScrollReveal from "@/components/ScrollReveal";
-import { useLanguage } from "@/context/LanguageContext";
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
 
 export default function AboutOurVillas() {
-  const { t } = useLanguage();
-
   return (
     <section className="bg-white py-12 md:py-16">
       <div className="container-site">
@@ -18,7 +16,7 @@ export default function AboutOurVillas() {
               fontWeight: 300,
             }}
           >
-            {t.aboutOurVillasTitle}
+            <AdminEditableText blockKey="our_villas.title" as="span" />
           </h2>
           <p
             className="text-[var(--text)]"
@@ -29,7 +27,7 @@ export default function AboutOurVillas() {
               lineHeight: 1.85,
             }}
           >
-            {t.aboutOurVillasBody}
+            <AdminEditableText blockKey="our_villas.body" allowLineBreaks as="span" />
           </p>
         </ScrollReveal>
       </div>

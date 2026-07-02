@@ -1,7 +1,8 @@
 "use client";
 
+import { useContext } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
-import { useLanguage } from "@/context/LanguageContext";
+import { AdminCoreContext, useAdminContent } from "@/hooks/useAdminContent";
 
 type RatingItem = {
   platform: string;
@@ -10,7 +11,7 @@ type RatingItem = {
   href?: string;
 };
 
-const RATINGS: RatingItem[] = [
+const RATINGS_FALLBACK: RatingItem[] = [
   {
     platform: "Booking.com",
     score: "8.5",
@@ -133,9 +134,22 @@ function DesktopRatingEntry({ item }: { item: RatingItem }) {
 }
 
 export default function RatingsTrustBar() {
-  const { t } = useLanguage();
-  const topRow = RATINGS.slice(0, 3);
-  const bottomRow = RATINGS.slice(3);
+  const core = useContext(AdminCoreContext);
+  const { getText } = useAdminContent();
+  void core?.contentRevision;
+
+  const ratings: RatingItem[] = RATINGS_FALLBACK.map((fallback, index) => {
+    const num = index + 1;
+    return {
+      platform: getText(`ratings.${num}.platform`) || fallback.platform,
+      score: getText(`ratings.${num}.score`) || fallback.score,
+      max: getText(`ratings.${num}.max`) || fallback.max,
+      href: getText(`ratings.${num}.url`) || fallback.href,
+    };
+  });
+
+  const topRow = ratings.slice(0, 3);
+  const bottomRow = ratings.slice(3);
 
   return (
     <section className="bg-[#1A2E1A] py-2 md:max-h-[80px] md:py-4">
@@ -153,10 +167,10 @@ export default function RatingsTrustBar() {
             }}
           >
             <span className="md:hidden" style={{ fontSize: "9px" }}>
-              {t.ratingsTrustTitle}
+              {getText("ratings.title")}
             </span>
             <span className="hidden md:inline" style={{ fontSize: "10px" }}>
-              {t.ratingsTrustTitle}
+              {getText("ratings.title")}
             </span>
           </p>
 
@@ -174,7 +188,7 @@ export default function RatingsTrustBar() {
           </div>
 
           <div className="hidden items-center justify-center md:flex">
-            {RATINGS.map((item, index) => (
+            {ratings.map((item, index) => (
               <div key={item.platform} className="flex items-center">
                 {index > 0 && (
                   <div

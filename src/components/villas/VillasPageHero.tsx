@@ -1,17 +1,20 @@
 "use client";
 
 import VideoPageHero from "@/components/VideoPageHero";
-import { useLanguage } from "@/context/LanguageContext";
 import { HERO_VIDEO } from "@/lib/media";
 
-export default function VillasPageHero() {
-  const { t } = useLanguage();
+type VillasPageHeroProps = {
+  title: string;
+  subtitle: string;
+  videoSrc?: string;
+};
 
+export default function VillasPageHero({ title, subtitle, videoSrc }: VillasPageHeroProps) {
   return (
     <VideoPageHero
-      videoSrc={HERO_VIDEO}
-      title={t.navOurVillas}
-      subtitle={t.villasPageHeroSubtitle}
+      videoSrc={videoSrc || HERO_VIDEO}
+      title={title}
+      subtitle={subtitle}
     />
   );
 }

@@ -1,7 +1,9 @@
 "use client";
 
+import { useContext } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
-import { useLanguage } from "@/context/LanguageContext";
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
+import { AdminCoreContext, useAdminContent } from "@/hooks/useAdminContent";
 
 const SEMINYAK_VIDEO =
   "https://videos.pexels.com/video-files/2169880/2169880-hd_1920_1080_30fps.mp4";
@@ -38,7 +40,17 @@ function PinIcon() {
 }
 
 export default function WhySeminyak() {
-  const { t } = useLanguage();
+  const core = useContext(AdminCoreContext);
+  const { getText } = useAdminContent();
+  void core?.contentRevision;
+
+  const destinations = DESTINATIONS.map((dest, index) => {
+    const i = index + 1;
+    return {
+      name: getText(`seminyak.dest.${i}.name`) || dest.name,
+      time: getText(`seminyak.dest.${i}.time`) || dest.time,
+    };
+  });
 
   return (
     <section className="relative overflow-hidden py-14 md:py-20">
@@ -51,7 +63,7 @@ export default function WhySeminyak() {
         className="absolute inset-0 h-full w-full object-cover"
         aria-hidden="true"
       >
-        <source src={SEMINYAK_VIDEO} type="video/mp4" />
+        <source src={getText("seminyak.video_url") || SEMINYAK_VIDEO} type="video/mp4" />
       </video>
 
       <div
@@ -70,7 +82,7 @@ export default function WhySeminyak() {
               fontWeight: 300,
             }}
           >
-            {t.seminyakTitle}
+            <AdminEditableText blockKey="seminyak.title" as="span" />
           </h2>
           <p
             className="text-white"
@@ -80,7 +92,7 @@ export default function WhySeminyak() {
               fontWeight: 300,
             }}
           >
-            {t.seminyakSubtitle}
+            <AdminEditableText blockKey="seminyak.subtitle" as="span" />
           </p>
         </ScrollReveal>
 
@@ -95,23 +107,13 @@ export default function WhySeminyak() {
                 lineHeight: 1.85,
               }}
             >
-              Seminyak is one of Bali&apos;s most sought-after destinations,
-              known for its world-class restaurants, vibrant beach clubs,
-              boutique shopping, and stunning sunsets. Staying in Seminyak puts
-              you right in the middle of everything Bali has to offer. Canggu
-              and Berawa are just a short Gojek or Grab ride away to the north,
-              while Kuta and the airport are easily accessible to the south.
-              Whether you want to catch waves at the legendary surf breaks of
-              Batu Bolong or Echo Beach, explore the iconic rice terraces of
-              Ubud, dance the night away at one of Seminyak&apos;s famous beach
-              clubs, or simply spend the day by your private pool with a cold
-              Bintang, Seminyak is the perfect base for your Bali adventure.
+              <AdminEditableText blockKey="seminyak.body" allowLineBreaks as="span" />
             </p>
           </ScrollReveal>
 
           <div className="hidden md:block">
             <div className="grid grid-cols-2 gap-3 sm:gap-4">
-              {DESTINATIONS.map((dest, index) => (
+              {destinations.map((dest, index) => (
                 <ScrollReveal key={dest.name} delay={100 + index * 60}>
                   <div
                     className="card-lift flex items-center gap-3 rounded-sm border px-3 py-3 sm:px-4 sm:py-4"
@@ -156,7 +158,7 @@ export default function WhySeminyak() {
                 fontStyle: "italic",
               }}
             >
-              Estimated travel times by Gojek, Grab or scooter
+              <AdminEditableText blockKey="seminyak.travel_note" as="span" />
             </p>
           </div>
         </div>

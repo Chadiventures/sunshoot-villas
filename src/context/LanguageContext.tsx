@@ -58,6 +58,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     setLanguageState(lang);
     localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
     document.documentElement.lang = lang === "id" ? "id" : "en";
+    document.cookie = `${LANGUAGE_STORAGE_KEY}=${lang};path=/;max-age=31536000;SameSite=Lax`;
   }, []);
 
   const t = translations[language];

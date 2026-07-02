@@ -43,13 +43,13 @@ export default function AdminHistoryPanel({ open, onClose }: Props) {
         error?: string
       }
       if (!res.ok) {
-        setError(typeof data.error === 'string' ? data.error : 'Kunde inte läsa historik')
+        setError(typeof data.error === 'string' ? data.error : 'Could not load history')
         setChanges([])
         return
       }
       setChanges(Array.isArray(data.changes) ? data.changes : [])
     } catch {
-      setError('Kunde inte läsa historik')
+      setError('Could not load history')
       setChanges([])
     } finally {
       setLoading(false)
@@ -76,16 +76,16 @@ export default function AdminHistoryPanel({ open, onClose }: Props) {
       })
       const data = (await res.json().catch(() => ({}))) as { error?: string }
       if (!res.ok) {
-        setError(typeof data.error === 'string' ? data.error : 'Kunde inte återställa')
+        setError(typeof data.error === 'string' ? data.error : 'Could not restore')
         return
       }
       core?.updateText(restorePageSlug, item.blockKey, restoredValue)
       router.refresh()
-      setConfirmMessage('Återställt!')
+      setConfirmMessage('Restored!')
       window.setTimeout(() => setConfirmMessage(null), 2500)
       await loadHistory()
     } catch {
-      setError('Kunde inte återställa')
+      setError('Could not restore')
     } finally {
       setRestoringId(null)
     }
@@ -96,29 +96,29 @@ export default function AdminHistoryPanel({ open, onClose }: Props) {
       {open && (
         <button
           type="button"
-          aria-label="Stäng historikpanel"
-          className="fixed inset-0 z-[9997] bg-navy/40"
+          aria-label="Close history panel"
+          className="fixed inset-0 z-[9997] bg-[#1a2e1a]/40"
           onClick={onClose}
         />
       )}
       <aside
-        className="fixed right-0 top-0 z-[9998] flex h-full w-[320px] flex-col bg-[#0f1f44] shadow-2xl transition-transform duration-300 ease-out"
+        className="fixed right-0 top-0 z-[9998] flex h-full w-[320px] flex-col bg-[#1a2e1a] shadow-2xl transition-transform duration-300 ease-out"
         style={{ transform: open ? 'translateX(0)' : 'translateX(100%)' }}
-        aria-label="Revisionshistorik"
+        aria-label="Revision history"
         aria-hidden={!open}
       >
         <div className="shrink-0 border-b border-white/10 px-4 py-4">
           <div className="flex items-start justify-between gap-2">
-            <h2 className="font-serif text-lg font-light text-pearl">Historik</h2>
+            <h2 className="font-serif text-lg font-light text-pearl">History</h2>
             <button
               type="button"
               onClick={onClose}
-              className="shrink-0 font-sans text-xs uppercase tracking-wider text-pearl/60 transition-colors hover:text-gold"
+              className="shrink-0 font-sans text-xs uppercase tracking-wider text-pearl/60 transition-colors hover:text-[#c9a84c]"
             >
-              Stäng
+              Close
             </button>
           </div>
-          <p className="mt-1 font-sans text-[10px] text-pearl/50">Senaste 20 ändringar på hela webbplatsen</p>
+          <p className="mt-1 font-sans text-[10px] text-pearl/50">Latest 20 changes across the site</p>
           {confirmMessage && (
             <p className="mt-2 font-sans text-xs font-medium text-emerald-300" role="status">
               {confirmMessage}
@@ -127,14 +127,14 @@ export default function AdminHistoryPanel({ open, onClose }: Props) {
         </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4">
-          {loading && <p className="font-sans text-xs text-pearl/50">Laddar historik...</p>}
+          {loading && <p className="font-sans text-xs text-pearl/50">Loading history...</p>}
           {error && (
             <p className="font-sans text-xs text-red-300" role="alert">
               {error}
             </p>
           )}
           {!loading && !error && changes.length === 0 && (
-            <p className="font-sans text-xs text-pearl/50">Ingen sparad historik ännu.</p>
+            <p className="font-sans text-xs text-pearl/50">No saved history yet.</p>
           )}
           <ul className="space-y-2">
             {changes.map((item) => (
@@ -145,7 +145,7 @@ export default function AdminHistoryPanel({ open, onClose }: Props) {
                 <p className="font-sans text-[10px] uppercase tracking-wider text-pearl/45">
                   {item.pageSlug}
                 </p>
-                <p className="font-sans text-[11px] font-medium text-gold">
+                <p className="font-sans text-[11px] font-medium text-[#c9a84c]">
                   {adminBlockLabel(item.blockKey)}
                 </p>
                 <p className="mt-1 font-sans text-xs leading-relaxed text-pearl/80">
@@ -156,9 +156,9 @@ export default function AdminHistoryPanel({ open, onClose }: Props) {
                   type="button"
                   disabled={restoringId !== null}
                   onClick={() => void handleRestore(item)}
-                  className="mt-2 rounded border border-pearl/25 px-2 py-1 font-sans text-[10px] uppercase tracking-wider text-pearl transition-colors hover:border-gold hover:text-gold disabled:opacity-45"
+                  className="mt-2 rounded border border-pearl/25 px-2 py-1 font-sans text-[10px] uppercase tracking-wider text-pearl transition-colors hover:border-[#c9a84c] hover:text-[#c9a84c] disabled:opacity-45"
                 >
-                  {restoringId === item.id ? 'Återställer...' : 'Återställ'}
+                  {restoringId === item.id ? 'Restoring...' : 'Restore'}
                 </button>
               </li>
             ))}

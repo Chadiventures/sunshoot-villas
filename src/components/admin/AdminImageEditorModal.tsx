@@ -199,7 +199,7 @@ function AdminImageEditorModalInner() {
       clearImageError()
       const ok = await updateImage(imageBlockKey, file)
       if (!ok) {
-        setLocalError('Kunde inte välja bild')
+        setLocalError('Could not select image')
         return
       }
       handleClose()
@@ -279,10 +279,10 @@ function AdminImageEditorModalInner() {
             className="pointer-events-auto w-full max-w-lg rounded-lg border border-gold/40 bg-pearl p-5 shadow-xl"
           >
             <p className="mb-1 font-sans text-[10px] uppercase tracking-[0.3em] text-navy">
-              Justera bild
+              Adjust image
             </p>
             <p className="mb-4 font-sans text-sm text-charcoal/65">
-              Dra bilden i rutan för att välja utsnitt. Zooma in eller ut vid behov.
+              Drag the image in the frame to choose a crop. Zoom in or out as needed.
             </p>
             <div className="relative mx-auto flex justify-center overflow-hidden py-6">
               <div
@@ -312,7 +312,7 @@ function AdminImageEditorModalInner() {
                 type="button"
                 className="min-h-[44px] border border-silver px-4 py-2 font-sans text-[10px] uppercase tracking-widest text-navy transition-colors hover:border-gold"
               >
-                Zooma ut
+                Zoom out
               </button>
               <span className="flex min-h-[44px] items-center px-2 font-sans text-sm text-charcoal/70">
                 {cropZoom}%
@@ -322,7 +322,7 @@ function AdminImageEditorModalInner() {
                 type="button"
                 className="min-h-[44px] border border-silver px-4 py-2 font-sans text-[10px] uppercase tracking-widest text-navy transition-colors hover:border-gold"
               >
-                Zooma in
+                Zoom in
               </button>
             </div>
             <div className="mt-5 flex flex-col gap-2 sm:flex-row">
@@ -331,14 +331,14 @@ function AdminImageEditorModalInner() {
                 type="button"
                 className="min-h-[44px] flex-1 border border-gold bg-gold px-4 py-2 font-sans text-[10px] uppercase tracking-widest text-white transition-colors hover:bg-navy"
               >
-                Spara
+                Save
               </button>
               <button
                 ref={cancelCropBtnRef}
                 type="button"
                 className="min-h-[44px] flex-1 border border-silver px-4 py-2 font-sans text-[10px] uppercase tracking-widest text-navy transition-colors hover:border-gold"
               >
-                Avbryt
+                Cancel
               </button>
             </div>
           </div>
@@ -359,9 +359,9 @@ function AdminImageEditorModalInner() {
           ref={modalRef}
           className="pointer-events-auto relative z-[2] w-full max-w-xs rounded-lg border border-gold/40 bg-pearl p-4 shadow-xl"
           role="menu"
-          aria-label="Bildalternativ"
+          aria-label="Image options"
         >
-          <p className="mb-3 font-sans text-[10px] uppercase tracking-[0.3em] text-navy">Bild</p>
+          <p className="mb-3 font-sans text-[10px] uppercase tracking-[0.3em] text-navy">Image</p>
           {displayError && (
             <p className="mb-3 font-sans text-sm text-red-700" role="alert">
               {displayError}
@@ -373,17 +373,17 @@ function AdminImageEditorModalInner() {
               type="button"
               className="min-h-[44px] w-full border border-gold bg-gold px-4 py-2 text-left font-sans text-[10px] uppercase tracking-widest text-white transition-colors hover:bg-navy"
             >
-              Ladda upp ny bild
+              Upload new image
             </button>
             <p className="admin-upload-hint-touch hidden font-sans text-xs text-charcoal/75">
-              Välj bild från din telefon
+              Choose an image from your phone
             </p>
             <button
               ref={adjustBtnRef}
               type="button"
               className="min-h-[44px] w-full border border-silver px-4 py-2 text-left font-sans text-[10px] uppercase tracking-widest text-navy transition-colors hover:border-gold"
             >
-              Justera bild
+              Adjust image
             </button>
             <button
               ref={cancelBtnRef}

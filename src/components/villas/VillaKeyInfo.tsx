@@ -1,54 +1,35 @@
 "use client";
 
 import ScrollReveal from "@/components/ScrollReveal";
-import { getVillaBySlug } from "@/lib/villas";
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
 
 const MAPS_URL =
   "https://maps.google.com/?q=Jl.+Bidadari+II+E,+Seminyak,+Bali,+Indonesia";
 
-const INCLUDED_TAGS = [
-  { label: "Daily Cleaning", icon: "✦" },
-  { label: "Free WiFi", icon: "✦" },
-  { label: "Free Airport Transfer", icon: "✦" },
-  { label: "Baby Crib on Request", icon: "✦" },
-];
+const KEY_CARDS = [
+  { labelKey: "details.location_label", valueKey: "details.location_value", href: MAPS_URL },
+  { labelKey: "details.size_label", valueKey: "details.size_value" },
+  { labelKey: "details.bedrooms_bathrooms_label", valueKey: "details.bedrooms_bathrooms_value" },
+  { labelKey: "details.pool_label", valueKey: "details.pool_value" },
+  { labelKey: "details.checkin_label", valueKey: "details.checkin_value" },
+  { labelKey: "details.transfer_label", valueKey: "details.transfer_value" },
+] as const;
 
-type KeyCard = {
-  label: string;
-  value: string;
-  href?: string;
-};
-
-function buildKeyCards(slug: string): KeyCard[] {
-  const villa = getVillaBySlug(slug);
-  if (!villa) return [];
-
-  const { stats } = villa;
-  return [
-    {
-      label: "Location, Seminyak Bali",
-      value: "Jl. Bidadari II E, Seminyak",
-      href: MAPS_URL,
-    },
-    { label: "Size", value: `${stats.sizeM2} m2` },
-    {
-      label: "Bedrooms & Bathrooms",
-      value: `${stats.bedroomCount} Bed / ${stats.bathroomCount} Bath`,
-    },
-    { label: "Pool", value: "Private" },
-    { label: "Check-in & Check-out", value: "14:00 / 11:00" },
-    { label: "Airport Transfer", value: "Free" },
-  ];
-}
+const INCLUDED_KEYS = [
+  "details.included.1",
+  "details.included.2",
+  "details.included.3",
+  "details.included.4",
+] as const;
 
 function InfoCard({
-  label,
-  value,
+  labelKey,
+  valueKey,
   href,
   index,
 }: {
-  label: string;
-  value: string;
+  labelKey: string;
+  valueKey: string;
   href?: string;
   index: number;
 }) {
@@ -65,7 +46,7 @@ function InfoCard({
           lineHeight: 1.4,
         }}
       >
-        {label}
+        <AdminEditableText blockKey={labelKey} as="span" />
       </p>
       <p
         className="text-[var(--dark)]"
@@ -76,7 +57,7 @@ function InfoCard({
           lineHeight: 1.4,
         }}
       >
-        {value}
+        <AdminEditableText blockKey={valueKey} as="span" />
       </p>
     </>
   );
@@ -102,22 +83,16 @@ function InfoCard({
   );
 }
 
-type VillaKeyInfoProps = {
-  slug: string;
-};
-
-export default function VillaKeyInfo({ slug }: VillaKeyInfoProps) {
-  const cards = buildKeyCards(slug);
-
+export default function VillaKeyInfo() {
   return (
     <div>
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
-        {cards.map((card, i) => (
+        {KEY_CARDS.map((card, i) => (
           <InfoCard
-            key={card.label}
-            label={card.label}
-            value={card.value}
-            href={card.href}
+            key={card.labelKey}
+            labelKey={card.labelKey}
+            valueKey={card.valueKey}
+            href={"href" in card ? card.href : undefined}
             index={i}
           />
         ))}
@@ -134,12 +109,12 @@ export default function VillaKeyInfo({ slug }: VillaKeyInfoProps) {
             textTransform: "uppercase",
           }}
         >
-          Included
+          <AdminEditableText blockKey="details.included_heading" as="span" />
         </p>
         <div className="flex flex-wrap justify-center gap-2 md:justify-start">
-          {INCLUDED_TAGS.map((tag, i) => (
+          {INCLUDED_KEYS.map((blockKey, i) => (
             <span
-              key={tag.label}
+              key={blockKey}
               className="inline-flex items-center gap-1.5 rounded-full border border-[var(--sand)]/40 bg-[var(--sand)]/10 px-3 py-1.5 text-[var(--dark)]"
               style={{
                 fontFamily: "var(--font-inter)",
@@ -149,9 +124,9 @@ export default function VillaKeyInfo({ slug }: VillaKeyInfoProps) {
               }}
             >
               <span className="text-[var(--sand)]" aria-hidden="true">
-                {tag.icon}
+                ✦
               </span>
-              {tag.label}
+              <AdminEditableText blockKey={blockKey} as="span" />
             </span>
           ))}
         </div>

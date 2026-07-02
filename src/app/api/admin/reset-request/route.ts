@@ -1,4 +1,4 @@
-import { neon } from '@neondatabase/serverless'
+import { getSql } from '@/lib/db'
 import { Resend } from 'resend'
 import { NextRequest, NextResponse } from 'next/server'
 import { adminPublicPath } from '@/lib/adminPath'
@@ -14,8 +14,8 @@ function originFromRequest(req: NextRequest): string {
 type AdminIdRow = { id: string }
 
 export async function POST(req: NextRequest) {
-  const dbUrl = process.env.DATABASE_URL
-  if (!dbUrl) {
+  const sql = getSql()
+  if (!sql) {
     return NextResponse.json({ error: 'Databas är inte konfigurerad' }, { status: 500 })
   }
 
@@ -51,7 +51,6 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const sql = neon(dbUrl)
     await ensureAdminTables(sql)
 
     const users = await sql`
@@ -77,7 +76,8 @@ export async function POST(req: NextRequest) {
 
     const origin = originFromRequest(req)
     const link = `${origin}${adminPublicPath('/aterstall')}?token=${encodeURIComponent(signedToken)}`
-    const from = process.env.RESEND_FROM?.trim() ?? 'Stuveribaren <noreply@stuveribaren.se>'
+    const from =
+      process.env.RESEND_FROM?.trim() ?? 'Sun Shoot Villas <noreply@sunshootvillasseminyak.com>'
 
     const resend = new Resend(apiKey)
     const { error } = await resend.emails.send({
@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
       subject: 'Återställ lösenord',
       html: [
         '<p>Hej,</p>',
-        '<p>Du har begärt att återställa lösenordet för Stuveribarens CMS.</p>',
+        '<p>Du har begärt att återställa lösenordet för Sun Shoot Villas CMS.</p>',
         `<p><a href="${link}">Klicka här för att välja nytt lösenord</a> (gäller i en timme).</p>`,
         '<p>Om du inte har begärt detta kan du ignorera mailet.</p>',
       ].join(''),

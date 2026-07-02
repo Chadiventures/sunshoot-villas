@@ -3,7 +3,7 @@ import type { Language } from "@/lib/translations";
 /** Reference nightly rate used to derive the site-wide IDR → USD rate. */
 export const BASE_NIGHTLY_PRICE_IDR = 1_000_000;
 
-/** Fixed IDR → USD rate (55 USD ≈ 1,000,000 IDR). Update BASE_NIGHTLY_PRICE_IDR to refresh USD prices site-wide. */
+/** Fixed IDR → USD rate (55 USD ≈ 1,000,000 IDR). */
 export const IDR_TO_USD_RATE = 55 / BASE_NIGHTLY_PRICE_IDR;
 
 /** Per-villa nightly rates in IDR (source of truth). */
@@ -16,12 +16,13 @@ export const VILLA_NIGHTLY_PRICE_IDR: Record<string, number> = {
 
 export const PLACEHOLDER_DISCOUNT_PERCENT = 20;
 
-export function getVillaNightlyPriceIdr(slug: string): number {
+export function getVillaNightlyPriceIdr(slug: string, overrideIdr?: number): number {
+  if (overrideIdr !== undefined && overrideIdr > 0) return overrideIdr;
   return VILLA_NIGHTLY_PRICE_IDR[slug] ?? BASE_NIGHTLY_PRICE_IDR;
 }
 
-export function getVillaNightlyPriceUsd(slug: string): number {
-  return Math.round(getVillaNightlyPriceIdr(slug) * IDR_TO_USD_RATE);
+export function getVillaNightlyPriceUsd(slug: string, overrideIdr?: number): number {
+  return Math.round(getVillaNightlyPriceIdr(slug, overrideIdr) * IDR_TO_USD_RATE);
 }
 
 export function getNightlyPriceUsd(slug?: string): number {
@@ -51,12 +52,19 @@ function formatUsd(amount: number): string {
   return `${amount} USD`;
 }
 
-export function formatNightlyPrice(language: Language, slug?: string): string {
+export function formatNightlyPrice(
+  language: Language,
+  slug?: string,
+  overrideIdr?: number,
+): string {
+  const idr = slug
+    ? getVillaNightlyPriceIdr(slug, overrideIdr)
+    : overrideIdr && overrideIdr > 0
+      ? overrideIdr
+      : BASE_NIGHTLY_PRICE_IDR;
   return language === "en"
-    ? formatUsd(getNightlyPriceUsd(slug))
-    : formatIdr(
-        slug ? getVillaNightlyPriceIdr(slug) : BASE_NIGHTLY_PRICE_IDR,
-      );
+    ? formatUsd(Math.round(idr * IDR_TO_USD_RATE))
+    : formatIdr(idr);
 }
 
 /** Compact card price: "$55" (EN) or "Rp 1.000.000" (ID). */

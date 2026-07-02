@@ -2,15 +2,15 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
-import {
-  DEFAULT_REVIEWS,
-  getVillaReviews,
-  type ReviewPlatform,
-  type VillaReview,
-} from "@/lib/villa-reviews";
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
+import { useAdminContent } from "@/hooks/useAdminContent";
+import type { ReviewPlatform } from "@/lib/villa-reviews";
 
-type VillaReviewsCarouselProps = {
-  slug?: string;
+type ReviewItem = {
+  text: string;
+  name: string;
+  country: string;
+  platform: ReviewPlatform;
 };
 
 function Stars() {
@@ -42,7 +42,11 @@ function PlatformBadge({ platform }: { platform: ReviewPlatform }) {
   );
 }
 
-function ReviewCard({ review }: { review: VillaReview }) {
+function ReviewCard({ index }: { index: number }) {
+  const { getText } = useAdminContent();
+  const n = index + 1;
+  const platform = (getText(`reviews.${n}.platform`) || "Google") as ReviewPlatform;
+
   return (
     <article className="card-lift flex h-full w-[85vw] max-w-[340px] shrink-0 flex-col rounded-sm border border-[var(--text)]/10 bg-white p-5 shadow-sm sm:w-[320px] md:w-[360px]">
       <Stars />
@@ -55,7 +59,9 @@ function ReviewCard({ review }: { review: VillaReview }) {
           lineHeight: 1.7,
         }}
       >
-        &ldquo;{review.text}&rdquo;
+        &ldquo;
+        <AdminEditableText blockKey={`reviews.${n}.text`} as="span" />
+        &rdquo;
       </p>
       <div className="flex items-end justify-between gap-3">
         <div>
@@ -67,7 +73,7 @@ function ReviewCard({ review }: { review: VillaReview }) {
               fontWeight: 500,
             }}
           >
-            {review.name}
+            <AdminEditableText blockKey={`reviews.${n}.name`} as="span" />
           </p>
           <p
             className="text-[var(--text-muted)]"
@@ -77,10 +83,10 @@ function ReviewCard({ review }: { review: VillaReview }) {
               fontWeight: 300,
             }}
           >
-            {review.country}
+            <AdminEditableText blockKey={`reviews.${n}.country`} as="span" />
           </p>
         </div>
-        <PlatformBadge platform={review.platform} />
+        <PlatformBadge platform={platform} />
       </div>
     </article>
   );
@@ -121,11 +127,24 @@ function CarouselArrow({
   );
 }
 
-export default function VillaReviewsCarousel({ slug }: VillaReviewsCarouselProps) {
-  const reviews = useMemo(
-    () => (slug ? getVillaReviews(slug) : DEFAULT_REVIEWS),
-    [slug],
-  );
+export default function VillaReviewsCarousel() {
+  const { getText } = useAdminContent();
+
+  const reviews = useMemo(() => {
+    const items: ReviewItem[] = [];
+    for (let i = 1; i <= 5; i++) {
+      const text = getText(`reviews.${i}.text`);
+      if (!text.trim()) break;
+      const platform = getText(`reviews.${i}.platform`) as ReviewPlatform;
+      items.push({
+        text,
+        name: getText(`reviews.${i}.name`),
+        country: getText(`reviews.${i}.country`),
+        platform: platform || "Google",
+      });
+    }
+    return items;
+  }, [getText]);
 
   const trackRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
@@ -141,7 +160,7 @@ export default function VillaReviewsCarousel({ slug }: VillaReviewsCarouselProps
 
   useEffect(() => {
     const track = trackRef.current;
-    if (!track) return;
+    if (!track || reviews.length === 0) return;
 
     const animate = () => {
       if (!isPaused) {
@@ -156,13 +175,16 @@ export default function VillaReviewsCarousel({ slug }: VillaReviewsCarouselProps
     return () => {
       if (animRef.current) cancelAnimationFrame(animRef.current);
     };
-  }, [isPaused, TOTAL]);
+  }, [isPaused, TOTAL, reviews.length]);
 
-  const scroll = useCallback((dir: "left" | "right") => {
-    positionRef.current += dir === "right" ? STEP : -STEP;
-    if (positionRef.current < 0) positionRef.current = 0;
-    if (positionRef.current > TOTAL) positionRef.current = 0;
-  }, [STEP, TOTAL]);
+  const scroll = useCallback(
+    (dir: "left" | "right") => {
+      positionRef.current += dir === "right" ? STEP : -STEP;
+      if (positionRef.current < 0) positionRef.current = 0;
+      if (positionRef.current > TOTAL) positionRef.current = 0;
+    },
+    [STEP, TOTAL],
+  );
 
   const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
@@ -176,6 +198,8 @@ export default function VillaReviewsCarousel({ slug }: VillaReviewsCarouselProps
     scroll(diff < 0 ? "right" : "left");
   };
 
+  if (reviews.length === 0) return null;
+
   return (
     <section id="reviews" className="scroll-mt-28 bg-white py-14 md:py-20">
       <div className="container-site">
@@ -188,7 +212,7 @@ export default function VillaReviewsCarousel({ slug }: VillaReviewsCarouselProps
               fontWeight: 300,
             }}
           >
-            What Our Guests Say
+            <AdminEditableText blockKey="reviews.title" as="span" />
           </h2>
           <p
             className="text-[var(--text-muted)]"
@@ -198,7 +222,7 @@ export default function VillaReviewsCarousel({ slug }: VillaReviewsCarouselProps
               fontWeight: 300,
             }}
           >
-            Reviews from Google, TripAdvisor and Facebook
+            <AdminEditableText blockKey="reviews.subtitle" as="span" />
           </p>
         </ScrollReveal>
 
@@ -222,7 +246,7 @@ export default function VillaReviewsCarousel({ slug }: VillaReviewsCarouselProps
               style={{ width: "max-content" }}
             >
               {doubled.map((review, i) => (
-                <ReviewCard key={`${review.name}-${i}`} review={review} />
+                <ReviewCard key={`${review.name}-${i}`} index={i % reviews.length} />
               ))}
             </div>
           </div>
@@ -235,7 +259,7 @@ export default function VillaReviewsCarousel({ slug }: VillaReviewsCarouselProps
         </div>
 
         <p className="mt-3 text-center text-[0.6875rem] text-[var(--text-muted)] md:hidden">
-          Swipe to read more reviews
+          <AdminEditableText blockKey="reviews.swipe_hint" as="span" />
         </p>
 
         <div className="mt-8 flex justify-center px-2 md:mt-10">
@@ -252,14 +276,16 @@ export default function VillaReviewsCarousel({ slug }: VillaReviewsCarouselProps
               fontWeight: 500,
             }}
           >
-            <span>Read all reviews on</span>
+            <span>
+              <AdminEditableText blockKey="reviews.booking_prefix" as="span" />
+            </span>
             <span className="inline-flex items-center gap-1.5">
               <span
                 className="inline-block h-2 w-2 shrink-0 rounded-full bg-[#003580] transition-colors duration-300 ease-in-out group-hover:bg-white"
                 aria-hidden="true"
               />
               <span className="font-semibold text-[#003580] transition-colors duration-300 ease-in-out group-hover:text-white">
-                booking.com
+                <AdminEditableText blockKey="reviews.booking_brand" as="span" />
               </span>
             </span>
           </a>

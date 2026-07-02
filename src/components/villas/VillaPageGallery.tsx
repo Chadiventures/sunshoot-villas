@@ -1,17 +1,22 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { AdminCoreContext, useAdminContent } from "@/hooks/useAdminContent";
+import { getPageContentDefaults } from "@/lib/contentDefaults";
+import { AdminEditableText } from "@/components/admin/AdminEditableText";
 
-type VillaPageGalleryProps = {
-  images: string[];
-  villaName: string;
-};
+export default function VillaPageGallery() {
+  const core = useContext(AdminCoreContext);
+  void core?.contentRevision;
+  const { getText, pageSlug } = useAdminContent();
+  const galleryDefaults = getPageContentDefaults(pageSlug);
+  const villaName = getText("villa.name") || galleryDefaults["villa.name"] || "";
+  const images = (getText("villa.gallery_urls") || galleryDefaults["villa.gallery_urls"] || "")
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
 
-export default function VillaPageGallery({
-  images,
-  villaName,
-}: VillaPageGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const swipeRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
@@ -91,7 +96,18 @@ export default function VillaPageGallery({
     };
   }, [goTo]);
 
-  if (total === 0) return null;
+  if (total === 0) {
+    return (
+      <div className="w-full rounded-sm border border-dashed border-[var(--text)]/15 bg-[var(--bg)] px-6 py-12 text-center">
+        <p className="font-[family-name:var(--font-cormorant)] text-lg text-[var(--text-muted)]">
+          <AdminEditableText blockKey="gallery.title" fallback={galleryDefaults["gallery.title"]} as="span" />
+        </p>
+        <p className="mt-3 font-[family-name:var(--font-inter)] text-sm text-[var(--text-muted)]">
+          No gallery images yet. Add image URLs in the admin panel (one per line).
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full touch-pan-y">
@@ -151,7 +167,7 @@ export default function VillaPageGallery({
         </div>
 
         <p className="mt-2 text-center text-[0.6875rem] text-[var(--text-muted)] md:hidden">
-          Swipe left or right to browse photos
+          <AdminEditableText blockKey="gallery.swipe_hint" fallback={galleryDefaults["gallery.swipe_hint"]} as="span" />
         </p>
       </div>
 

@@ -19,7 +19,7 @@ import {
 } from '@/lib/adminPanelConfig'
 import { resolveImageDisplayUrl } from '@/lib/resolveImageDisplayUrl'
 import { adminPathSegment } from '@/lib/adminPath'
-import { getPageContentDefaults } from '@/lib/contentDefaults'
+import { getPageContentDefaults, listAllBlockKeysForPage } from '@/lib/contentDefaults'
 import {
   draftKeyForBlock,
   isSharedCmsBlockKey,
@@ -282,10 +282,10 @@ export function useBuildAdminContentValue({
   const updateText = useCallback(
     (pageSlug: PageSlug, blockKey: string, value: string, locale: CmsLocale = adminLocale) => {
       const key = draftKeyForBlock(pageSlug, blockKey, locale)
-      setDrafts((prev) => ({
-        ...prev,
-        [key]: value,
-      }))
+      setDrafts((prev) => {
+        const next = { ...prev, [key]: value }
+        return next
+      })
       setContentRevision((r) => r + 1)
       setIsDirty(true)
       setSaveStatus('idle')
@@ -352,10 +352,30 @@ export function useBuildAdminContentValue({
         }
       }
 
+      const hasBlock = (pageSlug: PageSlug, blockKey: string) =>
+        blocks.some((block) => block.pageSlug === pageSlug && block.blockKey === blockKey)
+
+      for (const pageSlug of slugsToSave) {
+        const allBlockKeys = listAllBlockKeysForPage(pageSlug, adminLocale as Language)
+        for (const blockKey of allBlockKeys) {
+          const blockLocale: CmsLocale = isSharedCmsBlockKey(blockKey) ? 'en' : adminLocale
+          if (!hasDraftKey(pageSlug, blockKey, blockLocale)) continue
+          const storageKey = storageBlockKey(blockLocale, blockKey)
+          if (hasBlock(pageSlug, storageKey)) continue
+          blocks.push({
+            pageSlug,
+            blockKey: storageKey,
+            type: 'text',
+            value: getDraft(pageSlug, blockKey, blockLocale),
+          })
+        }
+      }
+
       setIsSaving(true)
       setSaveStatus('saving')
       setSaveError(null)
       try {
+        console.log('[admin/save] blocksPayload', blocks)
         const res = await fetch('/api/admin/content', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

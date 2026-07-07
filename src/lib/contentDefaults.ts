@@ -355,3 +355,17 @@ export function getPageContentDefaults(
   }
   return withSeoDefaults(pageSlug, getCmsDefaults(pageSlug, locale), locale)
 }
+
+export function listAllBlockKeysForPage(
+  pageSlug: PageSlug,
+  locale: Language = 'en',
+): string[] {
+  const keys = new Set(Object.keys(getPageContentDefaults(pageSlug, locale)))
+  if (pageSlug === 'home') {
+    for (let i = 1; i <= 8; i++) {
+      keys.add(`map.location.${i}.name`)
+      keys.add(`map.location.${i}.time`)
+    }
+  }
+  return [...keys]
+}

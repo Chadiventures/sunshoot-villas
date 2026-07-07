@@ -236,6 +236,8 @@ function homeDefaults(): Record<string, string> {
   dests.forEach((dest, i) => {
     d[`seminyak.dest.${i + 1}.name`] = dest.name
     d[`seminyak.dest.${i + 1}.time`] = dest.time
+    d[`map.location.${i + 1}.name`] = dest.name
+    d[`map.location.${i + 1}.time`] = dest.time
   })
   const galleryAlts = [
     'Sun Shoot Villas private pool',

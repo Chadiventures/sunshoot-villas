@@ -293,6 +293,9 @@ function sharedVillaUiDefaults(locale: Language = 'en'): Record<string, string> 
     out[`rules.${n}.description`] = rule.description
   })
 
+  out['rules.pool_fence.title'] = isId ? 'Pagar pengaman kolam' : 'Pool safety fence'
+  out['rules.pool_fence.description'] = isId ? 'Tersedia atas permintaan' : 'Available on request'
+
   for (const [key, label] of Object.entries(FACILITY_LABELS)) {
     out[`amenities.${key}`] = label
   }

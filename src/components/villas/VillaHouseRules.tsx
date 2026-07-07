@@ -87,15 +87,30 @@ const RULE_ICONS: ReactNode[] = [
   ),
 ];
 
-function RuleCard({ index }: { index: number }) {
+const POOL_FENCE_ICON = (
+  <RuleIcon key="pool-fence">
+    <path d="M4 4v16M20 4v16M4 12h16" />
+  </RuleIcon>
+);
+
+function RuleCard({
+  index,
+  titleKey,
+  descriptionKey,
+  icon,
+}: {
+  index: number;
+  titleKey: string;
+  descriptionKey: string;
+  icon: ReactNode;
+}) {
   const { getText } = useAdminContent();
-  const n = index + 1;
-  const description = getText(`rules.${n}.description`);
+  const description = getText(descriptionKey);
 
   return (
     <ScrollReveal delay={index * 60}>
       <div className="card-lift flex h-full gap-2 rounded-sm border border-[var(--text)]/10 bg-[var(--bg)] p-[10px] sm:gap-3 sm:px-5 sm:py-5">
-        <span className="shrink-0 text-[var(--sand)]">{RULE_ICONS[index]}</span>
+        <span className="shrink-0 text-[var(--sand)]">{icon}</span>
         <div className="min-w-0">
           <p
             className="mb-0.5 text-[12px] text-[var(--dark)] sm:mb-1 sm:text-[0.875rem]"
@@ -104,7 +119,7 @@ function RuleCard({ index }: { index: number }) {
               fontWeight: 500,
             }}
           >
-            <AdminEditableText blockKey={`rules.${n}.title`} as="span" />
+            <AdminEditableText blockKey={titleKey} as="span" />
           </p>
           {description ? (
             <p
@@ -115,12 +130,24 @@ function RuleCard({ index }: { index: number }) {
                 lineHeight: 1.6,
               }}
             >
-              <AdminEditableText blockKey={`rules.${n}.description`} as="span" />
+              <AdminEditableText blockKey={descriptionKey} as="span" />
             </p>
           ) : null}
         </div>
       </div>
     </ScrollReveal>
+  );
+}
+
+function NumberedRuleCard({ index }: { index: number }) {
+  const n = index + 1;
+  return (
+    <RuleCard
+      index={index}
+      titleKey={`rules.${n}.title`}
+      descriptionKey={`rules.${n}.description`}
+      icon={RULE_ICONS[index]}
+    />
   );
 }
 
@@ -143,8 +170,14 @@ export default function VillaHouseRules() {
 
         <div className="grid grid-cols-2 gap-2 sm:gap-4 lg:grid-cols-3">
           {Array.from({ length: 8 }, (_, i) => (
-            <RuleCard key={i} index={i} />
+            <NumberedRuleCard key={i} index={i} />
           ))}
+          <RuleCard
+            index={8}
+            titleKey="rules.pool_fence.title"
+            descriptionKey="rules.pool_fence.description"
+            icon={POOL_FENCE_ICON}
+          />
         </div>
       </div>
     </section>

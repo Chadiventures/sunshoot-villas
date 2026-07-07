@@ -155,6 +155,12 @@ const villaFields = (slug: PageSlug): AdminPanelFieldGroup[] => {
       textField(slug, `rules.${i}.description`, `Rule ${i} description`, { multiline: true }),
     )
   }
+  ruleFields.push(
+    textField(slug, 'rules.pool_fence.title', 'Pool safety fence title'),
+    textField(slug, 'rules.pool_fence.description', 'Pool safety fence description', {
+      multiline: true,
+    }),
+  )
 
   const highlightFields: AdminPanelTextField[] = []
   for (let i = 1; i <= 3; i++) {
@@ -384,6 +390,8 @@ const BLOCK_LABELS: Record<string, string> = {
   'amenities.subtitle': 'Facilities subtitle',
   'facilities.included': 'Included facilities',
   'rules.title': 'Rules heading',
+  'rules.pool_fence.title': 'Pool safety fence title',
+  'rules.pool_fence.description': 'Pool safety fence description',
   'whatsapp.title': 'WhatsApp heading',
   'whatsapp.body': 'WhatsApp body',
   'whatsapp.button': 'WhatsApp button',

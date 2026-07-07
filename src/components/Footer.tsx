@@ -201,7 +201,14 @@ export default function Footer() {
                 </a>
               </p>
               <p>
-                <AdminEditableText blockKey="footer.address" fallback={GLOBAL_DEFAULTS["footer.address"]} as="span" />
+                <a
+                  href="https://maps.google.com/?q=Jl.+Bidadari+II+E,+Seminyak,+Bali,+Indonesia"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="no-underline transition-colors hover:text-[var(--sand)] hover:underline"
+                >
+                  <AdminEditableText blockKey="footer.address" fallback={GLOBAL_DEFAULTS["footer.address"]} as="span" />
+                </a>
               </p>
             </address>
           </div>

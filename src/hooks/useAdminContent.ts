@@ -90,6 +90,7 @@ export type AdminCoreContextValue = {
   saveStatus: 'idle' | 'saving' | 'saved' | 'error'
   saveError: string | null
   isDirty: boolean
+  autoSavePending: boolean
 }
 
 export const AdminCoreContext = createContext<AdminCoreContextValue | null>(null)
@@ -176,6 +177,7 @@ export function useBuildAdminContentValue({
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
   const [saveError, setSaveError] = useState<string | null>(null)
   const [isDirty, setIsDirty] = useState(false)
+  const [autoSavePending, setAutoSavePending] = useState(false)
   const [contentRevision, setContentRevision] = useState(0)
   const [focusedField, setFocusedField] = useState<{
     pageSlug: PageSlug
@@ -185,6 +187,8 @@ export function useBuildAdminContentValue({
 
   const serverRef = useRef(serverContent)
   serverRef.current = serverContent
+  const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const saveSectionRef = useRef<(pageSlugs: PageSlug[]) => Promise<void>>(async () => {})
 
   const loadPage = useCallback(async (pageSlug: PageSlug) => {
     setLoaded(false)
@@ -289,6 +293,17 @@ export function useBuildAdminContentValue({
       setContentRevision((r) => r + 1)
       setIsDirty(true)
       setSaveStatus('idle')
+      if (autoSaveTimerRef.current) {
+        clearTimeout(autoSaveTimerRef.current)
+      }
+      setAutoSavePending(true)
+      autoSaveTimerRef.current = setTimeout(() => {
+        autoSaveTimerRef.current = null
+        setAutoSavePending(false)
+        void saveSectionRef.current([pageSlug]).catch(() => {
+          /* saveSection sets error state */
+        })
+      }, 1500)
     },
     [adminLocale],
   )
@@ -311,6 +326,25 @@ export function useBuildAdminContentValue({
     },
     [updateText],
   )
+
+  useEffect(() => {
+    return () => {
+      if (autoSaveTimerRef.current) {
+        clearTimeout(autoSaveTimerRef.current)
+        autoSaveTimerRef.current = null
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    const handler = (e: BeforeUnloadEvent) => {
+      if (!isDirty) return
+      e.preventDefault()
+      e.returnValue = ''
+    }
+    window.addEventListener('beforeunload', handler)
+    return () => window.removeEventListener('beforeunload', handler)
+  }, [isDirty])
 
   const focusPanelField = useCallback((pageSlug: PageSlug, blockKey: string) => {
     setFocusedField({ pageSlug, blockKey })
@@ -372,6 +406,7 @@ export function useBuildAdminContentValue({
       }
 
       setIsSaving(true)
+      setAutoSavePending(false)
       setSaveStatus('saving')
       setSaveError(null)
       try {
@@ -399,10 +434,16 @@ export function useBuildAdminContentValue({
     },
     [getDraft, routePageSlug, adminLocale],
   )
+  saveSectionRef.current = saveSection
 
   const save = useCallback(async () => {
     const section = routePageSlug ? getAdminPanelSectionForRoute(routePageSlug) : null
     if (!section) return
+    if (autoSaveTimerRef.current) {
+      clearTimeout(autoSaveTimerRef.current)
+      autoSaveTimerRef.current = null
+      setAutoSavePending(false)
+    }
     try {
       await saveSection(sectionPageSlugs(section))
     } catch {
@@ -437,6 +478,7 @@ export function useBuildAdminContentValue({
       saveStatus,
       saveError,
       isDirty,
+      autoSavePending,
     }),
     [
       routePageSlug,
@@ -464,6 +506,7 @@ export function useBuildAdminContentValue({
       saveStatus,
       saveError,
       isDirty,
+      autoSavePending,
     ],
   )
 }

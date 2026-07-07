@@ -44,14 +44,6 @@ export default function WhySeminyak() {
   const { getText } = useAdminContent();
   void core?.contentRevision;
 
-  const destinations = DESTINATIONS.map((dest, index) => {
-    const i = index + 1;
-    return {
-      name: getText(`seminyak.dest.${i}.name`) || dest.name,
-      time: getText(`seminyak.dest.${i}.time`) || dest.time,
-    };
-  });
-
   return (
     <section className="relative overflow-hidden py-14 md:py-20">
       <video
@@ -113,8 +105,10 @@ export default function WhySeminyak() {
 
           <div className="hidden md:block">
             <div className="grid grid-cols-2 gap-3 sm:gap-4">
-              {destinations.map((dest, index) => (
-                <ScrollReveal key={dest.name} delay={100 + index * 60}>
+              {DESTINATIONS.map((dest, index) => {
+                const i = index + 1;
+                return (
+                <ScrollReveal key={`map-location-${i}`} delay={100 + index * 60}>
                   <div
                     className="card-lift flex items-center gap-3 rounded-sm border px-3 py-3 sm:px-4 sm:py-4"
                     style={{
@@ -132,7 +126,11 @@ export default function WhySeminyak() {
                           fontWeight: 500,
                         }}
                       >
-                        {dest.name}
+                        <AdminEditableText
+                          blockKey={`map.location.${i}.name`}
+                          fallback={getText(`seminyak.dest.${i}.name`) || dest.name}
+                          as="span"
+                        />
                       </p>
                       <p
                         className="text-white"
@@ -142,12 +140,17 @@ export default function WhySeminyak() {
                           fontWeight: 400,
                         }}
                       >
-                        {dest.time}
+                        <AdminEditableText
+                          blockKey={`map.location.${i}.time`}
+                          fallback={getText(`seminyak.dest.${i}.time`) || dest.time}
+                          as="span"
+                        />
                       </p>
                     </div>
                   </div>
                 </ScrollReveal>
-              ))}
+                );
+              })}
             </div>
             <p
               className="mt-4 text-center text-white lg:text-left"

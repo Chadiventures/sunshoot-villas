@@ -140,6 +140,8 @@ export default function AdminToolbar() {
 
     isSaving,
 
+    autoSavePending,
+
     setAdminMode,
 
   } = core
@@ -166,6 +168,8 @@ export default function AdminToolbar() {
 
     if (loadError) return loadError
 
+    if (autoSavePending) return 'Auto-saving...'
+
     if (saveStatus === 'saving') return 'Saving...'
 
     if (saveStatus === 'saved') return 'Saved'
@@ -182,7 +186,7 @@ export default function AdminToolbar() {
 
   const statusIsError = Boolean(loadError || saveStatus === 'error')
 
-  const statusIsSuccess = saveStatus === 'saved'
+  const statusIsSuccess = !autoSavePending && saveStatus === 'saved'
 
 
 

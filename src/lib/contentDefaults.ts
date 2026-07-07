@@ -3,7 +3,7 @@ import { VILLA_PAGE_SLUGS } from '@/lib/contentBlockTypes'
 import type { Language } from '@/lib/translations'
 import { translations } from '@/lib/translations'
 import { getCmsDefaults } from '@/lib/cmsDefaults'
-import { FACILITY_LABELS, getVillaBySlug } from '@/lib/villas'
+import { FACILITY_LABELS, getVillaBySlug, type VillaFacilities } from '@/lib/villas'
 import { getVillaLongDescription } from '@/lib/villa-descriptions'
 import { getVillaNightlyPriceIdr } from '@/lib/pricing'
 import { HERO_VIDEO, VILLA_IMAGES, getVillaGalleryImages } from '@/lib/media'
@@ -220,6 +220,17 @@ const INCLUDED_TAGS_ID = [
   'Boks Bayi atas Permintaan',
 ]
 
+const HIDDEN_FACILITY_KEYS: (keyof VillaFacilities)[] = ['petsAllowed', 'suitableForEvents']
+
+function villaFacilitiesIncludedDefault(slug: string): string {
+  const villa = getVillaBySlug(slug)
+  if (!villa) return ''
+  return (Object.keys(villa.facilities) as (keyof VillaFacilities)[])
+    .filter((key) => !HIDDEN_FACILITY_KEYS.includes(key) && villa.facilities[key])
+    .map((key) => FACILITY_LABELS[key])
+    .join(',')
+}
+
 function sharedVillaUiDefaults(locale: Language = 'en'): Record<string, string> {
   const id = translations.id
   const isId = locale === 'id'
@@ -312,6 +323,7 @@ export function getVillaContentDefaults(slug: string, locale: Language = 'en'): 
     'villa.hero_image': VILLA_IMAGES[slug] ?? VILLA_IMAGES.mawar,
     'villa.hero_image.alt': name,
     'villa.gallery_urls': getVillaGalleryImages(slug).join('\n'),
+    'facilities.included': villaFacilitiesIncludedDefault(slug),
     'details.size_value': `${stats?.sizeM2 ?? 150} m2`,
     'details.bedrooms_bathrooms_value': `${stats?.bedroomCount ?? 2} Bed / ${stats?.bathroomCount ?? 2} Bath`,
     'whatsapp.title':

@@ -263,6 +263,9 @@ const villaFields = (slug: PageSlug): AdminPanelFieldGroup[] => {
       fields: [
         textField(slug, 'amenities.title', 'Facilities heading'),
         textField(slug, 'amenities.subtitle', 'Facilities subtitle'),
+        textField(slug, 'facilities.included', 'Included facilities (comma or newline separated)', {
+          multiline: true,
+        }),
         ...amenityFields,
       ],
     },
@@ -379,6 +382,7 @@ const BLOCK_LABELS: Record<string, string> = {
   'reviews.subtitle': 'Reviews subtitle',
   'amenities.title': 'Facilities heading',
   'amenities.subtitle': 'Facilities subtitle',
+  'facilities.included': 'Included facilities',
   'rules.title': 'Rules heading',
   'whatsapp.title': 'WhatsApp heading',
   'whatsapp.body': 'WhatsApp body',
